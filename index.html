@@ -137,6 +137,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;opa
 
 /* tabs */
 .tabs-sec{padding:0 40px;scroll-margin-top:74px;}
+#site.no-hero .tabs-sec{padding-top:78px;}
 .tabs-nav{display:flex;border-bottom:1px solid var(--bdr);flex-wrap:wrap;}
 .tab-btn{font-family:'Raleway',sans-serif;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);background:transparent;border:none;border-bottom:2px solid transparent;padding:11px 18px 9px;cursor:pointer;transition:all .3s;position:relative;bottom:-1px;}
 .tab-btn.active{color:var(--ice);border-bottom-color:var(--icdim);}
@@ -386,9 +387,9 @@ body.theme-wu::after{opacity:.4;background-image:
 .ch-av{width:54px;height:54px;border-radius:50%;background:rgba(42,108,176,.25);border:1px solid var(--bdr);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
 .ch-av img{width:100%;height:100%;object-fit:cover;}
 .ch-av-ph{font-size:1.3rem;color:var(--mut);}
-.ch-name{font-family:'Orbitron',monospace;font-size:.72rem;letter-spacing:.12em;color:var(--ice);}
+.ch-name{font-family:'Raleway',sans-serif;font-size:.74rem;font-weight:600;letter-spacing:.06em;color:var(--ice);}
 .ch-tag{font-family:'Raleway',sans-serif;font-size:.6rem;letter-spacing:.02em;color:var(--mut);font-weight:300;}
-.ch-desc{font-size:.64rem;color:var(--mut);margin-top:5px;line-height:1.5;font-family:'Orbitron',monospace;}
+.ch-desc{font-size:.62rem;color:var(--mut);margin-top:5px;line-height:1.5;font-family:'Raleway',sans-serif;font-weight:300;}
 /* красный — Сайлус */
 .ch-bar.red{border-color:rgba(255,80,95,.25);}
 .ch-bar.red:hover{border-color:#ff5566;background:rgba(40,12,16,.6);box-shadow:0 0 26px rgba(255,60,80,.16);}
@@ -417,7 +418,8 @@ footer{border-top:1px solid var(--bdr);padding:18px 40px;display:flex;justify-co
   .nav-logo-img{height:36px;}
   .nav-logo{font-size:.78rem;}
   .tabs-sec{padding:0 14px;}
-  .site-hero{padding:78px 14px 28px;}
+  .site-hero{padding:108px 14px 28px;}
+  #site.no-hero .tabs-sec{padding-top:100px;}
   .hero-inner{flex-direction:column;gap:28px;text-align:center;}
   .hero-content{text-align:center;}
   .hero-pai-img{height:150px;}
@@ -1090,7 +1092,9 @@ function blizzard(done){
 /* ── NAV page routing ── */
 function navGo(section,navBtn){
   const hero=document.querySelector('.site-hero');
-  hero.style.display=(section==='all')?'':'none';
+  const showHero=(section==='all');
+  hero.style.display=showHero?'':'none';
+  document.getElementById('site').classList.toggle('no-hero',!showHero);
   document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
   navBtn.classList.add('active');
   const btn=document.getElementById('tbtn-'+section);
