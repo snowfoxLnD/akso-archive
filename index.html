@@ -405,7 +405,13 @@ body.theme-wu::after{opacity:.4;background-image:
 footer{border-top:1px solid var(--bdr);padding:18px 40px;display:flex;justify-content:flex-end;align-items:center;}
 .foot-copy{font-size:.54rem;color:var(--mut);opacity:.4;letter-spacing:.08em;}
 
-@media(max-width:980px){.nav-menu{display:none;}}
+@media(max-width:980px){
+  #main-nav{flex-wrap:wrap;gap:4px;padding:10px 14px;}
+  .nav-menu{gap:10px;flex-wrap:wrap;order:3;width:100%;border-top:1px solid var(--bdr);padding-top:8px;margin-top:4px;}
+  button.nav-link{font-size:.5rem;letter-spacing:.12em;padding:3px 0;}
+  .nav-brand{display:none;}
+  .nav-right{display:none;}
+}
 @media(max-width:768px){
   #main-nav{padding:11px 14px;}
   .nav-logo-img{height:36px;}
@@ -652,7 +658,7 @@ const CARDS=[
    desc:'В то время как Зейн сражался с бурей, на его связь пришёл сигнал тревоги. А я тем временем даже не подозреваю о том, что с ним происходит.',
    link:'https://teletype.in/@snowfox_lnd/medicalescue'},
 
-  {type:'5', badge:'bdg-gold', badgeLabel:'10 days with you',
+  {type:'5', badge:'bdg-gold', badgeLabel:'Соло Баннер',
    title:'Exclusive Tutorial',
    tags:[{l:'★★★★★',c:''}],
    img:F+'Exclusive%20Tutorial/%D0%A4%D0%BE%D1%82%D0%BE%20%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D0%B8.png',
