@@ -1,0 +1,1120 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Akso Archive</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Raleway:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Chakra+Petch:wght@500;600;700&family=Cinzel:wght@500;600&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'FHWA';src:url('./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/FHWASeriesEM_Rg.ttf') format('truetype');}
+@font-face{font-family:'Biotrip';src:url('./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/BiotripCaps-Bold.ttf') format('truetype');font-weight:700;}
+@font-face{font-family:'Biotrip';src:url('./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/BiotripCaps-Regular.ttf') format('truetype');font-weight:400;}
+@font-face{font-family:'Netherfield';src:url('./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/Netherfield.otf') format('opentype');}
+
+:root{
+  --bg:#060e1a;--bg2:#0a1628;--card-bg:rgba(9,20,37,.72);
+  --ice:#a8d8f0;--icdim:#4a8ab0;--cop:#c49a6c;
+  --txt:#d4e8f5;--mut:#7a9ab8;--bdr:rgba(168,216,240,.14);
+  --green:#3ecf8e;--akso:#2a6cb0;--mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--txt);font-family:'Raleway',sans-serif;font-weight:300;overflow-x:hidden;}
+
+/* ════════ ФОН: полярная аврора + медсетка + снежинки ════════ */
+body::before{content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(60% 50% at 20% 0%,   rgba(42,108,176,.20), transparent 60%),
+    radial-gradient(55% 45% at 85% 15%,  rgba(62,207,142,.07), transparent 55%),
+    radial-gradient(70% 60% at 50% 110%, rgba(74,138,176,.16), transparent 60%),
+    linear-gradient(180deg,#040912 0%,#060e1a 45%,#08182b 100%);
+  animation:auroraBreathe 18s ease-in-out infinite;}
+@keyframes auroraBreathe{0%,100%{filter:hue-rotate(0) brightness(1)}50%{filter:hue-rotate(-12deg) brightness(1.12)}}
+body::after{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.5;
+  background-image:
+    linear-gradient(rgba(42,108,176,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(42,108,176,.05) 1px,transparent 1px);
+  background-size:46px 46px;
+  -webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 30%,#000 40%,transparent 100%);
+          mask-image:radial-gradient(ellipse 90% 80% at 50% 30%,#000 40%,transparent 100%);}
+.flake{position:fixed;top:-20px;color:rgba(168,216,240,.35);z-index:-1;pointer-events:none;animation:flakeFall linear infinite;user-select:none;}
+@keyframes flakeFall{to{transform:translateY(105vh) rotate(220deg);opacity:0;}}
+
+/* screens */
+.screen{display:none;position:fixed;inset:0;z-index:1000;flex-direction:column;align-items:center;justify-content:center;}
+.screen.vis{display:flex;animation:scrnFade .5s ease;}
+@keyframes scrnFade{from{opacity:0}to{opacity:1}}
+.grid-bg::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(42,108,176,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(42,108,176,.06) 1px,transparent 1px);
+  background-size:44px 44px;}
+
+/* welcome */
+#welcome{background:#040912;gap:32px;cursor:pointer;}
+.welcome-hosp{font-family:'FHWA',monospace;font-size:clamp(.6rem,1.2vw,.85rem);letter-spacing:.38em;color:rgba(168,216,240,.5);text-transform:uppercase;}
+.welcome-h{font-family:'FHWA',monospace;font-size:clamp(1.5rem,4.5vw,2.8rem);letter-spacing:.12em;color:#c8e8f8;text-align:center;line-height:1.3;text-shadow:0 0 60px rgba(168,216,240,.3);}
+.welcome-sub{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--mut);text-align:center;}
+.welcome-enter{font-family:'FHWA',monospace;font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;color:#c8e8f8;border:1px solid rgba(168,216,240,.4);padding:13px 42px;animation:entpulse 2.2s ease infinite;}
+@keyframes entpulse{0%,100%{opacity:.5;border-color:rgba(168,216,240,.25)}50%{opacity:1;border-color:rgba(168,216,240,.6)}}
+
+/* loading */
+#loading{background:#040912;gap:24px;}
+#ekg-wrap{width:min(560px,88vw);height:88px;}
+#ekg-svg{width:100%;height:100%;overflow:visible;}
+#ekg-line{stroke:var(--icdim);stroke-width:2;fill:none;stroke-linecap:round;stroke-dasharray:1400;stroke-dashoffset:1400;filter:drop-shadow(0 0 5px rgba(74,138,176,.55));}
+#ekg-line.go{animation:drawEKG 3s linear forwards;}
+@keyframes drawEKG{to{stroke-dashoffset:0}}
+.jf{opacity:0;transform-origin:0 0;}
+.jf.bloom{animation:bloomF .45s ease forwards;}
+@keyframes bloomF{0%{opacity:0;transform:scale(0) rotate(-20deg)}65%{opacity:1;transform:scale(1.2) rotate(5deg)}100%{opacity:.88;transform:scale(1) rotate(0)}}
+.load-sys{font-family:'FHWA',monospace;font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--akso);}
+.load-st{font-family:'FHWA',monospace;font-size:.8rem;letter-spacing:.18em;color:var(--mut);min-height:1.4em;text-align:center;}
+.load-bw{width:min(360px,75vw);height:2px;background:rgba(42,108,176,.18);border-radius:1px;}
+.load-bf{height:100%;width:0;background:var(--akso);transition:width .15s;box-shadow:0 0 8px rgba(42,108,176,.6);border-radius:1px;}
+
+/* access */
+#access{background:#040912;gap:18px;}
+.access-txt{font-family:'FHWA',monospace;font-size:clamp(1rem,3vw,2.2rem);letter-spacing:.18em;text-transform:uppercase;color:var(--green);text-align:center;opacity:0;}
+.access-txt.neon-on{animation:neonOn 2.4s ease forwards;}
+@keyframes neonOn{
+  0%{opacity:.05;text-shadow:none;}10%{opacity:.4;text-shadow:0 0 8px var(--green);}
+  11%{opacity:.05;}12%{opacity:.5;text-shadow:0 0 8px var(--green);}
+  25%{opacity:.6;text-shadow:0 0 12px var(--green);}
+  50%{opacity:.85;text-shadow:0 0 15px var(--green),0 0 30px rgba(62,207,142,.3);}
+  100%{opacity:1;text-shadow:0 0 10px var(--green),0 0 25px rgba(62,207,142,.5),0 0 50px rgba(62,207,142,.15);}}
+.access-sub{font-family:'FHWA',monospace;font-size:clamp(.65rem,1.4vw,.9rem);letter-spacing:.24em;text-transform:uppercase;color:rgba(168,216,240,.7);text-align:center;opacity:0;animation:fadeInUp .8s 2.2s ease forwards;}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(8px)}to{opacity:.75;transform:none}}
+
+/* title */
+#title-scr{background:var(--bg);}
+.title-glow{position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 50%,rgba(74,138,176,.1)0%,transparent 68%);pointer-events:none;}
+.site-big{font-family:'Orbitron',monospace;font-weight:900;font-size:clamp(2.2rem,8vw,6rem);letter-spacing:.06em;color:#eaf3f9;line-height:1.1;text-shadow:0 0 70px rgba(168,216,240,.2);text-align:center;animation:fadeUp 1s ease both;position:relative;}
+.site-big::before,.site-big::after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;text-align:center;pointer-events:none;opacity:.0;}
+.site-big::before{color:#ff3b4e;animation:glitchA 5.5s steps(1) infinite;}
+.site-big::after{color:#46d0ff;animation:glitchB 5.5s steps(1) infinite;}
+@keyframes glitchA{0%,92%,100%{opacity:0;transform:none}93%{opacity:.7;transform:translate(-3px,1px)}95%{opacity:.6;transform:translate(2px,-1px)}97%{opacity:0}}
+@keyframes glitchB{0%,92%,100%{opacity:0;transform:none}94%{opacity:.7;transform:translate(3px,-1px)}96%{opacity:.6;transform:translate(-2px,1px)}98%{opacity:0}}
+.site-tag{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.88rem,1.8vw,1.1rem);color:var(--mut);text-align:center;margin-top:16px;animation:fadeUp 1s .3s ease both;}
+.title-btns{display:flex;gap:12px;margin-top:44px;flex-wrap:wrap;justify-content:center;animation:fadeUp 1s .6s ease both;}
+.title-btn{font-family:'Raleway',sans-serif;font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--ice);background:rgba(74,138,176,.08);border:1px solid rgba(74,138,176,.38);padding:13px 36px;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-block;}
+.title-btn:hover{background:rgba(74,138,176,.2);border-color:var(--ice);}
+.title-btn.tg{color:var(--cop);border-color:rgba(196,154,108,.38);}
+.title-btn.tg:hover{background:rgba(196,154,108,.1);border-color:var(--cop);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* particles */
+#ptcl{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+#ptcl span{position:absolute;border-radius:50%;background:rgba(168,216,240,.5);}
+
+/* ── MAIN SITE ── */
+#site{display:none;min-height:100vh;position:relative;z-index:1;}
+#site.vis{display:block;}
+
+/* nav */
+#main-nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:12px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(6,14,26,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--bdr);transition:transform .3s;}
+.nav-logo{font-family:'Orbitron',monospace;font-size:.92rem;color:#a8d8f0;letter-spacing:.14em;display:flex;align-items:center;gap:12px;text-decoration:none;}
+.nav-logo-img{height:46px;width:auto;object-fit:contain;filter:drop-shadow(0 0 8px rgba(168,216,240,.45));}
+.nav-menu{display:flex;align-items:center;gap:22px;}
+.nav-link{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);text-decoration:none;transition:color .3s;position:relative;padding:4px 0;}
+.nav-link:hover{color:var(--ice);}
+.nav-link::after{content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--icdim);transition:width .3s;}
+.nav-link:hover::after{width:100%;}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-tg{font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cop);border:1px solid rgba(196,154,108,.3);padding:5px 11px;text-decoration:none;transition:all .3s;}
+.nav-tg:hover{background:rgba(196,154,108,.1);border-color:var(--cop);}
+.nav-tg.b{color:var(--ice);border-color:rgba(168,216,240,.28);}
+.nav-tg.b:hover{background:rgba(168,216,240,.07);border-color:var(--ice);}
+
+/* hero — two-column layout */
+.site-hero{padding:110px 48px 48px;}
+.site-hero::after{content:'';display:block;margin-top:48px;height:1px;background:linear-gradient(90deg,transparent,var(--bdr),transparent);}
+.hero-inner{display:flex;align-items:center;gap:52px;max-width:940px;margin:0 auto;}
+.hero-pai-wrap{flex-shrink:0;}
+.hero-pai-img{height:210px;width:auto;object-fit:contain;filter:drop-shadow(0 0 20px rgba(168,216,240,.2));}
+.hero-content{text-align:left;}
+.hero-hosp{font-family:'Orbitron',monospace;font-size:clamp(.45rem,.9vw,.65rem);letter-spacing:.5em;text-transform:uppercase;color:var(--cop);margin-bottom:16px;}
+.hero-h{font-family:'Orbitron',monospace;font-size:clamp(1rem,2.8vw,1.9rem);color:#eaf3f9;line-height:1.3;font-weight:700;letter-spacing:.05em;text-shadow:0 0 40px rgba(168,216,240,.18);margin-bottom:14px;}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--mut);font-size:1.05rem;line-height:1.85;}
+
+/* tabs */
+.tabs-sec{padding:0 40px;scroll-margin-top:74px;}
+.tabs-nav{display:flex;border-bottom:1px solid var(--bdr);flex-wrap:wrap;}
+.tab-btn{font-family:'Raleway',sans-serif;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);background:transparent;border:none;border-bottom:2px solid transparent;padding:11px 18px 9px;cursor:pointer;transition:all .3s;position:relative;bottom:-1px;}
+.tab-btn.active{color:var(--ice);border-bottom-color:var(--icdim);}
+.tab-btn:hover:not(.active){color:var(--txt);}
+.tab-pane{display:none;padding:26px 0 52px;}
+.tab-pane.active{display:block;}
+
+/* search bar */
+.search-wrap{display:flex;align-items:center;gap:10px;margin-bottom:22px;max-width:420px;
+  border:1px solid var(--bdr);background:rgba(9,20,37,.55);padding:9px 14px;transition:border-color .3s;}
+.search-wrap:focus-within{border-color:rgba(168,216,240,.4);}
+.search-wrap .ic{font-family:var(--mono);font-size:.7rem;color:var(--icdim);}
+.search-wrap input{flex:1;background:transparent;border:none;outline:none;color:var(--txt);
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;}
+.search-wrap input::placeholder{color:var(--mut);opacity:.6;letter-spacing:.14em;text-transform:uppercase;font-size:.6rem;}
+
+/* star sub-tabs (cards tab only) */
+.subtabs-nav{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.stab-btn{font-size:.54rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);border:1px solid var(--bdr);padding:6px 15px;background:transparent;cursor:pointer;transition:all .3s;font-family:'Raleway',sans-serif;}
+.stab-btn.active{color:var(--ice);border-color:rgba(168,216,240,.38);background:rgba(168,216,240,.06);}
+.stab-btn:hover:not(.active){color:var(--txt);}
+
+/* cards grid */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px;max-width:1180px;}
+.no-results{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);padding:30px 4px;opacity:.7;}
+
+/* ════════ КАРТА ПАЦИЕНТА ════════ */
+.mcard{position:relative;background:var(--card-bg);border:1px solid var(--bdr);cursor:pointer;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  transition:transform .35s cubic-bezier(.2,.7,.3,1),border-color .35s,box-shadow .35s;overflow:hidden;}
+.mcard:hover{transform:translateY(-5px);border-color:rgba(168,216,240,.4);box-shadow:0 14px 40px rgba(4,12,26,.6),0 0 0 1px rgba(168,216,240,.06);}
+.mcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;z-index:3;
+  background:repeating-linear-gradient(180deg,var(--icdim) 0 7px,transparent 7px 16px);opacity:.5;}
+.mc-head{display:flex;justify-content:space-between;align-items:flex-start;
+  padding:11px 14px 9px 20px;border-bottom:1px dashed var(--bdr);font-family:var(--mono);}
+.mc-field{font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);line-height:1.7;}
+.mc-field b{color:var(--ice);font-weight:500;letter-spacing:.08em;}
+.mc-no{text-align:right;}
+.mc-no .num{color:var(--cop);font-size:.66rem;letter-spacing:.1em;}
+.mc-img{height:158px;background:linear-gradient(135deg,#0c1c32,#192f50);position:relative;overflow:hidden;border-bottom:1px solid var(--bdr);}
+.mc-img img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;}
+.mc-img .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(168,216,240,.22);}
+.stamp{position:absolute;top:14px;right:-34px;transform:rotate(34deg);z-index:2;
+  font-family:var(--mono);font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;
+  padding:4px 44px;border:1.5px solid;opacity:.92;background:rgba(6,14,26,.35);}
+.stamp.ok{color:var(--green);border-color:var(--green);text-shadow:0 0 8px rgba(62,207,142,.4);}
+.stamp.wait{color:var(--cop);border-color:var(--cop);}
+.mc-body{padding:14px 16px 16px;}
+.mc-rarity{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:8px;}
+.mc-rarity .stars{color:#e8c84a;font-size:.62rem;letter-spacing:.1em;}
+.mc-rarity .tag{font-family:var(--mono);font-size:.46rem;letter-spacing:.16em;text-transform:uppercase;color:var(--icdim);border:1px solid rgba(74,138,176,.25);padding:2px 7px;}
+.mc-rarity .tag.tg-wu{color:#4acce0;border-color:rgba(74,200,224,.3);}
+.mc-rarity .tag.tg-myth{color:#a080e0;border-color:rgba(160,128,224,.3);}
+.mc-rarity .tag.tg-meta{color:var(--cop);border-color:rgba(196,154,108,.3);}
+.mc-title{font-family:'Cormorant Garamond',serif;font-size:1.32rem;font-weight:500;color:#eaf3f9;line-height:1.25;margin-bottom:6px;}
+.mc-diag{font-size:.74rem;line-height:1.65;color:var(--mut);
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.mc-diag .k{font-family:var(--mono);font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--icdim);display:block;margin-bottom:3px;}
+.mc-vitals{height:22px;margin:12px 0 4px;opacity:.4;transition:opacity .35s;}
+.mcard:hover .mc-vitals{opacity:.85;}
+.mc-vitals svg{width:100%;height:100%;}
+.mc-vitals path{stroke:var(--icdim);stroke-width:1.4;fill:none;stroke-dasharray:600;stroke-dashoffset:600;}
+.mcard:hover .mc-vitals path{animation:beat 1.6s linear infinite;}
+@keyframes beat{from{stroke-dashoffset:600}to{stroke-dashoffset:0}}
+.mc-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:11px;border-top:1px dashed var(--bdr);}
+.mc-date{font-family:var(--mono);font-size:.5rem;letter-spacing:.1em;color:var(--mut);opacity:.7;}
+.mc-open{font-family:var(--mono);font-size:.54rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ice);opacity:.7;transition:.3s;}
+.mcard:hover .mc-open{opacity:1;}
+
+/* ════════ МОДАЛКА (раскрытая карта) ════════ */
+#overlay{position:fixed;inset:0;z-index:900;display:none;align-items:center;justify-content:center;padding:24px;
+  background:rgba(3,8,16,.78);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+#overlay.vis{display:flex;animation:ovFade .25s ease;}
+@keyframes ovFade{from{opacity:0}to{opacity:1}}
+.modal{position:relative;width:min(560px,100%);max-height:90vh;overflow-y:auto;
+  background:linear-gradient(180deg,rgba(11,24,44,.96),rgba(7,17,31,.97));
+  border:1px solid rgba(168,216,240,.28);box-shadow:0 30px 80px rgba(2,6,14,.8);
+  animation:modalIn .4s cubic-bezier(.2,.8,.25,1);}
+@keyframes modalIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+.modal::before{content:'';position:absolute;left:0;top:0;bottom:0;width:7px;z-index:3;
+  background:repeating-linear-gradient(180deg,var(--icdim) 0 8px,transparent 8px 18px);opacity:.6;}
+.m-close{position:absolute;top:12px;right:12px;z-index:5;width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:.9rem;color:var(--ice);border:1px solid var(--bdr);background:rgba(6,14,26,.6);cursor:pointer;transition:.3s;}
+.m-close:hover{border-color:var(--ice);background:rgba(168,216,240,.1);}
+.m-head{display:flex;justify-content:space-between;align-items:flex-start;
+  padding:14px 16px 12px 22px;border-bottom:1px dashed var(--bdr);font-family:var(--mono);}
+.m-field{font-size:.54rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);line-height:1.8;}
+.m-field b{color:var(--ice);font-weight:500;}
+.m-no{text-align:right;}
+.m-no .num{color:var(--cop);font-size:.78rem;letter-spacing:.1em;}
+.m-img{height:280px;background:linear-gradient(135deg,#0c1c32,#192f50);position:relative;overflow:hidden;border-bottom:1px solid var(--bdr);}
+.m-img img{width:100%;height:100%;object-fit:cover;object-position:center top;}
+.m-img .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(168,216,240,.22);}
+.m-img .scan{position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(168,216,240,.05) 0 1px,transparent 1px 3px);
+  mix-blend-mode:overlay;}
+.m-body{padding:20px 24px 26px;}
+.m-rarity{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;}
+.m-rarity .stars{color:#e8c84a;font-size:.78rem;letter-spacing:.12em;}
+.m-rarity .tag{font-family:var(--mono);font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--icdim);border:1px solid rgba(74,138,176,.3);padding:3px 9px;}
+.m-rarity .tag.tg-wu{color:#4acce0;border-color:rgba(74,200,224,.3);}
+.m-rarity .tag.tg-myth{color:#a080e0;border-color:rgba(160,128,224,.3);}
+.m-rarity .tag.tg-meta{color:var(--cop);border-color:rgba(196,154,108,.3);}
+.m-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:500;color:#eaf3f9;line-height:1.2;margin-bottom:14px;}
+.m-diag .k{font-family:var(--mono);font-size:.54rem;letter-spacing:.2em;text-transform:uppercase;color:var(--icdim);display:block;margin-bottom:6px;}
+.m-diag .txt{font-size:.92rem;line-height:1.85;color:var(--txt);}
+.m-diag .empty{font-style:italic;color:var(--mut);}
+.m-vitals{height:30px;margin:20px 0 6px;opacity:.7;}
+.m-vitals svg{width:100%;height:100%;}
+.m-vitals path{stroke:var(--icdim);stroke-width:1.5;fill:none;stroke-dasharray:600;stroke-dashoffset:600;animation:beat 1.8s linear infinite;}
+.m-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:16px;border-top:1px dashed var(--bdr);}
+.m-status{font-family:var(--mono);font-size:.54rem;letter-spacing:.14em;text-transform:uppercase;}
+.m-status.ok{color:var(--green);}
+.m-status.wait{color:var(--cop);}
+.m-read{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:#060e1a;background:var(--icdim);padding:11px 30px;text-decoration:none;transition:.3s;}
+.m-read:hover{background:var(--ice);box-shadow:0 0 22px rgba(168,216,240,.4);}
+.m-soon{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);font-style:italic;}
+
+/* ════════ ТЕМА МИФЫ (сяньси: нефрит + золото) ════════ */
+body.theme-myth::before{
+  background:
+    radial-gradient(55% 50% at 20% 10%,rgba(118,208,189,.12),transparent 60%),
+    radial-gradient(50% 50% at 85% 20%,rgba(200,170,110,.10),transparent 58%),
+    radial-gradient(70% 55% at 50% 115%,rgba(40,60,90,.30),transparent 62%),
+    linear-gradient(180deg,#060910 0%,#0a0f1c 100%) !important;
+  animation:auroraBreathe 18s ease-in-out infinite !important;}
+
+/* ═══ МИФЫ — панели-свитки ═══ */
+.myth-head{text-align:center;margin-bottom:30px;}
+.myth-h{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(1.8rem,5vw,3rem);letter-spacing:.06em;
+  background:linear-gradient(180deg,#efe7d8,#d8b878);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.myth-hsub{font-family:'Noto Serif SC',serif;font-size:.8rem;letter-spacing:.5em;color:#a8843e;margin-top:8px;}
+.myth-panel{position:relative;display:flex;margin-bottom:28px;border:1px solid rgba(216,184,120,.22);
+  background:linear-gradient(135deg,rgba(20,28,50,.7),rgba(10,14,28,.85));overflow:hidden;transition:.35s;}
+.myth-panel:hover{border-color:rgba(216,184,120,.45);box-shadow:0 14px 40px rgba(4,12,26,.5);}
+.myth-panel.snow{border-color:rgba(118,208,189,.22);}
+.myth-panel.snow:hover{border-color:rgba(118,208,189,.45);}
+.myth-panel::before,.myth-panel::after{content:'';position:absolute;width:26px;height:26px;z-index:3;pointer-events:none;}
+.myth-panel::before{top:8px;left:8px;border-top:1px solid #d8b878;border-left:1px solid #d8b878;opacity:.55;}
+.myth-panel::after{bottom:8px;right:8px;border-bottom:1px solid #d8b878;border-right:1px solid #d8b878;opacity:.55;}
+.myth-panel.snow::before,.myth-panel.snow::after{border-color:#76d0bd;}
+.myth-cover{position:relative;width:240px;flex-shrink:0;background:linear-gradient(160deg,#1a2746,#0c1322);display:flex;align-items:center;justify-content:center;overflow:hidden;border-right:1px solid rgba(216,184,120,.18);}
+.myth-panel.snow .myth-cover{background:linear-gradient(160deg,#16322f,#0a1a1a);border-right-color:rgba(118,208,189,.18);}
+.myth-cover img{width:100%;height:100%;object-fit:cover;}
+.myth-cover .ph{font-family:var(--mono);font-size:.52rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(216,184,120,.4);}
+.myth-seal{position:absolute;bottom:10px;right:12px;font-family:'Noto Serif SC',serif;font-weight:700;font-size:2.6rem;color:rgba(216,184,120,.16);line-height:1;}
+.myth-panel.snow .myth-seal{color:rgba(118,208,189,.18);}
+.myth-info{flex:1;padding:24px 26px;min-width:0;}
+.myth-kicker{font-family:var(--mono);font-size:.52rem;letter-spacing:.24em;text-transform:uppercase;color:#a8843e;margin-bottom:10px;}
+.myth-panel.snow .myth-kicker{color:#3f8e7e;}
+.myth-name{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:600;color:#efe7d8;line-height:1.1;margin-bottom:6px;}
+.myth-cn{font-family:'Noto Serif SC',serif;font-size:.88rem;color:#d8b878;letter-spacing:.3em;margin-bottom:14px;}
+.myth-panel.snow .myth-cn{color:#76d0bd;}
+.myth-lore{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.02rem;line-height:1.7;color:#cdd6e4;margin-bottom:18px;max-width:52ch;}
+.myth-chapters{display:flex;gap:10px;flex-wrap:wrap;}
+.myth-chip{font-family:var(--mono);font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:#efe7d8;
+  border:1px solid rgba(216,184,120,.35);padding:8px 18px;text-decoration:none;transition:.3s;}
+.myth-chip:hover{background:rgba(216,184,120,.12);border-color:#d8b878;box-shadow:0 0 16px rgba(216,184,120,.2);}
+.myth-panel.snow .myth-chip{border-color:rgba(118,208,189,.35);}
+.myth-panel.snow .myth-chip:hover{background:rgba(118,208,189,.1);border-color:#76d0bd;box-shadow:0 0 16px rgba(118,208,189,.2);}
+
+/* ════════ WORLD UNDERNEATH (агрессивная тема + косые карточки) ════════ */
+body.theme-wu::before{
+  background:
+    radial-gradient(58% 60% at 8% 38%,rgba(255,45,75,.28),transparent 60%),
+    radial-gradient(46% 50% at 88% 72%,rgba(70,200,255,.10),transparent 60%),
+    radial-gradient(70% 50% at 50% 115%,rgba(150,30,72,.22),transparent 62%),
+    linear-gradient(180deg,#08060c 0%,#0c0810 45%,#150a17 100%) !important;
+  animation:wuPulse 11s ease-in-out infinite !important;}
+body.theme-wu::after{opacity:.4;background-image:
+  linear-gradient(rgba(255,90,110,.05) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(70,200,255,.04) 1px,transparent 1px);}
+@keyframes wuPulse{0%,100%{filter:brightness(1) saturate(1)}50%{filter:brightness(1.2) saturate(1.32)}}
+
+#wu-head{position:relative;text-align:center;padding:6px 0 2px;}
+#wu-quote{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:2.4rem;color:#ff3b4e;line-height:0;display:inline-block;transform:translateY(.3em);text-shadow:0 0 18px rgba(255,59,78,.5);}
+.wu-title{position:relative;display:inline-block;font-family:'Chakra Petch',sans-serif;font-weight:700;
+  font-size:clamp(1.9rem,6vw,4rem);letter-spacing:.05em;text-transform:uppercase;line-height:1.1;cursor:default;color:#f3e6e8;
+  --gx:0px;--gy:0px;text-shadow:0 0 30px rgba(255,59,78,.28);}
+.wu-title .base{background:linear-gradient(180deg,#fff 0%,#f0cdd2 55%,#ff3b4e 130%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.wu-title::before,.wu-title::after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;text-align:center;pointer-events:none;text-transform:uppercase;mix-blend-mode:screen;transition:transform .08s linear;}
+.wu-title::before{color:#ff2d4b;transform:translate(calc(var(--gx)*-1),calc(var(--gy)*-1));opacity:.6;}
+.wu-title::after{color:#46d0ff;transform:translate(var(--gx),var(--gy));opacity:.5;}
+.wu-sub{font-family:var(--mono);font-size:.6rem;letter-spacing:.34em;text-transform:uppercase;color:var(--mut);margin-top:12px;}
+.wu-rule{height:1px;margin:24px auto 30px;max-width:520px;background:linear-gradient(90deg,transparent,#b01f33,#7a2540,transparent);opacity:.5;}
+
+/* WU slanted cards */
+.wcard{position:relative;display:flex;align-items:center;gap:28px;padding:22px 24px 22px 28px;margin-bottom:22px;text-decoration:none;
+  border:1px solid rgba(70,208,255,.16);background:rgba(8,14,24,.55);overflow:hidden;transition:.35s;}
+.wcard:hover{border-color:rgba(255,59,78,.4);transform:translateY(-3px);box-shadow:0 16px 40px rgba(2,6,14,.6);}
+.wcard::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.4;
+  background-image:linear-gradient(rgba(70,208,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,59,78,.03) 1px,transparent 1px);background-size:24px 24px;}
+.wpic{flex-shrink:0;width:148px;aspect-ratio:3/4;position:relative;border-radius:12px;overflow:hidden;
+  transform:skewX(-8deg) rotate(-3deg);border:1px solid rgba(70,208,255,.3);box-shadow:0 14px 36px rgba(2,6,14,.6),0 0 20px rgba(70,208,255,.12);}
+.wpic img{width:100%;height:100%;object-fit:cover;transform:skewX(8deg) scale(1.18);}
+.wpic .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;
+  background:linear-gradient(135deg,#0c1c32,#101826);font-family:var(--mono);font-size:.44rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(70,208,255,.35);transform:skewX(8deg);padding:0 12px;}
+.wpic .code{position:absolute;bottom:6px;right:8px;font-family:var(--mono);font-size:.42rem;letter-spacing:.08em;color:#ff5e74;background:rgba(6,10,18,.6);padding:2px 5px;transform:skewX(8deg);}
+.wbody{flex:1;min-width:0;position:relative;z-index:2;}
+.wtag{font-family:var(--mono);font-size:.5rem;letter-spacing:.24em;text-transform:uppercase;color:#ff3b4e;opacity:.85;}
+.wname{font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:1.4rem;color:#dbe8f5;line-height:1.15;margin:6px 0 12px;}
+.wname .arr{color:#46d0ff;font-size:.82rem;margin-left:6px;letter-spacing:-2px;}
+.wdiv{height:1px;background:linear-gradient(90deg,rgba(255,59,78,.5),rgba(70,208,255,.3),transparent);margin-bottom:12px;}
+.wdesc{font-size:.8rem;line-height:1.65;color:#9fb3c4;max-width:60ch;margin-bottom:14px;}
+.wgo{font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:#d2dde8;border:1px solid rgba(255,90,110,.3);padding:8px 20px;display:inline-block;transition:.3s;text-decoration:none;}
+.wgo:hover{color:#fff;background:rgba(255,59,78,.14);border-color:#ff3b4e;box-shadow:0 0 18px rgba(255,60,80,.3);}
+.wnum{position:absolute;top:10px;right:16px;font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:600;color:rgba(219,232,245,.1);line-height:1;z-index:1;}
+.wred{position:absolute;top:0;right:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,#ff3b4e,transparent);opacity:.6;}
+.wred::before{content:'';position:absolute;top:50%;right:0;width:6px;height:6px;border-radius:50%;background:#ff3b4e;box-shadow:0 0 10px #ff3b4e;transform:translate(2px,-50%);}
+
+/* ═══ TRANSITION FX ═══ */
+#fx{position:fixed;inset:0;z-index:500;pointer-events:none;display:none;}
+#fx.on{display:block;}
+.fx-fade{position:absolute;inset:0;opacity:0;}
+.fx-fade.go{animation:fxFadeOut .4s ease forwards;}
+@keyframes fxFadeOut{from{opacity:1}to{opacity:0}}
+/* lift */
+.lift{position:absolute;inset:0;background:#05060b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;}
+.lift-streaks{position:absolute;inset:0;overflow:hidden;}
+.lift-streaks i{position:absolute;top:-30%;width:1px;height:40%;background:linear-gradient(180deg,transparent,rgba(70,208,255,.5),transparent);}
+.lift-label{font-family:var(--mono);font-size:.62rem;letter-spacing:.4em;text-transform:uppercase;color:#ff3b4e;z-index:2;}
+.lift-floor{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:2.4rem;letter-spacing:.1em;color:#dbe8f5;z-index:2;min-width:6ch;text-align:center;text-shadow:0 0 20px rgba(70,208,255,.4);}
+.lift-arrow{font-size:1.4rem;color:#46d0ff;z-index:2;animation:liftdown 1s ease infinite;}
+@keyframes liftdown{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(6px);opacity:1}}
+@keyframes lStreak{from{transform:translateY(-60vh)}to{transform:translateY(160vh)}}
+/* blizzard */
+.bliz{position:absolute;inset:0;background:#0a0f1c;overflow:hidden;}
+.bliz .veil{position:absolute;inset:0;background:radial-gradient(circle at 40% 30%,rgba(200,222,245,.3),transparent 65%);animation:bVeil .9s ease;}
+@keyframes bVeil{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+.sf{position:absolute;border-radius:50%;background:#eaf3ff;box-shadow:0 0 6px rgba(200,225,255,.7);animation:blow linear forwards;}
+.gust{position:absolute;height:1px;background:linear-gradient(90deg,transparent,rgba(225,240,255,.6),transparent);animation:blow linear forwards;}
+@keyframes blow{from{transform:translate(-12vw,-6vh);opacity:0}12%{opacity:1}to{transform:translate(118vw,34vh);opacity:.15}}
+
+@media(max-width:680px){
+  .myth-panel{flex-direction:column;}
+  .myth-cover{width:100%;height:180px;border-right:none;border-bottom:1px solid rgba(216,184,120,.18);}
+  .wcard{flex-direction:column;text-align:center;gap:20px;padding-top:28px;}
+  .wpic{margin:0 auto;}
+  .wdiv{max-width:200px;margin:0 auto 12px;}
+  .wdesc{margin-left:auto;margin-right:auto;}
+}
+
+/* channel bars */
+.channel-bars{border-top:1px solid var(--bdr);padding:34px 40px;display:flex;gap:18px;flex-wrap:wrap;scroll-margin-top:74px;}
+.ch-bar{display:flex;align-items:center;gap:16px;background:rgba(10,22,40,.7);border:1px solid var(--bdr);padding:18px 22px;flex:1;min-width:280px;text-decoration:none;transition:all .3s;}
+.ch-bar:hover{border-color:rgba(168,216,240,.28);background:rgba(10,22,40,.95);transform:translateY(-2px);}
+.ch-av{width:54px;height:54px;border-radius:50%;background:rgba(42,108,176,.25);border:1px solid var(--bdr);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.ch-av img{width:100%;height:100%;object-fit:cover;}
+.ch-av-ph{font-size:1.3rem;color:var(--mut);}
+.ch-name{font-family:'Orbitron',monospace;font-size:.72rem;letter-spacing:.12em;color:var(--ice);}
+.ch-tag{font-family:'Raleway',sans-serif;font-size:.6rem;letter-spacing:.02em;color:var(--mut);font-weight:300;}
+.ch-desc{font-size:.64rem;color:var(--mut);margin-top:5px;line-height:1.5;font-family:'Orbitron',monospace;}
+/* красный — Сайлус */
+.ch-bar.red{border-color:rgba(255,80,95,.25);}
+.ch-bar.red:hover{border-color:#ff5566;background:rgba(40,12,16,.6);box-shadow:0 0 26px rgba(255,60,80,.16);}
+.ch-bar.red .ch-name{color:#ff6b7a;text-shadow:0 0 12px rgba(255,60,80,.35);}
+.ch-bar.red .ch-av{background:rgba(255,60,80,.15);border-color:rgba(255,80,95,.32);}
+.ch-bar.red .ch-av-ph{color:#ff6b7a;}
+/* оранжевый — 夏以昼 */
+.ch-bar.orange{border-color:rgba(232,148,60,.25);}
+.ch-bar.orange:hover{border-color:#e8943c;background:rgba(38,24,8,.6);box-shadow:0 0 26px rgba(232,148,60,.16);}
+.ch-bar.orange .ch-name{color:#f0a64c;text-shadow:0 0 12px rgba(232,148,60,.35);}
+.ch-bar.orange .ch-av{background:rgba(232,148,60,.15);border-color:rgba(232,148,60,.32);}
+.ch-bar.orange .ch-av-ph{color:#f0a64c;font-family:serif;}
+
+footer{border-top:1px solid var(--bdr);padding:18px 40px;display:flex;justify-content:flex-end;align-items:center;}
+.foot-copy{font-size:.54rem;color:var(--mut);opacity:.4;letter-spacing:.08em;}
+
+@media(max-width:980px){.nav-menu{display:none;}}
+@media(max-width:768px){
+  #main-nav{padding:11px 14px;}
+  .nav-logo-img{height:36px;}
+  .nav-logo{font-size:.78rem;}
+  .tabs-sec{padding:0 14px;}
+  .site-hero{padding:78px 14px 28px;}
+  .hero-inner{flex-direction:column;gap:28px;text-align:center;}
+  .hero-content{text-align:center;}
+  .hero-pai-img{height:150px;}
+  .cards-grid{grid-template-columns:1fr;}
+  .channel-bars{padding:24px 14px;flex-direction:column;}
+  footer{padding:14px;justify-content:center;}
+  .m-title{font-size:1.6rem;}
+  .m-img{height:220px;}
+}
+@media(max-width:480px){
+  .welcome-h{font-size:1.4rem;letter-spacing:.07em;}
+  .hero-h{font-size:.95rem;}
+  #ekg-wrap{height:64px;}
+}
+
+/* доступность: уважаем reduced-motion */
+@media(prefers-reduced-motion:reduce){
+  body::before{animation:none;}
+  .flake{display:none;}
+  .mcard:hover .mc-vitals path,.m-vitals path{animation:none;stroke-dashoffset:0;}
+  *{scroll-behavior:auto !important;}
+}
+
+/* ── v5 updates ── */
+#wu-quote{display:none;}
+.stars-4{color:#b8c4cc !important;text-shadow:0 0 4px rgba(180,192,204,.18);}
+button.nav-link{background:none;border:none;cursor:pointer;font-weight:700;letter-spacing:.2em;}
+.nav-link.active{color:var(--ice);}
+.nav-link.active::after{width:100% !important;}
+.nav-brand{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;letter-spacing:.04em;color:rgba(168,216,240,.55);white-space:nowrap;}
+@keyframes fadePanel{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.tab-pane.active{animation:fadePanel .55s ease .08s both;}
+</style>
+</head>
+<body>
+
+<div id="ptcl"></div>
+
+<!-- WELCOME -->
+<div class="screen grid-bg vis" id="welcome" onclick="startLoading()">
+  <div class="welcome-hosp">AKSO HOSPITAL · Digital Archive · v4.0</div>
+  <div class="welcome-h">Добро пожаловать<br>в Архив Аксо</div>
+  <div class="welcome-sub">Система управления медицинскими данными</div>
+  <div class="welcome-enter">[ Войти в систему ]</div>
+</div>
+
+<!-- LOADING -->
+<div class="screen grid-bg" id="loading">
+  <div class="load-sys">AKSO HOSPITAL · Инициализация системы</div>
+  <div id="ekg-wrap">
+    <svg id="ekg-svg" viewBox="0 0 580 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <defs><filter id="ekgglow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+      <path id="ekg-line" filter="url(#ekgglow)"
+        d="M0,45 L38,45 L52,45 L56,38 L60,45 L65,45 L70,10 L76,82 L82,45 L94,45
+           L130,45 L144,45 L148,38 L152,45 L157,45 L162,10 L168,82 L174,45 L186,45
+           L222,45 L236,45 L240,38 L244,45 L249,45 L254,10 L260,82 L266,45 L278,45
+           L314,45 L328,45 L332,38 L336,45 L341,45 L346,10 L352,82 L358,45 L370,45
+           L406,45 L420,45 L424,38 L428,45 L433,45 L438,10 L444,82 L450,45 L462,45
+           L510,45 L580,45"/>
+      <g class="jf" id="jf0" transform="translate(70,10)"><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(0)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(72)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(144)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(216)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(288)"/><circle r="2.5" fill="#f7e054"/></g>
+      <g class="jf" id="jf1" transform="translate(162,10)"><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(0)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(72)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(144)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(216)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(288)"/><circle r="2.5" fill="#f7e054"/></g>
+      <g class="jf" id="jf2" transform="translate(254,10)"><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(0)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(144)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(216)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(288)"/><circle r="2.5" fill="#f7e054"/></g>
+      <g class="jf" id="jf3" transform="translate(346,10)"><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(0)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(72)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(144)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(216)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(288)"/><circle r="2.5" fill="#f7e054"/></g>
+      <g class="jf" id="jf4" transform="translate(438,10)"><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(0)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(72)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(144)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(216)"/><ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="white" transform="rotate(288)"/><circle r="2.5" fill="#f7e054"/></g>
+    </svg>
+  </div>
+  <div class="load-st" id="load-st">—</div>
+  <div class="load-bw"><div class="load-bf" id="load-bf"></div></div>
+</div>
+
+<!-- ACCESS -->
+<div class="screen grid-bg" id="access">
+  <div class="access-txt" id="access-txt">█ ДОСТУП РАЗРЕШЁН █</div>
+  <div class="access-sub">Добро пожаловать, Госпожа Охотница</div>
+</div>
+
+<!-- TITLE -->
+<div class="screen" id="title-scr">
+  <div class="title-glow"></div>
+  <div class="site-big" data-text="Архив Аксо">Архив Аксо</div>
+  <div class="site-tag">Создано Лисёнком Доктора Ноа — для Жасминок и не только</div>
+  <div class="title-btns">
+    <button class="title-btn" onclick="enterSite()">Перейти в архив →</button>
+    <a class="title-btn tg" href="https://t.me/snowfox_lnd" target="_blank">↗ Telegram-канал</a>
+  </div>
+</div>
+
+<!-- MAIN SITE -->
+<div id="site">
+  <nav id="main-nav">
+    <a class="nav-logo" href="#">
+      <img class="nav-logo-img"
+        src="./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/%D0%90%D0%BA%D1%81%D0%BE%20%D0%BB%D0%BE%D0%B3%D0%BE%20(%D0%BD%D1%83%D0%B6%D0%BD%D0%BE%D0%B5).png"
+        alt="Аксо" onerror="this.style.display='none'">
+      AKSO ARCHIVE
+    </a>
+    <div class="nav-menu">
+      <button class="nav-link active" onclick="navGo('all',this)">Главная</button>
+      <button class="nav-link" onclick="navGo('cards',this)">Карточки</button>
+      <button class="nav-link" onclick="navGo('myths',this)">Мифы</button>
+      <button class="nav-link" onclick="navGo('wu',this)">World Underneath</button>
+    </div>
+    <div class="nav-right">
+      <span class="nav-brand">Love &amp; Deepspace</span>
+    </div>
+  </nav>
+
+  <div class="site-hero" id="about">
+    <div class="hero-inner">
+      <div class="hero-pai-wrap">
+        <img class="hero-pai-img"
+          src="./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/%D0%9F%D0%B0%D0%B9.png"
+          alt="Пай" onerror="this.style.display='none'">
+      </div>
+      <div class="hero-content">
+        <div class="hero-hosp">AKSO HOSPITAL · Архив статей · Zayne</div>
+        <h1 class="hero-h">ДОБРО ПОЖАЛОВАТЬ<br>В АРХИВ БОЛЬНИЦЫ АКСО</h1>
+        <p class="hero-sub">Листайте вниз для просмотра</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs-sec" id="cards-section">
+    <div class="tabs-nav">
+      <button class="tab-btn active" id="tbtn-all" onclick="switchTab('all',this)">Все истории</button>
+      <button class="tab-btn" id="tbtn-cards" onclick="switchTab('cards',this)">Карточки</button>
+      <button class="tab-btn" id="tbtn-myths" onclick="switchTab('myths',this)" style="display:none"></button>
+      <button class="tab-btn" id="tbtn-wu" onclick="switchTab('wu',this)" style="display:none"></button>
+    </div>
+
+    <!-- ВСЕ ИСТОРИИ -->
+    <div class="tab-pane active" id="tab-all">
+      <div class="search-wrap">
+        <span class="ic">⌕</span>
+        <input id="search-input" type="text" placeholder="Поиск по картам пациента" oninput="filterCards(this.value)">
+      </div>
+      <div class="cards-grid" id="all-wrap"></div>
+    </div>
+
+    <!-- КАРТОЧКИ -->
+    <div class="tab-pane" id="tab-cards">
+      <div class="subtabs-nav">
+        <button class="stab-btn active" onclick="switchStarTab('5',this)">★★★★★ &nbsp;5-звёздочные</button>
+        <button class="stab-btn" onclick="switchStarTab('4',this)">★★★★ &nbsp;4-звёздочные</button>
+      </div>
+      <div id="cards-5-wrap" class="cards-grid"></div>
+      <div id="cards-4-wrap" class="cards-grid" style="display:none"></div>
+    </div>
+
+    <!-- МИФЫ -->
+    <div class="tab-pane" id="tab-myths">
+      <div class="myth-head"><div class="myth-h">Мифы</div><div class="myth-hsub">神 話 録</div></div>
+      <div id="myths-wrap"></div>
+    </div>
+
+    <!-- WORLD UNDERNEATH -->
+    <div class="tab-pane" id="tab-wu">
+      <div id="wu-head">
+        <span id="wu-quote">“</span>
+        <span class="wu-title" data-text="World Underneath"><span class="base">World Underneath</span></span>
+        <div class="wu-sub">AKSO HOSPITAL · Подземный архив · уровень доступа ████</div>
+      </div>
+      <div class="wu-rule"></div>
+      <div id="wu-wrap"></div>
+    </div>
+  </div>
+
+  <!-- Channel bars -->
+  <div class="channel-bars" id="useful-authors">
+    <a href="https://t.me/snowfox_lnd" target="_blank" class="ch-bar">
+      <div class="ch-av">
+        <img src="./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/%D0%90%D0%B2%D0%B0%D1%82%D0%B0%D1%80%D0%BA%D0%B0%20Pie%27s%20Theory.jfif" alt="pie's theory"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ch-av-ph" style="display:none">🦊</div>
+      </div>
+      <div>
+        <div class="ch-name">pie's theory <span class="ch-tag">| гадаем на жасминовом чае</span></div>
+        <div class="ch-desc">Фанатский канал по Зейну и автор архива</div>
+      </div>
+    </a>
+    <a href="https://t.me/ladslove" target="_blank" class="ch-bar">
+      <div class="ch-av">
+        <img src="./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/%D0%B0%D0%B2%D0%B0%D1%82%D0%B0%D1%80%D0%BA%D0%B0%20%D0%9C%D1%83%D0%B6%D0%B8%D0%BA%D0%B8%20%D0%B2%20%D0%BA%D0%BE%D1%81%D0%BC%D0%BE%D1%81%D0%B5.jfif" alt=""
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ch-av-ph" style="display:none">♡</div>
+      </div>
+      <div>
+        <div class="ch-name">Мужики в Космосе</div>
+        <div class="ch-desc">Информационный канал о Love and Deepspace | Гайды | Новости</div>
+      </div>
+    </a>
+    <a href="https://t.me/ladslovesylus" target="_blank" class="ch-bar red">
+      <div class="ch-av">
+        <img src="./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/%D0%94%D0%B0%D0%B9%20%D0%94%D0%B5%D0%BD%D0%B5%D0%B3%20%D0%A1%D0%B0%D0%B9%D0%BB%D1%83%D1%81%20%D0%90%D0%B2%D0%B0%D1%82%D0%B0%D1%80%D0%BA%D0%B0.jfif" alt="Сайлус"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ch-av-ph" style="display:none">⚡</div>
+      </div>
+      <div>
+        <div class="ch-name">Дай Денег, Сайлус</div>
+        <div class="ch-desc">Канал по Сайлусу с нарративными переводами и разборами</div>
+      </div>
+    </a>
+    <a href="https://teletype.in/@xiayizhou" target="_blank" class="ch-bar orange">
+      <div class="ch-av">
+        <img src="./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/%D0%B0%D0%B2%D0%B0%D1%82%D0%B0%D1%80%D0%BA%D0%B0%20%D0%BA%D0%B0%D0%BD%D0%B0%D0%BB%D0%B0%20%D1%82%D0%B5%D0%BB%D0%B5%D1%82%D0%B0%D0%B9%D0%BF%D0%B0%20%D0%BF%D0%BE%20%D0%BA%D0%B0%D0%BB%D0%B5%D0%B1%D1%83.jpg" alt="夏"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ch-av-ph" style="display:none">夏</div>
+      </div>
+      <div>
+        <div class="ch-name">夏以昼</div>
+        <div class="ch-desc">Канал по переводам с китайского и английского по Калебу</div>
+      </div>
+    </a>
+  </div>
+
+  <footer>
+    <div class="foot-copy">© 2026 · @snowfox_lnd · Фанатский проект · Love &amp; Deepspace</div>
+  </footer>
+</div>
+
+<!-- MODAL OVERLAY -->
+<div id="overlay" onclick="if(event.target===this)closeCard()">
+  <div class="modal" id="modal"></div>
+</div>
+
+<div id="fx"></div>
+<script>
+/* image path shorthand */
+const F='./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/';
+
+/* ── CARD DATA ── */
+const CARDS=[
+  /* 5★ */
+  {type:'5', badge:'bdg-gold', badgeLabel:'Соло Баннер',
+   title:'Medical Rescue',
+   tags:[{l:'★★★★★',c:''}],
+   img:F+'Medical%20Rescue/%D0%BF%D1%80%D0%B5%D0%B2%D1%8C%D1%8E%20%D0%BA%20%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D0%B5.png',
+   desc:'В то время как Зейн сражался с бурей, на его связь пришёл сигнал тревоги. А я тем временем даже не подозреваю о том, что с ним происходит.',
+   link:'https://teletype.in/@snowfox_lnd/medicalescue'},
+
+  {type:'5', badge:'bdg-gold', badgeLabel:'10 days with you',
+   title:'Exclusive Tutorial',
+   tags:[{l:'★★★★★',c:''}],
+   img:F+'Exclusive%20Tutorial/%D0%A4%D0%BE%D1%82%D0%BE%20%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D0%B8.png',
+   desc:'В выходной Зейн зовёт меня сопровождать его на встречу выпускников. Оказавшись в незнакомой среде, я узнаю ту его грань, которую видят лишь избранные...',
+   link:'https://teletype.in/@snowfox_lnd/extutorial'},
+
+  {type:'5', badge:'bdg-gold', badgeLabel:'Ивент 2024',
+   title:'Eternal Attachment',
+   tags:[{l:'★★★★★',c:''},{l:'Ивент 2024',c:'tg-meta'}],
+   img:F+'Happy%20Birthday%202014/%D0%BF%D1%80%D0%B5%D0%B2%D1%8C%D1%8E.png',
+   desc:'Приближается день рождения Зейна, но из-за признаков, указывающих на подозрение на теносиновит, он отдыхает дома. Однако этот неожиданный отпуск — "хорошая новость" для меня, планирующей вечеринку в честь его дня рождения.',
+   link:'https://teletype.in/@snowfox_lnd/hpbdy2024'},
+
+  {type:'5', badge:'bdg-gold', badgeLabel:'Мультибаннер',
+   title:'Snowy Serenity',
+   tags:[{l:'★★★★★',c:''}],
+   img:F+'Snowy%20Serenity/%D0%BF%D1%80%D0%B5%D0%B2%D1%8C%D1%8E.jpg',
+   desc:'В полярном регионе разразился Метафлуксовый шторм. Зейн, находящийся там в командировке, перестаёт выходить на связь.',
+   link:'https://teletype.in/@snowfox_lnd/snowyserenity'},
+
+  /* 4★ */
+  {type:'4', badge:'bdg-blue', badgeLabel:'10 days with you',
+   title:'Blooming Hour',
+   tags:[{l:'★★★★',c:''}],
+   img:F+'Blooming%20Hour/%D0%A4%D0%BE%D1%82%D0%BE%20%D0%B4%D0%BB%D1%8F%20%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D0%B8..jpg',
+   desc:'Я хочу запечатлеть весну, а также тебя.',
+   link:'https://teletype.in/@snowfox_lnd/BloomingHour'},
+
+  {type:'4', badge:'bdg-blue', badgeLabel:'Боевой Пропуск',
+   title:'Steamy Proximity',
+   tags:[{l:'★★★★',c:''}],
+   img:F+'Steamy%20Proximity/%D1%84%D0%BE%D1%82%D0%BE%20%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D0%B8.png',
+   desc:'У меня были планы на субботний вечер с Зейном, но в последний момент мне поручили секретное задание — тайно доставить важный Протокор в исследовательский институт в соседнем городе.',
+   link:'https://teletype.in/@snowfox_lnd/steamyproximity'},
+
+  {type:'4', badge:'bdg-blue', badgeLabel:'Боевой Пропуск',
+   title:'Chasing Silhouettes',
+   tags:[{l:'★★★★',c:''}],
+   img:F+'Chasing%20Silhouettes/%D0%BF%D1%80%D0%B5%D0%B2%D1%8C%D1%8E.jpg',
+   desc:'После того как я повредила руку во время спасательной операции, Зейн стал моим "личным врачом" на период восстановления. Но даже в отпуске нам с Зейном порой приходится снова бросаться в гущу событий…',
+   link:'https://teletype.in/@snowfox_lnd/chasing01'},
+
+  /* Мифы — ToS first */
+  {type:'myth', badge:'bdg-myth', badgeLabel:'Миф',
+   title:'Tower of Secrets',
+   tags:[{l:'Миф',c:'tg-myth'}],
+   img:F+'Tower%20of%20Secrets%20%D0%9C%D0%B8%D1%84/%D0%BF%D1%80%D0%B5%D0%B2%D1%8C%D1%8E.jpeg',
+   desc:'Небесный спаситель, взбирающийся на Башню — было ли это предсказано Провидцем, что ожидает в объятиях ледяной гробницы.',
+   meta:'1-5 глава',
+   link:'https://teletype.in/@snowfox_lnd/towerofsecrets15'},
+
+  {type:'myth', badge:'bdg-myth', badgeLabel:'Миф',
+   title:'Tower of Secrets',
+   tags:[{l:'Миф',c:'tg-myth'}],
+   img:F+'Tower%20of%20Secrets%20%D0%9C%D0%B8%D1%84/%D0%BF%D1%80%D0%B5%D0%B2%D1%8C%D1%8E.jpeg',
+   desc:'Небесный спаситель, взбирающийся на Башню — было ли это предсказано Провидцем, что ожидает в объятиях ледяной гробницы.',
+   meta:'6-9 глава',
+   link:'https://teletype.in/@snowfox_lnd/towerofsecrets69'},
+
+  /* SE — 3 parts */
+  {type:'myth', badge:'bdg-myth', badgeLabel:'Миф',
+   title:"Snow's Embrace",
+   tags:[{l:'Миф',c:'tg-myth'}],
+   img:F+'%D0%9C%D0%B8%D1%84%20Snow%27s%20Embrace/%D0%BF%D1%80%D0%B5%D0%B2%D1%8C%D1%8E%20%D1%87%D0%B0%D1%81%D1%82%D1%8C%201-3.png',
+   desc:'Река Дань течёт на юг и впадает в море, а в трёхстах семидесяти ли от неё высится безымянная гора. Там растут диковинные деревья и лежит драгоценный нефрит. Говорят, в горе обитает божество.',
+   meta:'1-3 глава',
+   link:'https://teletype.in/@snowfox_lnd/snowsembrace1'},
+
+  {type:'myth', badge:'bdg-myth', badgeLabel:'Миф',
+   title:"Snow's Embrace",
+   tags:[{l:'Миф',c:'tg-myth'}],
+   img:F+'%D0%9C%D0%B8%D1%84%20Snow%27s%20Embrace/%D0%BF%D1%80%D0%B5%D0%B2%D1%8C%D1%8E%20%D1%87%D0%B0%D1%81%D1%82%D1%8C%201-3.png',
+   desc:'Река Дань течёт на юг и впадает в море, а в трёхстах семидесяти ли от неё высится безымянная гора. Там растут диковинные деревья и лежит драгоценный нефрит. Говорят, в горе обитает божество.',
+   meta:'4-6 глава',
+   link:'https://teletype.in/@snowfox_lnd/snowsembrace2'},
+
+  {type:'myth', badge:'bdg-myth', badgeLabel:'Миф',
+   title:"Snow's Embrace",
+   tags:[{l:'Миф',c:'tg-myth'}],
+   img:F+'%D0%9C%D0%B8%D1%84%20Snow%27s%20Embrace/%D0%BF%D1%80%D0%B5%D0%B2%D1%8C%D1%8E%20%D1%87%D0%B0%D1%81%D1%82%D1%8C%201-3.png',
+   desc:'Река Дань течёт на юг и впадает в море, а в трёхстах семидесяти ли от неё высится безымянная гора. Там растут диковинные деревья и лежит драгоценный нефрит. Говорят, в горе обитает божество.',
+   meta:'7-9 глава',
+   link:'https://teletype.in/@snowfox_lnd/snowsembrace3'},
+
+  /* World Underneath — by file number */
+  {type:'wu', badge:'bdg-wu', badgeLabel:'Подземка',
+   title:'Одинокий огонь',tags:[{l:'Подземка',c:'tg-wu'}],
+   img:F+'World%20Underneath/Longly_Flame_1.webp',
+   desc:'Стоит доктору Ноа посетить университет Скайхейвена, как он мысленно возвращается в те дни, когда Зейн был просто студентом, мечтавшим о профессии врача.',
+   link:'https://teletype.in/@snowfox_lnd/longlyflame'},
+  {type:'wu', badge:'bdg-wu', badgeLabel:'Подземка',
+   title:'Снежные ступени',tags:[{l:'Подземка',c:'tg-wu'}],
+   img:F+'World%20Underneath/Snowy_Stairs_2.webp',
+   desc:'Два врача, два разных пути — история амбициозного доктора Картера, который охотится за мастерством доктора Зейна.',
+   link:'https://teletype.in/@snowfox_lnd/snowystairs'},
+  {type:'wu', badge:'bdg-wu', badgeLabel:'Подземка',
+   title:'Ненаступившее утро',tags:[{l:'Подземка',c:'tg-wu'}],
+   img:F+'World%20Underneath/No_Morning_3.png',
+   desc:'Грейсон, молодой врач под началом доктора Зейна, влюбляется в девушку-охотника и пытается понять, как быть рядом с теми, кто каждый день рискует жизнью.',
+   link:'https://teletype.in/@snowfox_lnd/nomorning'},
+  {type:'wu', badge:'bdg-wu', badgeLabel:'Подземка',
+   title:'Фрактальная библиотека',tags:[{l:'Подземка',c:'tg-wu'}],
+   img:F+'World%20Underneath/Fractal_Library_4.png',
+   desc:'Я жду кое-кого. Я знаю, что однажды в эти двери войдёт человек, что потерял веру в Бога. Он — истинный владелец этой библиотеки.',
+   link:'https://teletype.in/@snowfox_lnd/fractallibrary'},
+  {type:'wu', badge:'bdg-wu', badgeLabel:'Подземка',
+   title:'От сумерек к осени',tags:[{l:'Подземка',c:'tg-wu'}],
+   img:F+'World%20Underneath/Dusk_to_Autumn_5.webp',
+   desc:'Шубай видит взросление Эмиссара и увядание его матери — и впервые верит в подлинность этого мира.',
+   link:'https://teletype.in/@snowfox_lnd/snowautumn'},
+  {type:'wu', badge:'bdg-wu', badgeLabel:'Подземка',
+   title:'Доброй ночи, Фростмир',tags:[{l:'Подземка',c:'tg-wu'}],
+   img:F+'World%20Underneath/Good_Night%2C_Frostmere_6.png',
+   desc:'Грейсон возвращается с миссии в арктическом городке Фростмир, пережившем катастрофу. Он пишет отчёты о смерти, прощается с погибшими и в финале обещает себе встретить рассвет.',
+   link:'https://teletype.in/@snowfox_lnd/goodnight'},
+];
+
+/* мини-ЭКГ путь */
+const EKG_PATH='M0,11 H60 l5,-7 4,14 4,-13 5,6 H120 l5,-7 4,14 4,-13 5,6 H200 l5,-7 4,14 4,-13 5,6 H280';
+const FLAT_PATH='M0,11 H280';
+
+/* номер карты — стабильный по индексу */
+function cardNo(i){return 'AH-'+String(372+i*23).padStart(4,'0');}
+
+/* тег-классы для модалки/карты */
+function tagClass(c){
+  if(c==='tg-wu')return 'tg-wu';
+  if(c==='tg-myth')return 'tg-myth';
+  return '';
+}
+
+/* ── CARD RENDER ── */
+function cardHTML(c,i){
+  const available=!!c.link;
+  const stamp=available
+    ? `<div class="stamp ok">Доступно</div>`
+    : `<div class="stamp wait">Обработка</div>`;
+  const imgBlock=c.img
+    ? `<img src="${c.img}" alt="${c.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ph" style="display:none">медиа · превью</div>`
+    : `<div class="ph">медиа · превью</div>`;
+  const rarity=c.tags.map(t=>{
+    if(t.l.includes('★')){const s4=t.l==='★★★★';return `<span class="stars${s4?' stars-4':''}">${t.l}</span>`;}
+    return `<span class="tag ${tagClass(t.c)}">${t.l}</span>`;
+  }).join('');
+  const metaTag=c.meta?`<span class="tag tg-meta">${c.meta}</span>`:'';
+  const diagLabel=available?'Анамнез':'Статус карты';
+  const diagText=c.desc||'Запись доступна по ссылке. Откройте карту для перехода.';
+  const vit=available?EKG_PATH:FLAT_PATH;
+  return`<div class="mcard" data-i="${i}" onclick="openCard(${i})">
+    <div class="mc-head">
+      <div class="mc-field">Пациент<br><b>ZAYNE</b></div>
+      <div class="mc-field mc-no">Карта №<br><span class="num">${cardNo(i)}</span></div>
+    </div>
+    <div class="mc-img">
+      ${imgBlock}
+      ${stamp}
+    </div>
+    <div class="mc-body">
+      <div class="mc-rarity">${rarity}${metaTag}</div>
+      <div class="mc-title">${c.title}</div>
+      <div class="mc-diag"><span class="k">${diagLabel}</span>${diagText}</div>
+      <div class="mc-vitals"><svg viewBox="0 0 280 22" preserveAspectRatio="none"><path d="${vit}"/></svg></div>
+      <div class="mc-foot">
+        <span class="mc-date">${c.badgeLabel}</span>
+        <span class="mc-open">Открыть ↗</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function wuCardHTML(c,n){
+  const nn=String(n).padStart(2,'0');
+  const imgBlock=c.img
+    ? `<img src="${c.img}" alt="${c.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="ph" style="display:none">добавишь с ПК</span>`
+    : `<span class="ph">добавишь с ПК</span>`;
+  return`<a class="wcard" href="${c.link}" target="_blank">
+    <div class="wpic">${imgBlock}<span class="code">A-${128+n} · ${n}.0J/7</span></div>
+    <div class="wbody">
+      <div class="wtag">Подземка</div>
+      <div class="wname">${nn}. ${c.title} <span class="arr">►►</span></div>
+      <div class="wdiv"></div>
+      ${c.desc?`<div class="wdesc">${c.desc}</div>`:''}
+      <span class="wgo">Читать →</span>
+    </div>
+    <div class="wnum">${nn}</div><span class="wred"></span>
+  </a>`;
+}
+
+/* myth grouping: Tower + Snow's Embrace panels */
+const MYTH_GROUPS={
+  'Tower of Secrets':{seal:'塔',cn:'秘 密 之 塔',kicker:'Миф · Провидец · Foreseer',cls:'tower',
+    lore:'Небесный спаситель, взбирающийся на Башню — было ли это предсказано Провидцем, что ожидает в объятиях ледяной гробницы.'},
+  "Snow's Embrace":{seal:'命',cn:'雪 之 拥 抱',kicker:'Миф · Master of Fate',cls:'snow',
+    lore:'Девушка с духовными способностями. Бог горы. И Бай Цзэ, которого не стоило трогать. Под жасминовым деревом решается чужая судьба.'}
+};
+function renderMythPanels(){
+  const wrap=document.getElementById('myths-wrap');
+  const groups={};
+  CARDS.filter(c=>c.type==='myth').forEach(c=>{
+    if(!groups[c.title])groups[c.title]=[];groups[c.title].push(c);});
+  Object.entries(groups).forEach(([title,cards])=>{
+    const g=MYTH_GROUPS[title]||{seal:'',cn:'',kicker:'Миф',cls:'',lore:''};
+    const cover=cards[0].img
+      ? `<img src="${cards[0].img}" alt="${title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="ph" style="display:none">обложка</span>`
+      : `<span class="ph">обложка</span>`;
+    const chips=cards.map(c=>`<a class="myth-chip" href="${c.link}" target="_blank">${c.meta||'Читать'}</a>`).join('');
+    wrap.insertAdjacentHTML('beforeend',`<article class="myth-panel ${g.cls}">
+      <div class="myth-cover">${cover}<div class="myth-seal">${g.seal}</div></div>
+      <div class="myth-info">
+        <div class="myth-kicker">${g.kicker}</div>
+        <h3 class="myth-name">${title}</h3>
+        <div class="myth-cn">${g.cn}</div>
+        <p class="myth-lore">${g.lore}</p>
+        <div class="myth-chapters">${chips}</div>
+      </div>
+    </article>`);
+  });
+}
+
+function renderAllCards(){
+  const targets={
+    all:document.getElementById('all-wrap'),
+    '5':document.getElementById('cards-5-wrap'),
+    '4':document.getElementById('cards-4-wrap'),
+    wu:document.getElementById('wu-wrap'),
+  };
+  let wuN=0;
+  CARDS.forEach((c,i)=>{
+    if(c.type==='5'||c.type==='4')targets.all.insertAdjacentHTML('beforeend',cardHTML(c,i));
+    if(c.type==='5')targets['5'].insertAdjacentHTML('beforeend',cardHTML(c,i));
+    if(c.type==='4')targets['4'].insertAdjacentHTML('beforeend',cardHTML(c,i));
+    if(c.type==='wu'){wuN++;targets.wu.insertAdjacentHTML('beforeend',wuCardHTML(c,wuN));}
+  });
+  renderMythPanels();
+  initWuGlitch();
+}
+
+/* ── WORLD UNDERNEATH glitch (курсор на десктопе, авто на телефоне) ── */
+function initWuGlitch(){
+  const t=document.querySelector('.wu-title');
+  if(!t||t.dataset.bound)return;t.dataset.bound='1';
+  const head=document.getElementById('wu-head');
+  const reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const set=(x,y)=>{t.style.setProperty('--gx',x.toFixed(1)+'px');t.style.setProperty('--gy',y.toFixed(1)+'px');};
+  const clamp=(v,m)=>Math.max(-m,Math.min(m,v));
+  const fromPoint=(px,py)=>{
+    const r=t.getBoundingClientRect();
+    set(clamp(((px-(r.left+r.width/2))/r.width)*11,6),clamp(((py-(r.top+r.height/2))/r.height)*8,4));
+  };
+  const fine=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if(fine){
+    head.addEventListener('pointermove',e=>fromPoint(e.clientX,e.clientY));
+    head.addEventListener('pointerleave',()=>set(0,0));
+  }else if(!reduce){
+    let f=0;
+    (function loop(){f+=0.05;
+      const jx=Math.random()<.07?(Math.random()*9-4.5):0;
+      set(Math.sin(f)*4+jx,Math.cos(f*1.3)*2.4);
+      requestAnimationFrame(loop);
+    })();
+    document.getElementById('tab-wu').addEventListener('touchmove',e=>{
+      const tc=e.touches[0];if(tc)fromPoint(tc.clientX,tc.clientY);
+    },{passive:true});
+  }
+}
+
+/* ── MODAL ── */
+function openCard(i){
+  const c=CARDS[i];
+  const available=!!c.link;
+  const imgBlock=c.img
+    ? `<img src="${c.img}" alt="${c.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ph" style="display:none">медиа · превью</div><div class="scan"></div>`
+    : `<div class="ph">медиа · превью</div><div class="scan"></div>`;
+  const rarity=c.tags.map(t=>{
+    if(t.l.includes('★')){const s4=t.l==='★★★★';return `<span class="stars${s4?' stars-4':''}">${t.l}</span>`;}
+    return `<span class="tag ${tagClass(t.c)}">${t.l}</span>`;
+  }).join('');
+  const metaTag=c.meta?`<span class="tag tg-meta">${c.meta}</span>`:'';
+  const diagLabel=available?'Анамнез':'Статус карты';
+  const diagText=c.desc
+    ? `<div class="txt">${c.desc}</div>`
+    : `<div class="txt empty">Описание появится после публикации записи.</div>`;
+  const vit=available?EKG_PATH:FLAT_PATH;
+  const footAction=available
+    ? `<span class="m-status ok">● Запись доступна</span><a class="m-read" href="${c.link}" target="_blank">Читать →</a>`
+    : `<span class="m-status wait">● В обработке</span><span class="m-soon">Скоро</span>`;
+  document.getElementById('modal').innerHTML=`
+    <button class="m-close" onclick="closeCard()" aria-label="Закрыть">✕</button>
+    <div class="m-head">
+      <div class="m-field">Пациент<br><b>ZAYNE</b></div>
+      <div class="m-field m-no">Карта №<br><span class="num">${cardNo(i)}</span></div>
+    </div>
+    <div class="m-img">${imgBlock}</div>
+    <div class="m-body">
+      <div class="m-rarity">${rarity}${metaTag}<span class="tag">${c.badgeLabel}</span></div>
+      <div class="m-title">${c.title}</div>
+      <div class="m-diag"><span class="k">${diagLabel}</span>${diagText}</div>
+      <div class="m-vitals"><svg viewBox="0 0 560 30" preserveAspectRatio="none"><path d="${available?'M0,15 H120 l8,-10 6,20 6,-18 8,8 H260 l8,-10 6,20 6,-18 8,8 H420 l8,-10 6,20 6,-18 8,8 H560':'M0,15 H560'}"/></svg></div>
+      <div class="m-foot">${footAction}</div>
+    </div>`;
+  document.getElementById('overlay').classList.add('vis');
+  document.body.style.overflow='hidden';
+}
+function closeCard(){
+  document.getElementById('overlay').classList.remove('vis');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCard();});
+
+/* ── SEARCH ── */
+function filterCards(q){
+  q=q.trim().toLowerCase();
+  const wrap=document.getElementById('all-wrap');
+  let shown=0;
+  wrap.querySelectorAll('.mcard').forEach(el=>{
+    const c=CARDS[+el.dataset.i];
+    const hay=(c.title+' '+(c.desc||'')+' '+c.badgeLabel+' '+(c.meta||'')).toLowerCase();
+    const ok=hay.includes(q);
+    el.style.display=ok?'':'none';
+    if(ok)shown++;
+  });
+  let nr=document.getElementById('all-noresults');
+  if(shown===0){
+    if(!nr){nr=document.createElement('div');nr.id='all-noresults';nr.className='no-results';nr.textContent='Карты не найдены — уточните запрос.';wrap.after(nr);}
+  }else if(nr){nr.remove();}
+}
+
+/* ── SCREENS ── */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('vis'));
+  document.getElementById(id).classList.add('vis');
+}
+function startLoading(){
+  showScreen('loading');
+  setTimeout(runEKG,80);
+  runLoadSeq();
+}
+function runEKG(){
+  document.getElementById('ekg-line').classList.add('go');
+  [70,162,254,346,438].forEach((x,i)=>{
+    setTimeout(()=>document.getElementById('jf'+i)?.classList.add('bloom'),x/580*3000+350);
+  });
+}
+const LSTEPS=[[300,'ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ...',10],[900,'ПОИСК ПАЦИЕНТА...',38],[1700,'ИДЕНТИФИКАЦИЯ...',68],[2500,'ЗАГРУЗКА ДАННЫХ...',90],[3300,'ПАЦИЕНТ НАЙДЕН.',100]];
+function runLoadSeq(){
+  const st=document.getElementById('load-st'),bf=document.getElementById('load-bf');
+  LSTEPS.forEach(([d,lbl,pct])=>setTimeout(()=>{
+    st.textContent=lbl;bf.style.width=pct+'%';
+    if(pct===100)setTimeout(showAccess,700);
+  },d));
+}
+function showAccess(){
+  showScreen('access');
+  document.getElementById('access-txt').classList.add('neon-on');
+  setTimeout(()=>showScreen('title-scr'),3600);
+}
+function enterSite(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('vis'));
+  document.getElementById('site').classList.add('vis');
+  renderAllCards();
+  setupNavHide();
+}
+function setupNavHide(){
+  let ly=0;
+  window.addEventListener('scroll',()=>{
+    const y=window.scrollY,nav=document.getElementById('main-nav');
+    nav.style.transform=(y>ly&&y>80)?'translateY(-100%)':'translateY(0)';ly=y;
+  },{passive:true});
+}
+
+/* ── TABS with transitions ── */
+let _curTab='all';
+function switchTab(tab,btn){
+  if(tab===_curTab)return;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const doSwap=()=>{
+    document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+    document.getElementById('tab-'+tab).classList.add('active');
+    document.body.classList.remove('theme-wu','theme-myth');
+    if(tab==='wu')document.body.classList.add('theme-wu');
+    if(tab==='myths')document.body.classList.add('theme-myth');
+    _curTab=tab;
+  };
+  if(tab==='wu') liftDown(doSwap);
+  else if(tab==='myths') blizzard(doSwap);
+  else doSwap();
+}
+
+/* lift transition (WU) */
+function liftDown(done){
+  const fx=document.getElementById('fx');
+  const streaks=Array.from({length:26},()=>`<i style="left:${Math.random()*100}%;animation:lStreak ${.3+Math.random()*.3}s linear ${-Math.random()*.5}s infinite"></i>`).join('');
+  fx.innerHTML=`<div class="lift"><div class="lift-streaks">${streaks}</div><div class="lift-label">Спуск в подземный архив</div><div class="lift-floor" id="lfloor">1 ЭТАЖ</div><div class="lift-arrow">▼</div><div class="fx-fade" style="background:#0c0810"></div></div>`;
+  fx.classList.add('on');
+  const floors=['1 ЭТАЖ','B1','B2','B3','B4','— ПОДЗЕМЕЛЬЕ —'],el=document.getElementById('lfloor');let k=0;
+  const iv=setInterval(()=>{k++;if(k<floors.length)el.textContent=floors[k];},150);
+  setTimeout(()=>{clearInterval(iv);done();fx.querySelector('.fx-fade').classList.add('go');},1000);
+  setTimeout(()=>{fx.classList.remove('on');fx.innerHTML='';},1450);
+}
+
+/* blizzard transition (myths) */
+function blizzard(done){
+  const fx=document.getElementById('fx');
+  let snow='';
+  for(let i=0;i<80;i++){const top=Math.random()*100,sz=2+Math.random()*4,dur=.45+Math.random()*.5,dl=Math.random()*.45;
+    snow+=`<span class="sf" style="top:${top}%;left:0;width:${sz}px;height:${sz}px;animation-duration:${dur}s;animation-delay:${dl}s"></span>`;}
+  for(let i=0;i<14;i++){const top=Math.random()*100,w=40+Math.random()*120,dur=.4+Math.random()*.3,dl=Math.random()*.4;
+    snow+=`<span class="gust" style="top:${top}%;left:0;width:${w}px;animation-duration:${dur}s;animation-delay:${dl}s"></span>`;}
+  fx.innerHTML=`<div class="bliz"><div class="veil"></div>${snow}<div class="fx-fade" style="background:#0a0f1c"></div></div>`;
+  fx.classList.add('on');
+  setTimeout(done,560);
+  setTimeout(()=>fx.querySelector('.fx-fade').classList.add('go'),640);
+  setTimeout(()=>{fx.classList.remove('on');fx.innerHTML='';},1080);
+}
+/* ── NAV page routing ── */
+function navGo(section,navBtn){
+  const hero=document.querySelector('.site-hero');
+  hero.style.display=(section==='all')?'':'none';
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  navBtn.classList.add('active');
+  const btn=document.getElementById('tbtn-'+section);
+  if(btn&&section!==_curTab)switchTab(section,btn);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function switchStarTab(star,btn){
+  document.querySelectorAll('#tab-cards .stab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cards-5-wrap').style.display=star==='5'?'':'none';
+  document.getElementById('cards-4-wrap').style.display=star==='4'?'':'none';
+}
+
+/* ── PARTICLES (rising dust) ── */
+(function(){
+  const p=document.getElementById('ptcl');
+  const s=document.createElement('style');
+  s.textContent='@keyframes ptcRise{0%{opacity:.7;transform:translateY(0)}100%{opacity:0;transform:translateY(-100vh)}}';
+  document.head.appendChild(s);
+  for(let i=0;i<12;i++){
+    const el=document.createElement('span');
+    const sz=1.5+Math.random()*2,dur=10+Math.random()*14,dl=Math.random()*12;
+    el.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;bottom:${Math.random()*10}%;opacity:.5;animation:ptcRise ${dur}s linear ${dl}s infinite;`;
+    p.appendChild(el);
+  }
+})();
+
+/* ── SNOWFLAKES (background) ── */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  const glyphs=['❄','❅','•','·'];
+  for(let i=0;i<22;i++){
+    const f=document.createElement('div');
+    f.className='flake';f.textContent=glyphs[Math.floor(Math.random()*glyphs.length)];
+    f.style.left=Math.random()*100+'vw';
+    f.style.fontSize=(6+Math.random()*12)+'px';
+    f.style.opacity=.15+Math.random()*.35;
+    f.style.animationDuration=(11+Math.random()*16)+'s';
+    f.style.animationDelay=(-Math.random()*20)+'s';
+    document.body.appendChild(f);
+  }
+})();
+</script>
+</body>
+</html>
