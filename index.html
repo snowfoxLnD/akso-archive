@@ -467,11 +467,111 @@ button.nav-link{background:none;border:none;cursor:pointer;font-weight:700;lette
 .myth-info{position:relative;z-index:2;}
 @keyframes fadePanel{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 .tab-pane.active{animation:fadePanel .55s ease .08s both;}
+
+/* ── EXTRA FEATURES ── */
+/* day mode */
+body.day{--bg:#cfe0ee;--card:rgba(255,255,255,.82);--txt:#1a2a3a;--mut:#4a6882;--ice:#2a6ea0;--icdim:#3a7fb0;--bdr:rgba(40,90,140,.18);}
+body.day #main-nav{background:rgba(215,232,245,.96);}
+body.day::before{filter:brightness(1.55) saturate(.65) hue-rotate(6deg);}
+
+/* freeze effect */
+#freeze-tint{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity 1.1s;
+  background:radial-gradient(ellipse at 50% 40%,rgba(120,200,255,.1),rgba(40,120,200,.28) 90%);mix-blend-mode:screen;}
+body.frozen #freeze-tint{opacity:1;}
+body.frozen{animation:shiver 6s ease-in-out infinite;}
+@keyframes shiver{0%,100%{filter:none}50%{filter:hue-rotate(-12deg) saturate(1.2)}}
+
+/* globe button */
+#globe-btn{position:fixed;right:18px;bottom:18px;z-index:30;cursor:pointer;width:68px;height:68px;border:none;background:none;padding:0;
+  filter:drop-shadow(0 4px 14px rgba(100,180,255,.45));transition:transform .25s;}
+#globe-btn:hover{transform:scale(1.1);}
+#globe-btn img{width:100%;height:100%;object-fit:contain;}
+#globe-btn.shake{animation:gShake .5s ease;}
+@keyframes gShake{0%,100%{transform:rotate(0)}20%{transform:rotate(-10deg)}40%{transform:rotate(9deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(4deg)}}
+
+/* bell */
+#bell-btn{position:fixed;right:96px;bottom:26px;z-index:30;cursor:pointer;border:none;background:none;
+  font-size:1.5rem;line-height:1;filter:drop-shadow(0 2px 8px rgba(196,154,108,.5));transition:transform .2s;}
+#bell-btn:hover{transform:rotate(12deg);}
+#bell-btn.ring{animation:bellRing .35s ease;}
+@keyframes bellRing{0%,100%{transform:rotate(0)}25%{transform:rotate(-22deg)}75%{transform:rotate(22deg)}}
+
+/* mode buttons bottom-left */
+#mode-btns{position:fixed;left:14px;bottom:18px;z-index:30;display:flex;flex-direction:column;gap:7px;}
+.mode-btn{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--mut);border:1px solid var(--bdr);background:rgba(6,14,26,.75);padding:6px 10px;cursor:pointer;
+  transition:all .3s;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);}
+.mode-btn:hover,.mode-btn.on{color:var(--ice);border-color:rgba(168,216,240,.4);}
+
+/* Bai sprite */
+#bai-sprite{position:fixed;z-index:25;pointer-events:none;width:80px;height:auto;
+  filter:drop-shadow(0 4px 10px rgba(80,160,220,.5));transform:translateX(-200px);}
+
+/* paw trail */
+.paw{position:fixed;pointer-events:none;z-index:15;font-size:.75rem;opacity:.55;
+  animation:pawFade .9s ease forwards;transform-origin:center;}
+@keyframes pawFade{0%{opacity:.55;transform:scale(1)}100%{opacity:0;transform:scale(.4)}}
+
+/* WU ice click */
+.wcard{cursor:default;}
+.wcard.iced::after{content:'';position:absolute;inset:0;z-index:5;pointer-events:none;
+  background:radial-gradient(circle at var(--ix,50%) var(--iy,50%),rgba(140,220,255,.42) 0%,rgba(60,140,220,.18) 30%,transparent 68%);
+  animation:iceReveal .4s ease;}
+@keyframes iceReveal{from{opacity:0;filter:blur(5px)}to{opacity:1;filter:none}}
+
+/* Rx popup (Досье) */
+#rx-popup{position:fixed;right:18px;top:78px;z-index:50;width:256px;
+  background:rgba(244,245,238,.97);color:#1a2430;border:1px solid rgba(196,154,108,.55);
+  box-shadow:0 14px 40px rgba(0,0,0,.55);transform:translateX(310px);opacity:0;
+  transition:transform .5s cubic-bezier(.2,.8,.3,1),opacity .4s;pointer-events:none;}
+#rx-popup.vis{transform:translateX(0);opacity:1;pointer-events:all;}
+.rx-top{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;
+  border-bottom:1px dashed rgba(26,36,48,.25);}
+.rx-rx{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:#7a2f2f;font-style:italic;}
+.rx-h{font-size:.43rem;letter-spacing:.18em;text-transform:uppercase;color:#6a7682;line-height:1.6;text-align:right;}
+.rx-x{border:none;background:none;color:#6a7682;cursor:pointer;font-size:.9rem;padding:0;}
+.rx-body{padding:13px 14px 15px;}
+.rx-q{font-family:'Cormorant Garamond',serif;font-size:.98rem;line-height:1.55;color:#28323e;font-style:italic;}
+#rx-pill{position:fixed;right:18px;top:78px;z-index:49;width:42px;height:42px;border-radius:50%;
+  background:rgba(244,245,238,.97);border:1px solid rgba(196,154,108,.5);color:#7a2f2f;
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:700;font-size:1.2rem;
+  display:none;align-items:center;justify-content:center;cursor:pointer;
+  box-shadow:0 6px 20px rgba(0,0,0,.4);animation:pillPulse 2.5s ease infinite;}
+@keyframes pillPulse{0%,100%{box-shadow:0 6px 20px rgba(0,0,0,.4)}50%{box-shadow:0 6px 20px rgba(0,0,0,.4),0 0 0 5px rgba(196,154,108,.1)}}
+
+@media(max-width:768px){
+  #globe-btn{right:12px;bottom:12px;width:54px;height:54px;}
+  #bell-btn{right:74px;bottom:18px;font-size:1.2rem;}
+  #mode-btns{left:10px;bottom:12px;gap:5px;}
+  .mode-btn{font-size:.44rem;padding:5px 8px;}
+  #bai-sprite{width:60px;}
+  #rx-popup{width:220px;right:12px;}
+  #rx-pill{right:12px;}
+}
 </style>
 </head>
 <body>
 
 <div id="ptcl"></div>
+<div id="freeze-tint"></div>
+<img id="bai-sprite" src="./bai.png" alt="Бай" onerror="this.style.display='none'">
+<button id="globe-btn" onclick="shakeGlobe()" title="Потрясти шар ❄">
+  <img src="./globe.png" alt="Снежный шар" onerror="this.outerHTML='<span style=font-size:2.2rem;line-height:1>🔮</span>'">
+</button>
+<button id="bell-btn" onclick="ringBell()" title="Колокольчик">🔔</button>
+<div id="mode-btns">
+  <button class="mode-btn" id="btn-day" onclick="toggleDay()">☀ День</button>
+  <button class="mode-btn" id="btn-snd" onclick="toggleSound()">♪ Звук</button>
+</div>
+<div id="rx-popup">
+  <div class="rx-top">
+    <span class="rx-rx">℞</span>
+    <span class="rx-h">AKSO HOSPITAL<br>Досье · цитата дня</span>
+    <button class="rx-x" onclick="closeRx()">✕</button>
+  </div>
+  <div class="rx-body"><div class="rx-q" id="rx-q">—</div></div>
+</div>
+<button id="rx-pill" onclick="openRx()" title="Открыть досье">℞</button>
 
 <!-- WELCOME -->
 <div class="screen grid-bg vis" id="welcome" onclick="startLoading()">
@@ -853,17 +953,17 @@ function wuCardHTML(c,n){
   const imgBlock=c.img
     ? `<img src="${c.img}" alt="${c.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="ph" style="display:none">добавишь с ПК</span>`
     : `<span class="ph">добавишь с ПК</span>`;
-  return`<a class="wcard" href="${c.link}" target="_blank">
+  return`<div class="wcard" onclick="wuIce(this,event)">
     <div class="wpic">${imgBlock}<span class="code">A-${128+n} · ${n}.0J/7</span></div>
     <div class="wbody">
       <div class="wtag">Подземка</div>
       <div class="wname">${nn}. ${c.title} <span class="arr">►►</span></div>
       <div class="wdiv"></div>
       ${c.desc?`<div class="wdesc">${c.desc}</div>`:''}
-      <span class="wgo">Читать →</span>
+      <a class="wgo" href="${c.link}" target="_blank" onclick="event.stopPropagation()">Читать →</a>
     </div>
     <div class="wnum">${nn}</div><span class="wred"></span>
-  </a>`;
+  </div>`;
 }
 
 /* myth grouping: Tower + Snow's Embrace panels */
@@ -1045,6 +1145,7 @@ function enterSite(){
   document.getElementById('site').classList.add('vis');
   renderAllCards();
   setupNavHide();
+  setTimeout(initRx,1200);
 }
 function setupNavHide(){
   let ly=0;
@@ -1134,6 +1235,151 @@ function switchStarTab(star,btn){
     p.appendChild(el);
   }
 })();
+
+/* ── SOUNDS ── */
+let _actx=null,_sndOn=false;
+function _ac(){if(!_actx){_actx=new(window.AudioContext||window.webkitAudioContext)();}if(_actx.state==='suspended')_actx.resume();return _actx;}
+function _beep(freq,dur,type,vol,t0){
+  const ac=_ac(),o=ac.createOscillator(),g=ac.createGain(),t=t0||ac.currentTime;
+  o.type=type||'sine';o.frequency.value=freq;g.gain.setValueAtTime(vol||.08,t);
+  g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+dur+.02);
+}
+function sndBell(){
+  if(!_sndOn)return;const ac=_ac(),t=ac.currentTime;
+  _beep(1047,.6,'sine',.1,t);_beep(1319,.5,'sine',.06,t+.01);_beep(1568,.4,'sine',.04,t+.02);
+}
+function sndBleat(){
+  if(!_sndOn)return;const ac=_ac(),t=ac.currentTime;
+  const o=ac.createOscillator(),g=ac.createGain();
+  o.type='sawtooth';o.frequency.setValueAtTime(320,t);o.frequency.exponentialRampToValueAtTime(180,t+.18);
+  o.frequency.setValueAtTime(340,t+.22);o.frequency.exponentialRampToValueAtTime(200,t+.4);
+  g.gain.setValueAtTime(.07,t);g.gain.setValueAtTime(.07,t+.18);g.gain.exponentialRampToValueAtTime(.0001,t+.42);
+  o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+.45);
+}
+function sndHeartbeat(){
+  if(!_sndOn)return;const ac=_ac(),t=ac.currentTime;
+  _beep(55,.14,'sine',.12,t);_beep(50,.11,'sine',.09,t+.2);
+}
+function toggleSound(){
+  _sndOn=!_sndOn;_ac();
+  document.getElementById('btn-snd').classList.toggle('on',_sndOn);
+  document.getElementById('btn-snd').textContent=_sndOn?'♪ Звук ●':'♪ Звук';
+}
+
+/* ── GLOBE ── */
+function shakeGlobe(){
+  const g=document.getElementById('globe-btn');
+  g.classList.remove('shake');void g.offsetWidth;g.classList.add('shake');
+  sndBell();
+  // snow burst via ptcl particles
+  for(let i=0;i<18;i++){
+    const p=document.createElement('span');
+    const style=document.getElementById('ptcl');
+    const x=70+Math.random()*60,vy=-(3+Math.random()*5),vx=(Math.random()-0.5)*6;
+    p.style.cssText=`position:absolute;left:${x}%;bottom:20px;width:3px;height:3px;border-radius:50%;background:rgba(168,216,240,.8);transition:none;`;
+    document.getElementById('ptcl').appendChild(p);
+    let py=0,px=0,op=1,tick=0;
+    (function anim(){tick++;py+=vy-tick*.12;px+=vx;op-=.025;
+      p.style.transform=`translate(${px}px,${py}px)`;p.style.opacity=op;
+      if(op>0)requestAnimationFrame(anim);else p.remove();
+    })();
+  }
+}
+
+/* ── BELL ── */
+function ringBell(){
+  const b=document.getElementById('bell-btn');
+  b.classList.remove('ring');void b.offsetWidth;b.classList.add('ring');
+  sndBell();
+  // show Rx quote on bell ring
+  openRx();
+}
+
+/* ── DAY / NIGHT ── */
+function toggleDay(){
+  const on=document.body.classList.toggle('day');
+  document.getElementById('btn-day').classList.toggle('on',on);
+  document.getElementById('btn-day').textContent=on?'🌙 Ночь':'☀ День';
+}
+
+/* ── PAW TRAIL ── */
+let _pawT=0;
+document.addEventListener('mousemove',e=>{
+  const now=Date.now();if(now-_pawT<220)return;_pawT=now;
+  const p=document.createElement('div');p.className='paw';p.textContent='🐾';
+  p.style.cssText=`left:${e.clientX-6}px;top:${e.clientY-6}px;transform:rotate(${Math.random()*40-20}deg);`;
+  document.body.appendChild(p);setTimeout(()=>p.remove(),920);
+});
+
+/* ── BAI SPRITE ── */
+(function(){
+  const el=document.getElementById('bai-sprite');if(!el)return;
+  let busy=false;
+  function run(){
+    if(busy)return;busy=true;
+    const dir=Math.random()<.5?1:-1;
+    const yFrac=0.55+Math.random()*0.35; // 55-90% вниз
+    let x=dir>0?-160:innerWidth+160;
+    const end=dir>0?innerWidth+160:-160;
+    const speed=dir*(2+Math.random()*.9);
+    const t0=performance.now();
+    el.style.bottom='';el.style.top=(innerHeight*yFrac)+'px';
+    function step(now){
+      const t=(now-t0)/1e3;x+=speed;
+      const hop=Math.abs(Math.sin(t*7))*14,sway=Math.sin(t*7)*3;
+      el.style.transform=`translate(${x}px,${-hop}px) rotate(${sway*dir}deg) scaleX(${dir})`;
+      if((dir>0&&x<end)||(dir<0&&x>end))requestAnimationFrame(step);
+      else{busy=false;if(_sndOn)setTimeout(sndBleat,100);setTimeout(run,10000+Math.random()*18000);}
+    }
+    requestAnimationFrame(step);
+    if(_sndOn)sndBleat();
+  }
+  setTimeout(run,3000);
+})();
+
+/* ── WU ICE CLICK ── */
+function wuIce(el,e){
+  const rx=el.getBoundingClientRect();
+  el.style.setProperty('--ix',((e.clientX-rx.left)/rx.width*100)+'%');
+  el.style.setProperty('--iy',((e.clientY-rx.top)/rx.height*100)+'%');
+  el.classList.remove('iced');void el.offsetWidth;el.classList.add('iced');
+  sndHeartbeat();
+  setTimeout(()=>el.classList.remove('iced'),2200);
+}
+
+/* ── RX POPUP (Досье) ── */
+const RX=[
+  '"I want to capture spring, and you."',
+  '"I\'ve been thinking of you for a long time."',
+  '"Your presence alone turns even the most ordinary days into something special."',
+  '"I\'d like to share the quiet moments of all four seasons with you."',
+  '"Here is my heart — it\'s the one I\'ve spent all this time keeping safe."',
+  '"I am still waiting for you to come through the morning mist."',
+  '"I won\'t ask about the things that need to be kept confidential. But let me know if you\'re not feeling well. Otherwise, I\'ll worry."',
+  '"The person who\'s worth breaking the rules for wasn\'t with me back then."',
+  '"It\'s possible that I\'d rather show you my feelings with actions over telling you."',
+  '"We were going to meet anyway. Wouldn\'t it be nice to see each other sooner?"',
+  '"Physically or emotionally?"',
+  '"Don\'t move. If your hair isn\'t dry, you\'ll start sneezing again."',
+  '"I want to write down how it felt when I first fell in love with you."',
+  '"Did I ever say I don\'t enjoy adventuring with you?"',
+];
+let _rxIdx=Math.floor(Math.random()*RX.length);
+function openRx(){
+  _rxIdx=(_rxIdx+1)%RX.length;
+  document.getElementById('rx-q').textContent=RX[_rxIdx];
+  document.getElementById('rx-popup').classList.add('vis');
+  document.getElementById('rx-pill').style.display='none';
+}
+function closeRx(){
+  document.getElementById('rx-popup').classList.remove('vis');
+  setTimeout(()=>{document.getElementById('rx-pill').style.display='flex';},420);
+}
+// show on enter site, hide after 5s
+function initRx(){
+  openRx();
+  setTimeout(closeRx,5000);
+}
 
 /* ── MARQUEE quotes ── */
 (function(){
