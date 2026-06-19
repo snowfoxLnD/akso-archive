@@ -573,21 +573,32 @@ button.nav-link{background:none;border:none;cursor:pointer;font-weight:700;lette
 
 /* Burst-snow canvas (only during shake / 5.09 aurora pulse) */
 #burstSnow{position:fixed;inset:0;z-index:13;pointer-events:none;}
+/* frost overlay that melts under pointer */
+#frost{position:fixed;inset:0;z-index:5;pointer-events:none;}
 
 /* 5 sentября aurora burst */
-body.aurora-burst::before{filter:hue-rotate(0deg) brightness(2) saturate(2)!important;animation:auroraBurst 10s ease-out forwards!important;}
-@keyframes auroraBurst{0%{filter:hue-rotate(40deg) brightness(2.4) saturate(2.3)}50%{filter:hue-rotate(-20deg) brightness(1.7) saturate(1.7)}100%{filter:hue-rotate(0) brightness(1) saturate(1)}}
+body.aurora-burst::before{animation:auroraShimmer 5s ease-in-out infinite!important;}
+@keyframes auroraShimmer{0%{filter:hue-rotate(-25deg) brightness(1.45) saturate(1.7)}25%{filter:hue-rotate(35deg) brightness(1.7) saturate(2)}50%{filter:hue-rotate(80deg) brightness(1.5) saturate(1.9)}75%{filter:hue-rotate(20deg) brightness(1.75) saturate(2.1)}100%{filter:hue-rotate(-25deg) brightness(1.45) saturate(1.7)}}
+.aurora-band{position:fixed;left:-10%;right:-10%;top:0;height:60vh;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.2s;
+  background:linear-gradient(110deg,transparent,rgba(80,255,200,.18),rgba(120,180,255,.16),rgba(190,130,255,.16),transparent);
+  filter:blur(40px);mix-blend-mode:screen;}
+body.aurora-burst .aurora-band{opacity:1;animation:auroraWave 7s ease-in-out infinite;}
+@keyframes auroraWave{0%,100%{transform:translateX(-6%) skewY(-2deg) scaleY(1)}50%{transform:translateX(6%) skewY(2deg) scaleY(1.25)}}
 
 /* Frozen mode (Астра) */
 body.frozen{animation:shiver 5s ease-in-out infinite;}
 @keyframes shiver{0%,100%{filter:none}50%{filter:hue-rotate(-14deg) saturate(1.25) brightness(1.05)}}
 #frozenTint{position:fixed;inset:0;z-index:4;pointer-events:none;opacity:0;transition:opacity 1.1s;background:radial-gradient(ellipse at 50% 40%,rgba(120,200,255,.12),rgba(40,120,200,.32) 95%);mix-blend-mode:screen;}
 body.frozen #frozenTint{opacity:1;}
+#frozenLabel{position:fixed;top:78px;left:50%;transform:translateX(-50%);z-index:60;font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:#bfe6ff;background:rgba(8,20,38,.7);border:1px solid rgba(120,200,255,.4);padding:8px 18px;opacity:0;transition:opacity .5s;pointer-events:none;text-shadow:0 0 10px rgba(120,200,255,.6);}
+body.frozen #frozenLabel{opacity:1;}
+body.frozen #frostEdges{opacity:.85;}
+#frostEdges{position:fixed;inset:0;z-index:4;pointer-events:none;opacity:0;transition:opacity 1s;
+  background:radial-gradient(ellipse 120% 90% at 50% 50%,transparent 55%,rgba(190,225,255,.5) 100%);}
 
 /* Silence easter egg */
 #silenceOverlay{position:fixed;inset:0;z-index:200;background:#000;display:none;align-items:center;justify-content:center;padding:30px;}
-#silenceOverlay.on{display:flex;animation:silShake 0.18s linear infinite;}
-@keyframes silShake{0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-2px)}75%{transform:translate(-2px,-1px)}100%{transform:translate(1px,2px)}}
+#silenceOverlay.on{display:flex;}
 .silence-text{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(1.2rem,4vw,2.4rem);color:#eaf3f9;text-align:center;line-height:1.6;letter-spacing:.04em;max-width:780px;text-shadow:0 0 28px rgba(168,216,240,.5);}
 body.silence-pulse::before{animation:silAur 0.5s ease-in-out infinite!important;}
 @keyframes silAur{0%,100%{filter:brightness(.8)}50%{filter:brightness(1.6) saturate(1.4)}}
@@ -601,6 +612,15 @@ body.silence-pulse::before{animation:silAur 0.5s ease-in-out infinite!important;
   #snowGlobe{width:64px;height:64px;right:10px;bottom:10px;}
 }
 
+
+#baiBell{position:fixed;right:18px;bottom:112px;width:48px;height:48px;z-index:30;cursor:pointer;border:1px solid var(--bdr);background:rgba(8,18,34,.8);color:#a8d8f0;font-size:1.2rem;border-radius:50%;transition:.3s;box-shadow:0 4px 14px rgba(0,0,0,.4);}
+#baiBell:hover{border-color:var(--ice);transform:translateY(-2px);box-shadow:0 0 16px rgba(168,216,240,.35);}
+#baiRunner{position:fixed;bottom:10px;left:0;width:84px;height:auto;z-index:16;pointer-events:none;filter:drop-shadow(0 4px 10px rgba(80,160,220,.4));will-change:transform;transform:translate(-160px,0);}
+@media(max-width:640px){#baiBell{width:40px;height:40px;bottom:88px;right:12px;}#baiRunner{width:62px;}}
+
+/* WU card click — black ice shatter particles */
+.ice-burst{position:fixed;width:8px;height:8px;pointer-events:none;z-index:120;background:linear-gradient(135deg,#9fe4ff,#2a6cb0);clip-path:polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%);will-change:transform,opacity;}
+@keyframes iceFly{to{transform:translate(var(--dx),var(--dy)) rotate(var(--rot));opacity:0;}}
 </style>
 </head>
 <body>
@@ -608,6 +628,15 @@ body.silence-pulse::before{animation:silAur 0.5s ease-in-out infinite!important;
 <div id="ptcl"></div>
 
 <!-- WELCOME -->
+<div id="nameAsk" class="screen" style="background:#040912;display:none;flex-direction:column;align-items:center;justify-content:center;gap:22px;z-index:1001;">
+  <div style="font-family:'FHWA',monospace;font-size:clamp(.6rem,1.2vw,.8rem);letter-spacing:.34em;color:rgba(168,216,240,.55);text-transform:uppercase;">AKSO HOSPITAL · Регистрация</div>
+  <div id="nameAskTitle" style="font-family:'FHWA',monospace;font-size:clamp(1.2rem,3.5vw,2rem);letter-spacing:.1em;color:#c8e8f8;text-align:center;text-shadow:0 0 50px rgba(168,216,240,.3);">Госпожа Охотница,<br>введите своё имя</div>
+  <input id="nameAskInput" type="text" maxlength="32" placeholder="ваше имя" autocomplete="off"
+   style="background:rgba(9,20,37,.6);border:1px solid rgba(168,216,240,.3);color:#eaf3f9;font-family:'Orbitron',monospace;font-size:1rem;letter-spacing:.06em;padding:12px 18px;text-align:center;outline:none;min-width:240px;">
+  <button id="nameAskBtn" onclick="confirmName()" style="font-family:'FHWA',monospace;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:#c8e8f8;border:1px solid rgba(168,216,240,.4);background:none;padding:12px 36px;cursor:pointer;transition:.3s;">[ Подтвердить ]</button>
+  <button onclick="skipName()" style="font-family:'JetBrains Mono',monospace;font-size:.54rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);background:none;border:none;cursor:pointer;opacity:.6;">пропустить</button>
+</div>
+
 <div class="screen grid-bg vis" id="welcome" onclick="startLoading()">
   <div class="welcome-hosp">AKSO HOSPITAL · Digital Archive · v4.0</div>
   <div class="welcome-h">Добро пожаловать<br>в Архив Аксо</div>
@@ -1399,25 +1428,25 @@ const AWARDS={blue:F_ASSETS+'award_blue.png',jade:F_ASSETS+'award_jade.png',gold
 const R_LABEL={blue:'Стандартный',jade:'Необычный',gold:'Редкий',diamond:'Легендарный'};
 
 const ACH=[
-  {id:'visit',  n:'Первый визит',          d:'Войти в Архив Аксо.',                          r:'blue'},
-  {id:'cards5', n:'Полный осмотр',         d:'Прочитать все 5★ карточки.',                   r:'jade'},
-  {id:'cards4', n:'Боевой паёк',           d:'Прочитать 4★ карточки.',                       r:'blue'},
-  {id:'myths',  n:'Хранитель мифов',       d:'Открыть оба мифа.',                            r:'jade'},
-  {id:'under',  n:'Спуск в подземелье',    d:'Побывать в World Underneath.',                 r:'blue'},
-  {id:'freeze', n:'Криокамера',            d:'Активировать секретное слово в поиске.',       r:'gold'},
-  {id:'aurora', n:'Северное сияние',       d:'Поймать редкий день авроры.',                  r:'gold'},
-  {id:'night',  n:'Ночная смена',          d:'Зайти после полуночи.',                        r:'blue'},
-  {id:'globe10',n:'Снежная буря',          d:'Тряхнуть шар 10 раз.',                         r:'jade'},
-  {id:'globe50',n:'Метель',                d:'Тряхнуть шар 50 раз.',                         r:'gold'},
-  {id:'name',   n:'Опознан',               d:'Ввести имя в досье.',                          r:'blue'},
-  {id:'photo',  n:'Карта пациента',        d:'Загрузить фото в досье.',                      r:'blue'},
-  {id:'rx',     n:'По рецепту',            d:'Сгенерировать 5 рецептов.',                    r:'jade'},
-  {id:'zayne10',n:'Беседа с доктором',     d:'10 ответов от Dr. Zayne.',                     r:'jade'},
-  {id:'channels',n:'Знакомый круг',        d:'Открыть все каналы из подвала.',               r:'blue'},
-  {id:'bday',   n:'С днём рождения, доктор', d:'Зайти 5 сентября.',                            r:'diamond', secret:true},
-  {id:'silence',n:'Тишина',                d:'Прошептать «Silence».',                        r:'diamond', secret:true},
-  {id:'insomnia',n:'Бессонница хирурга',   d:'Зайти между 02:00 и 04:00.',                   r:'gold', secret:true},
-  {id:'fullset',n:'Полный допуск',         d:'Открыть все остальные допуски.',               r:'diamond'},
+  {id:'visit',  n:'🚪 Первый визит',          d:'Войти в Архив Аксо.',                          r:'blue'},
+  {id:'cards5', n:'🩺 Полный осмотр',         d:'Прочитать все 5★ карточки.',                   r:'jade'},
+  {id:'cards4', n:'🎴 Боевой паёк',           d:'Прочитать 4★ карточки.',                       r:'blue'},
+  {id:'myths',  n:'⛩️ Хранитель мифов',       d:'Открыть оба мифа.',                            r:'jade'},
+  {id:'under',  n:'🕳️ Спуск в подземелье',    d:'Побывать в World Underneath.',                 r:'blue'},
+  {id:'freeze', n:'❄️ Криокамера',            d:'Активировать секретное слово в поиске.',       r:'gold'},
+  {id:'aurora', n:'🌌 Северное сияние',       d:'Поймать редкий день авроры.',                  r:'gold'},
+  {id:'night',  n:'🌙 Ночная смена',          d:'Зайти после полуночи.',                        r:'blue'},
+  {id:'globe10',n:'🔮 Снежная буря',          d:'Тряхнуть шар 10 раз.',                         r:'jade'},
+  {id:'globe50',n:'🌨️ Метель',                d:'Тряхнуть шар 50 раз.',                         r:'gold'},
+  {id:'name',   n:'🪪 Опознан',               d:'Ввести имя в досье.',                          r:'blue'},
+  {id:'photo',  n:'📸 Карта пациента',        d:'Загрузить фото в досье.',                      r:'blue'},
+  {id:'rx',     n:'💊 По рецепту',            d:'Сгенерировать 5 рецептов.',                    r:'jade'},
+  {id:'zayne10',n:'💬 Беседа с доктором',     d:'10 ответов от Dr. Zayne.',                     r:'jade'},
+  {id:'channels',n:'📡 Знакомый круг',        d:'Открыть все каналы из подвала.',               r:'blue'},
+  {id:'bday',   n:'🎂 С днём рождения, доктор', d:'Зайти 5 сентября.',                            r:'diamond', secret:true},
+  {id:'silence',n:'🤫 Тишина',                d:'Прошептать «Silence».',                        r:'diamond', secret:true},
+  {id:'insomnia',n:'🕯️ Бессонница хирурга',   d:'Зайти между 02:00 и 04:00.',                   r:'gold', secret:true},
+  {id:'fullset',n:'👑 Полный допуск',         d:'Открыть все остальные допуски.',               r:'diamond'},
 ];
 
 let DS={u:[],name:'',photo:'',visits:0,id:null,rxRolls:0,zayneCount:0,globeShakes:0,channelsClicked:[]};
@@ -1502,18 +1531,18 @@ function resetDossier(){if(!confirm('Сбросить досье полност�
 
 /* Zayne talker — English lines */
 const Z_LINES=[
- "You didn't get enough sleep again. I can read it from your chart.",
- "Cold? Come closer. I don't bite. Usually.",
- "The archive won't run away. Your rest, on the other hand, might.",
- "When it gets heavy — you know where to find me.",
- "I checked your vitals. You'll live.",
- "Don't push yourself into my office. Although… I wouldn't mind.",
- "It's snowing. Perfect time to wrap up and read.",
- "You're stronger than you think. That's not a diagnosis — that's a fact.",
- "Breathe in. Hold. Breathe out. Better already.",
- "I'll write you a prescription. For warmth.",
- "Patient's pulse: steady. Doctor's pulse: complicated.",
- "Stay. Just for a while.",
+ "Ты снова не выспалась. Это видно по твоей карте.",
+ "Холодно? Подойди ближе. Я не кусаюсь… обычно.",
+ "Архив не убежит. А вот твой отдых — может.",
+ "Когда станет тяжело — ты знаешь, где меня найти.",
+ "Я проверил твои показатели. Жить будешь.",
+ "Не доводи себя до приёма у меня. Хотя… я бы не возражал.",
+ "Снег идёт. Самое время закутаться и почитать.",
+ "Ты сильнее, чем думаешь. Это не диагноз — это факт.",
+ "Вдох. Задержи. Выдох. Уже лучше.",
+ "Я выпишу тебе рецепт. На тепло.",
+ "Пульс пациента: ровный. Пульс врача: сложный.",
+ "Останься. Хотя бы ненадолго.",
 ];
 let z_i=-1;
 function zayneSpeak(){z_i=(z_i+1)%Z_LINES.length;const el=document.getElementById('ds-zline');if(el)el.textContent=Z_LINES[z_i];DS.zayneCount=(DS.zayneCount||0)+1;dsSave();if(DS.zayneCount>=10)dsUnlock('zayne10');dsBeep(440,.05);}
@@ -1544,15 +1573,19 @@ function makeFlakeSprite(size){const c=document.createElement('canvas');c.width=
 const BSPR=[null,null,null];
 function ensureSprites(){if(!BSPR[0])[8,13,18].forEach((s,i)=>BSPR[i]=makeFlakeSprite(s));}
 function burstLoop(){if(!burstCtx)return;requestAnimationFrame(burstLoop);burstCtx.clearRect(0,0,burstW,burstH);for(const f of burstFlakes){f.y+=f.vy;f.x+=f.vx+Math.sin(f.t)*.4;f.t+=.04;f.rot+=f.vrot;const sp=BSPR[f.L];burstCtx.globalAlpha=Math.max(0,f.life);burstCtx.setTransform(1,0,0,1,f.x,f.y);burstCtx.rotate(f.rot);burstCtx.drawImage(sp,-f.r,-f.r,f.r*2,f.r*2);f.life-=.005;}burstCtx.setTransform(1,0,0,1,0,0);burstCtx.globalAlpha=1;burstFlakes=burstFlakes.filter(f=>f.life>0&&f.y<burstH+30);}
-function burstSnowSpawn(n){ensureSprites();for(let i=0;i<n;i++){const L=Math.random()<.55?0:Math.random()<.7?1:2;burstFlakes.push({x:Math.random()*burstW,y:-20-Math.random()*100,vx:(Math.random()*1.4-.7),vy:1+Math.random()*2.2,L,r:[4,7,11][L],t:Math.random()*6,rot:Math.random()*6,vrot:(Math.random()*2-1)*.02,life:1});}}
+function burstSnowSpawn(n){ensureSprites();if(!burstCtx&&burstC){burstCtx=burstC.getContext("2d");burstResize();addEventListener("resize",burstResize);requestAnimationFrame(burstLoop);}if(!burstW){burstResize();}for(let i=0;i<n;i++){const L=Math.random()<.55?0:Math.random()<.7?1:2;burstFlakes.push({x:Math.random()*burstW,y:-20-Math.random()*100,vx:(Math.random()*1.4-.7),vy:1+Math.random()*2.2,L,r:[4,7,11][L],t:Math.random()*6,rot:Math.random()*6,vrot:(Math.random()*2-1)*.02,life:1});}}
 function shakeGlobe(){const g=document.getElementById('snowGlobe');if(g){g.classList.remove('shake');void g.offsetWidth;g.classList.add('shake');}if(!burstCtx&&burstC){burstCtx=burstC.getContext('2d');burstResize();addEventListener('resize',burstResize);requestAnimationFrame(burstLoop);}burstSnowSpawn(60);dsBeep(520,.07);DS.globeShakes=(DS.globeShakes||0)+1;dsSave();if(DS.globeShakes>=10)dsUnlock('globe10');if(DS.globeShakes>=50)dsUnlock('globe50');}
 
 /* Aurora burst (5 sept) */
-function auroraBurst(){document.body.classList.add('aurora-burst');if(!burstCtx&&burstC){burstCtx=burstC.getContext('2d');burstResize();addEventListener('resize',burstResize);requestAnimationFrame(burstLoop);}burstSnowSpawn(30);dsChime('gold');dsUnlock('aurora');setTimeout(()=>document.body.classList.remove('aurora-burst'),10000);}
+function auroraBurst(){document.body.classList.add('aurora-burst');if(!burstCtx&&burstC){burstCtx=burstC.getContext('2d');burstResize();addEventListener('resize',burstResize);requestAnimationFrame(burstLoop);}burstSnowSpawn(30);dsChime('gold');dsUnlock('aurora');setTimeout(()=>document.body.classList.remove('aurora-burst'),20000);}
 
 /* Freeze toggle (Астра) */
 let frozen=false;
-function toggleFreeze(){frozen=!frozen;document.body.classList.toggle('frozen',frozen);if(frozen){dsChime('gold');dsUnlock('freeze');}}
+function toggleFreeze(){
+  frozen=!frozen;document.body.classList.toggle('frozen',frozen);
+  const lab=document.getElementById('frozenLabel');
+  if(frozen){if(lab)lab.textContent='❄ Заморозка · введи «Астра» снова, чтобы разморозить';dsChime('gold');dsUnlock('freeze');}
+}
 
 /* Silence easter egg */
 const SILENCE_TEXT="Тишина — лучшее лекарство.\nИ всё же я хочу слышать тебя.";
@@ -1560,14 +1593,22 @@ let silenceBusy=false;
 function runSilence(){
   if(silenceBusy)return;silenceBusy=true;
   const ov=document.getElementById('silenceOverlay'),tx=document.getElementById('silText'),au=document.getElementById('silenceAudio');
-  if(!ov||!tx)return;
+  if(!ov||!tx){silenceBusy=false;return;}
   tx.textContent='';ov.classList.add('on');
   let i=0;const total=SILENCE_TEXT.length;
   const typer=setInterval(()=>{i++;tx.textContent=SILENCE_TEXT.slice(0,i);if(i>=total){clearInterval(typer);startMusic();}},65);
   function startMusic(){
-    try{au.currentTime=0;au.volume=0.85;au.play().then(()=>{document.body.classList.add('silence-pulse');au.onended=endSilence;}).catch(()=>{setTimeout(endSilence,3500);});}catch(e){setTimeout(endSilence,3500);}
+    try{
+      au.pause();au.currentTime=0;au.load();au.volume=0.85;
+      const p=au.play();
+      if(p&&p.then){p.then(()=>{document.body.classList.add('silence-pulse');}).catch(()=>{setTimeout(endSilence,3500);});}
+      else{document.body.classList.add('silence-pulse');}
+      au.onended=endSilence;
+    }catch(e){setTimeout(endSilence,3500);}
   }
-  function endSilence(){document.body.classList.remove('silence-pulse');ov.classList.remove('on');silenceBusy=false;dsUnlock('silence');}
+  function endSilence(){document.body.classList.remove('silence-pulse');ov.classList.remove('on');silenceBusy=false;try{au.pause();au.currentTime=0;}catch(e){}dsUnlock('silence');}
+  // tap anywhere to close early
+  ov.onclick=endSilence;
 }
 
 /* Hook into search box (the existing #search-input) */
@@ -1621,11 +1662,106 @@ if(document.getElementById('site')&&document.getElementById('site').classList.co
 }
 
 
+
+/* Bai runner — hops across, summoned by bell */
+(function(){
+  const bai=document.getElementById('baiRunner');let busy=false;
+  window.baiRun=function(){
+    if(!bai||busy)return;busy=true;
+    const dir=Math.random()<.5?1:-1;let x=dir>0?-160:innerWidth+160;
+    const end=dir>0?innerWidth+160:-160,speed=dir*(2.4+Math.random()*.8),t0=performance.now();
+    function step(now){const t=(now-t0)/1000;x+=speed;const hop=Math.abs(Math.sin(t*7))*15,sway=Math.sin(t*7)*4;
+      bai.style.transform=`translate(${x}px,${-hop}px) rotate(${sway*dir}deg) scaleX(${dir})`;
+      if((dir>0&&x<end)||(dir<0&&x>end))requestAnimationFrame(step);else{busy=false;}}
+    requestAnimationFrame(step);dsBeep&&dsBeep(700,.05);
+  };
+  // occasional auto-run
+  setInterval(()=>{if(!busy&&Math.random()<.5&&document.getElementById('site')&&document.getElementById('site').classList.contains('vis'))window.baiRun();},22000);
+})();
+
+
+/* Hunter name capture on entry */
+function showScreen2(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('vis'));const el=document.getElementById(id);if(el){el.classList.add('vis');el.style.display='flex';}}
+let _origStartLoading=window.startLoading;
+window.startLoading=function(){
+  let hasName=false;try{const s=JSON.parse(localStorage.getItem('akso_dossier')||'null');hasName=s&&s.name;}catch(e){}
+  if(hasName){if(typeof _origStartLoading==='function')_origStartLoading();return;}
+  showScreen2('nameAsk');
+  setTimeout(()=>{const i=document.getElementById('nameAskInput');if(i)i.focus();},120);
+};
+function _proceedLoading(){const w=document.getElementById('welcome');document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('vis');if(s.id==='nameAsk')s.style.display='none';});if(typeof _origStartLoading==='function')_origStartLoading();}
+function confirmName(){
+  const i=document.getElementById('nameAskInput');const v=(i&&i.value.trim())||'';
+  if(v){try{let s=JSON.parse(localStorage.getItem('akso_dossier')||'{}');s.name=v;if(!s.u)s.u=[];localStorage.setItem('akso_dossier',JSON.stringify(s));}catch(e){}}
+  const t=document.getElementById('nameAskTitle');if(t){t.innerHTML='✓ Подтверждено!';}
+  const btn=document.getElementById('nameAskBtn');if(btn)btn.style.display='none';
+  setTimeout(_proceedLoading,1100);
+}
+function skipName(){_proceedLoading();}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('nameAsk')&&document.getElementById('nameAsk').classList.contains('vis')){confirmName();}});
+
+
+/* black-ice shatter on WU card click */
+(function(){
+  function shard(x,y){
+    const n=14;
+    for(let i=0;i<n;i++){
+      const el=document.createElement('div');el.className='ice-burst';
+      const ang=(Math.PI*2*i/n)+Math.random()*.5,dist=40+Math.random()*70;
+      el.style.left=x+'px';el.style.top=y+'px';
+      el.style.setProperty('--dx',Math.cos(ang)*dist+'px');
+      el.style.setProperty('--dy',(Math.sin(ang)*dist+30)+'px');
+      el.style.setProperty('--rot',(Math.random()*540-270)+'deg');
+      const sz=5+Math.random()*8;el.style.width=el.style.height=sz+'px';
+      if(Math.random()<.5)el.style.background='linear-gradient(135deg,#1a2a3a,#4a8ab0)';
+      el.style.animation='iceFly '+(.6+Math.random()*.4)+'s cubic-bezier(.2,.7,.3,1) forwards';
+      document.body.appendChild(el);setTimeout(()=>el.remove(),1100);
+    }
+  }
+  document.addEventListener('click',e=>{
+    const card=e.target.closest&&e.target.closest('#tab-wu .wcard');
+    if(card){shard(e.clientX,e.clientY);}
+  },true);
+})();
+
+
+/* Frost layer with pointer prints */
+(function(){
+  const fc=document.getElementById('frost');if(!fc)return;const fx=fc.getContext('2d');let W,H,melts=[],active=false;
+  function build(){W=fc.width=innerWidth;H=fc.height=innerHeight;
+    fx.clearRect(0,0,W,H);
+    const g=fx.createRadialGradient(W/2,H*.4,Math.min(W,H)*.3,W/2,H*.4,Math.max(W,H)*.8);
+    g.addColorStop(0,'rgba(200,230,255,0)');g.addColorStop(.72,'rgba(190,222,250,.08)');g.addColorStop(1,'rgba(200,232,255,.26)');
+    fx.fillStyle=g;fx.fillRect(0,0,W,H);
+    fx.fillStyle='rgba(225,242,255,.45)';
+    for(let i=0;i<260;i++){const x=Math.random()*W,y=Math.random()*H,d=Math.hypot((x-W/2)/W,(y-H*.4)/H);if(Math.random()>d*1.7)continue;fx.globalAlpha=.25+Math.random()*.4;fx.beginPath();fx.arc(x,y,Math.random()*1.5,0,6.3);fx.fill();}
+    fx.globalAlpha=1;
+  }
+  function loop(){requestAnimationFrame(loop);if(!melts.length)return;
+    fx.globalCompositeOperation='source-over';fx.globalAlpha=.01;
+    const g=fx.createRadialGradient(W/2,H*.4,0,W/2,H*.4,Math.max(W,H)*.8);
+    g.addColorStop(.72,'rgba(190,222,250,.08)');g.addColorStop(1,'rgba(200,232,255,.26)');
+    fx.fillStyle=g;fx.fillRect(0,0,W,H);fx.globalAlpha=1;
+    fx.globalCompositeOperation='destination-out';
+    for(const m of melts){m.r+=4;const rad=fx.createRadialGradient(m.x,m.y,0,m.x,m.y,48);rad.addColorStop(0,'rgba(0,0,0,.5)');rad.addColorStop(1,'rgba(0,0,0,0)');fx.fillStyle=rad;fx.beginPath();fx.arc(m.x,m.y,48,0,6.3);fx.fill();}
+    melts=melts.filter(m=>m.r<52);fx.globalCompositeOperation='source-over';
+  }
+  addEventListener('pointermove',e=>{melts.push({x:e.clientX,y:e.clientY,r:0});});
+  addEventListener('touchmove',e=>{for(const t of e.touches)melts.push({x:t.clientX,y:t.clientY,r:0});},{passive:true});
+  addEventListener('resize',build);build();loop();
+})();
+
 </script>
 
 <canvas id="burstSnow"></canvas>
 <div id="frozenTint"></div>
-<button id="snowGlobe" onclick="shakeGlobe()" title="Тряхни!"><img src="./Файлы/snowglobe.png" alt="snow globe"></button>
+<div id="frozenLabel"></div>
+<div id="frostEdges"></div>
+<div class="aurora-band"></div>
+<canvas id="frost"></canvas>
+<button id="snowGlobe" onclick="shakeGlobe()" title="Тряхни!"><img src="./Файлы/snowglobe2.png" alt="snow globe"></button>
+<button id="baiBell" onclick="baiRun()" title="Позвать Бая">🔔</button>
+<img id="baiRunner" src="./Файлы/bai.png" alt="Бай">
 <div id="ds-toasts"></div>
 <div id="silenceOverlay"><div class="silence-text" id="silText"></div></div>
 <audio id="silenceAudio" src="./Файлы/silence.mp3" preload="none"></audio>
