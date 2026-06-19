@@ -136,7 +136,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;opa
 .hero-h{font-family:'Orbitron',monospace;font-size:clamp(1rem,2.8vw,1.9rem);color:#eaf3f9;line-height:1.3;font-weight:700;letter-spacing:.05em;text-shadow:0 0 40px rgba(168,216,240,.18);margin-bottom:14px;}
 .hero-sub{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--mut);font-size:1.05rem;line-height:1.85;}
 .hero-marquee{overflow:hidden;width:100%;max-width:520px;border-top:1px solid rgba(168,216,240,.1);border-bottom:1px solid rgba(168,216,240,.1);padding:8px 0;margin-top:4px;}
-.marquee-track{display:flex;width:max-content;animation:marqueeRun 38s linear infinite;}
+.marquee-track{display:flex;width:max-content;animation:marqueeRun 80s linear infinite;}
 .marquee-track:hover{animation-play-state:paused;}
 .marquee-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(168,216,240,.55);white-space:nowrap;padding:0 2.4em;}
 .marquee-sep{font-size:.6rem;color:rgba(168,216,240,.2);align-self:center;flex-shrink:0;}
@@ -603,7 +603,7 @@ body.frozen #frostEdges{opacity:.85;}
 .sil-cue{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(168,216,240,.55);}
 .silence-text{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(1.2rem,4vw,2.4rem);color:#eaf3f9;text-align:center;line-height:1.6;letter-spacing:.04em;max-width:780px;text-shadow:0 0 28px rgba(168,216,240,.5);}
 body.silence-pulse::before{animation:silAur 0.5s ease-in-out infinite!important;}
-@keyframes silAur{0%,100%{filter:brightness(.8)}50%{filter:brightness(1.6) saturate(1.4)}}
+@keyframes silAur{0%,100%{filter:brightness(1) saturate(1)}50%{filter:brightness(1.35) saturate(1.5)}}
 
 @media(max-width:640px){
   .ds-card-grid{flex-direction:column;align-items:center;text-align:center;}
@@ -623,6 +623,29 @@ body.silence-pulse::before{animation:silAur 0.5s ease-in-out infinite!important;
 /* WU card click — black ice shatter particles */
 .ice-burst{position:fixed;width:8px;height:8px;pointer-events:none;z-index:120;background:linear-gradient(135deg,#9fe4ff,#2a6cb0);clip-path:polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%);will-change:transform,opacity;}
 @keyframes iceFly{to{transform:translate(var(--dx),var(--dy)) rotate(var(--rot));opacity:0;}}
+
+/* Silence floating player */
+#silencePlayer{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(140%);z-index:120;
+  display:flex;align-items:center;gap:14px;width:min(380px,92vw);
+  background:linear-gradient(100deg,rgba(8,16,28,.96),rgba(12,22,38,.95));border:1px solid rgba(168,216,240,.3);
+  box-shadow:0 18px 50px rgba(0,0,0,.6);padding:12px 16px 12px 12px;transition:transform .55s cubic-bezier(.2,.8,.3,1);}
+#silencePlayer.on{transform:translateX(-50%) translateY(0);}
+.sp-art{width:50px;height:50px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;color:#bfe6ff;background:radial-gradient(circle at 35% 30%,rgba(120,200,255,.4),rgba(20,50,80,.6));
+  border:1px solid rgba(168,216,240,.4);box-shadow:0 0 14px rgba(120,200,255,.25);animation:spSpin 8s linear infinite paused;}
+#silencePlayer.playing .sp-art{animation-play-state:running;}
+@keyframes spSpin{to{transform:rotate(360deg)}}
+.sp-mid{flex:1;min-width:0;}
+.sp-title{font-family:'Orbitron',monospace;font-weight:700;font-size:.8rem;letter-spacing:.06em;color:#eaf3f9;}
+.sp-sub{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin-top:2px;}
+.sp-bar{height:4px;background:rgba(168,216,240,.12);margin-top:8px;position:relative;overflow:hidden;}
+.sp-bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--icdim),var(--ice));transition:width .25s linear;}
+#sp-toggle{flex-shrink:0;width:42px;height:42px;border-radius:50%;border:1px solid rgba(168,216,240,.35);background:rgba(6,12,22,.5);color:#bfe6ff;font-size:1rem;cursor:pointer;transition:.3s;}
+#sp-toggle:hover{border-color:var(--ice);box-shadow:0 0 14px rgba(168,216,240,.3);}
+#silClose{position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;border:1px solid rgba(168,216,240,.3);background:rgba(8,16,28,.95);color:var(--mut);font-size:.7rem;cursor:pointer;line-height:1;}
+#silClose:hover{color:#eaf3f9;border-color:var(--ice);}
+@media(max-width:640px){#silencePlayer{bottom:14px;}}
+
 </style>
 </head>
 <body>
@@ -1379,16 +1402,19 @@ function switchStarTab(star,btn){
 /* ── MARQUEE quotes ── */
 (function(){
   const QUOTES=[
-    '"I want to capture spring, and you."',
-    '"I\'ve been thinking of you for a long time."',
-    '"Your presence alone turns even the most ordinary days into something special."',
-    '"I\'d like to share the quiet moments of all four seasons with you."',
-    '"I want to write down how it felt when I first fell in love with you."',
-    '"The person who\'s worth breaking the rules for wasn\'t with me back then."',
-    '"I am still waiting for you to come through the morning mist."',
-    '"Here is my heart — it\'s the one I\'ve spent all this time keeping safe."',
-    '"It\'s possible that I\'d rather show you my feelings with actions over telling you."',
-    '"We were going to meet up anyway. Wouldn\'t it be nice if we saw each other sooner?"',
+    "No one asked.",
+    "Why wouldn't I still love her? Now I can hide her in my pocket.",
+    "I need you. I have denied that. It's just\u2026 it's not the kind of need you think it is.",
+    "Mmm yes. Hello, hello. I'm Zaynie the penguin. I'm happy I could meet a fellow penguin in Linkon city.",
+    "From now on, we should watch the moon together, my love.",
+    "I will never let the girl I love be brave on her own.",
+    "Say my name.",
+    "Will you help me relax?",
+    "Can you heal me then, Doc-tor?",
+    "NO?",
+    "Doctors exaggerate all the time.",
+    "I don't want to just be someone who exists behind a screen. I would much rather be right there by your side.",
+    "Or\u2026 do you want to change position?",
   ];
   const track=document.getElementById('mq-track');
   if(!track)return;
@@ -1585,36 +1611,31 @@ function toggleFreeze(){
 const SILENCE_TEXT="";
 let silenceBusy=false;
 function runSilence(){
-  if(silenceBusy)return;silenceBusy=true;
-  const ov=document.getElementById('silenceOverlay'),tx=document.getElementById('silText'),au=document.getElementById('silenceAudio');
-  if(!ov){silenceBusy=false;return;}
-  if(tx)tx.innerHTML='<span class="sil-cue">♪ играет… нажми, чтобы закрыть</span>';
-  ov.classList.add('on');
-  let done=false,maxTimer=null;
-  function endSilence(){
-    if(done)return;done=true;
-    if(maxTimer)clearTimeout(maxTimer);
-    document.body.classList.remove('silence-pulse');
-    ov.classList.remove('on');
-    try{au.pause();au.currentTime=0;}catch(e){}
-    silenceBusy=false;dsUnlock('silence');
-  }
-  // hard cap: never stay black longer than 25s no matter what
-  maxTimer=setTimeout(endSilence,25000);
-  // close on tap / Esc
-  ov.onclick=endSilence;
-  window._silEsc=function(e){if(e.key==='Escape')endSilence();};
-  document.addEventListener('keydown',window._silEsc,{once:true});
-  // try to play music; if it can't start, auto-close after a short beat
-  try{
-    au.pause();au.currentTime=0;au.load();au.volume=0.85;
-    const p=au.play();
-    if(p&&p.then){
-      p.then(()=>{document.body.classList.add('silence-pulse');au.onended=endSilence;})
-       .catch(()=>{ if(tx)tx.innerHTML='<span class="sil-cue">звук заблокирован браузером · закрываю…</span>'; setTimeout(endSilence,1800); });
-    }else{document.body.classList.add('silence-pulse');au.onended=endSilence;}
-  }catch(e){setTimeout(endSilence,1800);}
+  const pl=document.getElementById('silencePlayer');const au=document.getElementById('silenceAudio');
+  if(!pl||!au)return;
+  pl.classList.add('on');
+  silencePlay();
+  dsUnlock('silence');
 }
+function silencePlay(){
+  const au=document.getElementById('silenceAudio'),pl=document.getElementById('silencePlayer'),tg=document.getElementById('sp-toggle');
+  try{au.volume=0.85;const p=au.play();
+    if(p&&p.then){p.then(()=>{pl.classList.add('playing');document.body.classList.add('silence-pulse');if(tg)tg.textContent='❚❚';}).catch(()=>{if(tg)tg.textContent='▶';});}
+    else{pl.classList.add('playing');document.body.classList.add('silence-pulse');if(tg)tg.textContent='❚❚';}
+  }catch(e){}
+}
+function silencePause(){
+  const au=document.getElementById('silenceAudio'),pl=document.getElementById('silencePlayer'),tg=document.getElementById('sp-toggle');
+  try{au.pause();}catch(e){}
+  pl.classList.remove('playing');document.body.classList.remove('silence-pulse');if(tg)tg.textContent='▶';
+}
+function silenceToggle(){const au=document.getElementById('silenceAudio');if(au.paused)silencePlay();else silencePause();}
+function closeSilencePlayer(){const pl=document.getElementById('silencePlayer');silencePause();if(pl)pl.classList.remove('on');}
+(function(){
+  const au=document.getElementById('silenceAudio');if(!au)return;
+  au.addEventListener('timeupdate',()=>{const f=document.getElementById('sp-fill');if(f&&au.duration)f.style.width=(au.currentTime/au.duration*100)+'%';});
+  au.addEventListener('ended',()=>{const tg=document.getElementById('sp-toggle');const pl=document.getElementById('silencePlayer');pl&&pl.classList.remove('playing');document.body.classList.remove('silence-pulse');if(tg)tg.textContent='▶';const f=document.getElementById('sp-fill');if(f)f.style.width='0%';});
+})();
 
 /* Hook into search box (the existing #search-input) */
 function hookSearch(){
@@ -1748,11 +1769,17 @@ function showScreen2(id){document.querySelectorAll('.screen').forEach(s=>s.class
 <div id="frostEdges"></div>
 <div class="aurora-band"></div>
 <canvas id="frost"></canvas>
-<button id="snowGlobe" onclick="shakeGlobe()" title="Тряхни!"><img src="./Файлы/snowglobe2.png" alt="snow globe"></button>
-<button id="baiBell" onclick="baiRun()" title="Позвать Бая">🔔</button>
-<img id="baiRunner" src="./Файлы/bai.png" alt="Бай">
 <div id="ds-toasts"></div>
-<div id="silenceOverlay"><div class="silence-text" id="silText"></div></div>
+<div id="silencePlayer">
+  <button id="silClose" onclick="closeSilencePlayer()" title="Закрыть">✕</button>
+  <div class="sp-art">❄</div>
+  <div class="sp-mid">
+    <div class="sp-title">Silence</div>
+    <div class="sp-sub">Dr. Zayne · нарезка</div>
+    <div class="sp-bar"><div class="sp-bar-fill" id="sp-fill"></div></div>
+  </div>
+  <button id="sp-toggle" onclick="silenceToggle()" title="Играть/Пауза">▶</button>
+</div>
 <audio id="silenceAudio" src="./Файлы/silence.mp3" preload="none"></audio>
 
 </body>
