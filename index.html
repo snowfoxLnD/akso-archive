@@ -1418,7 +1418,7 @@ const ACH=[
   {id:'rx',     n:'По рецепту',            d:'Сгенерировать 5 рецептов.',                    r:'jade'},
   {id:'zayne10',n:'Беседа с доктором',     d:'10 ответов от Dr. Zayne.',                     r:'jade'},
   {id:'channels',n:'Знакомый круг',        d:'Открыть все каналы из подвала.',               r:'blue'},
-  {id:'bday',   n:'С днём рождения',       d:'Зайти 9 ноября.',                              r:'diamond', secret:true},
+  {id:'bday',   n:'С днём рождения, доктор', d:'Зайти 5 сентября.',                            r:'diamond', secret:true},
   {id:'silence',n:'Тишина',                d:'Прошептать «Silence».',                        r:'diamond', secret:true},
   {id:'insomnia',n:'Бессонница хирурга',   d:'Зайти между 02:00 и 04:00.',                   r:'gold', secret:true},
   {id:'fullset',n:'Полный допуск',         d:'Открыть все остальные допуски.',               r:'diamond'},
@@ -1614,7 +1614,7 @@ window.enterSite=function(){
     const h=new Date().getHours();
     if(h>=0&&h<6)dsUnlock('night');
     if(h>=2&&h<4)dsUnlock('insomnia');
-    const d=new Date();if(d.getMonth()===10&&d.getDate()===9)dsUnlock('bday');
+    const d=new Date();if(d.getMonth()===8&&d.getDate()===5)dsUnlock('bday');
     dsAttach();dsRender();
   },100);
 };
