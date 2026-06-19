@@ -600,6 +600,7 @@ body.frozen #frostEdges{opacity:.85;}
 /* Silence easter egg */
 #silenceOverlay{position:fixed;inset:0;z-index:200;background:#000;display:none;align-items:center;justify-content:center;padding:30px;}
 #silenceOverlay.on{display:flex;}
+.sil-cue{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(168,216,240,.55);}
 .silence-text{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(1.2rem,4vw,2.4rem);color:#eaf3f9;text-align:center;line-height:1.6;letter-spacing:.04em;max-width:780px;text-shadow:0 0 28px rgba(168,216,240,.5);}
 body.silence-pulse::before{animation:silAur 0.5s ease-in-out infinite!important;}
 @keyframes silAur{0%,100%{filter:brightness(.8)}50%{filter:brightness(1.6) saturate(1.4)}}
@@ -1586,21 +1587,33 @@ let silenceBusy=false;
 function runSilence(){
   if(silenceBusy)return;silenceBusy=true;
   const ov=document.getElementById('silenceOverlay'),tx=document.getElementById('silText'),au=document.getElementById('silenceAudio');
-  if(!ov||!tx){silenceBusy=false;return;}
-  tx.textContent='';ov.classList.add('on');
-  startMusic();
-  function startMusic(){
-    try{
-      au.pause();au.currentTime=0;au.load();au.volume=0.85;
-      const p=au.play();
-      if(p&&p.then){p.then(()=>{document.body.classList.add('silence-pulse');}).catch(()=>{setTimeout(endSilence,3500);});}
-      else{document.body.classList.add('silence-pulse');}
-      au.onended=endSilence;
-    }catch(e){setTimeout(endSilence,3500);}
+  if(!ov){silenceBusy=false;return;}
+  if(tx)tx.innerHTML='<span class="sil-cue">♪ играет… нажми, чтобы закрыть</span>';
+  ov.classList.add('on');
+  let done=false,maxTimer=null;
+  function endSilence(){
+    if(done)return;done=true;
+    if(maxTimer)clearTimeout(maxTimer);
+    document.body.classList.remove('silence-pulse');
+    ov.classList.remove('on');
+    try{au.pause();au.currentTime=0;}catch(e){}
+    silenceBusy=false;dsUnlock('silence');
   }
-  function endSilence(){document.body.classList.remove('silence-pulse');ov.classList.remove('on');silenceBusy=false;try{au.pause();au.currentTime=0;}catch(e){}dsUnlock('silence');}
-  // tap anywhere to close early
+  // hard cap: never stay black longer than 25s no matter what
+  maxTimer=setTimeout(endSilence,25000);
+  // close on tap / Esc
   ov.onclick=endSilence;
+  window._silEsc=function(e){if(e.key==='Escape')endSilence();};
+  document.addEventListener('keydown',window._silEsc,{once:true});
+  // try to play music; if it can't start, auto-close after a short beat
+  try{
+    au.pause();au.currentTime=0;au.load();au.volume=0.85;
+    const p=au.play();
+    if(p&&p.then){
+      p.then(()=>{document.body.classList.add('silence-pulse');au.onended=endSilence;})
+       .catch(()=>{ if(tx)tx.innerHTML='<span class="sil-cue">звук заблокирован браузером · закрываю…</span>'; setTimeout(endSilence,1800); });
+    }else{document.body.classList.add('silence-pulse');au.onended=endSilence;}
+  }catch(e){setTimeout(endSilence,1800);}
 }
 
 /* Hook into search box (the existing #search-input) */
