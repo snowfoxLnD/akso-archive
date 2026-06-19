@@ -563,9 +563,6 @@ button.nav-link{background:none;border:none;cursor:pointer;font-weight:700;lette
 .ds-toast[data-r="gold"]{border-color:rgba(216,184,120,.45);}
 
 /* Pai mascot in header */
-.pai-mascot{position:fixed;left:14px;bottom:14px;width:78px;height:auto;z-index:14;pointer-events:none;filter:drop-shadow(0 4px 14px rgba(168,216,240,.35));animation:paiFloat 4s ease-in-out infinite;display:none;}
-body.has-pai .pai-mascot{display:block;}
-@keyframes paiFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
 
 /* Snow globe (replaces the corner button) */
 #snowGlobe{position:fixed;right:18px;bottom:18px;width:84px;height:84px;z-index:30;cursor:pointer;border:none;background:none;padding:0;transition:transform .3s;}
@@ -601,7 +598,6 @@ body.silence-pulse::before{animation:silAur 0.5s ease-in-out infinite!important;
   .ds-photo{width:130px;height:166px;}
   .ds-zayne{flex-direction:column;align-items:center;text-align:center;}
   .ds-zb::before{display:none;}
-  .pai-mascot{width:56px;left:8px;bottom:8px;}
   #snowGlobe{width:64px;height:64px;right:10px;bottom:10px;}
 }
 
@@ -1591,7 +1587,7 @@ function hookChannels(){
 }
 
 /* Show Pai mascot once site enters */
-function showPai(){document.body.classList.add('has-pai');}
+function showPai(){}
 
 /* Track which tabs visited (for myths/under achievements) */
 const _origSwitchTab=window.switchTab;
@@ -1630,7 +1626,6 @@ if(document.getElementById('site')&&document.getElementById('site').classList.co
 <canvas id="burstSnow"></canvas>
 <div id="frozenTint"></div>
 <button id="snowGlobe" onclick="shakeGlobe()" title="Тряхни!"><img src="./Файлы/snowglobe.png" alt="snow globe"></button>
-<img class="pai-mascot" src="./Файлы/%D0%9F%D0%B0%D0%B9.png" alt="Пай">
 <div id="ds-toasts"></div>
 <div id="silenceOverlay"><div class="silence-text" id="silText"></div></div>
 <audio id="silenceAudio" src="./Файлы/silence.mp3" preload="none"></audio>
