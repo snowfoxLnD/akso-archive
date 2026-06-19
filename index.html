@@ -1456,8 +1456,6 @@ const ACH=[
   {id:'freeze', e:'❄️', n:'Криокамера',            d:'Активировать секретное слово в поиске.',       r:'gold'},
   {id:'aurora', e:'🌌', n:'Северное сияние',       d:'Поймать редкий день авроры.',                  r:'gold'},
   {id:'night', e:'🌙', n:'Ночная смена',          d:'Зайти после полуночи.',                        r:'blue'},
-  {id:'globe10', e:'🔮', n:'Снежная буря',          d:'Тряхнуть шар 10 раз.',                         r:'jade'},
-  {id:'globe50', e:'🌨️', n:'Метель',                d:'Тряхнуть шар 50 раз.',                         r:'gold'},
   {id:'name', e:'🪪', n:'Опознан',               d:'Ввести имя в досье.',                          r:'blue'},
   {id:'photo', e:'📸', n:'Карта пациента',        d:'Загрузить фото в досье.',                      r:'blue'},
   {id:'rx', e:'💊', n:'По рецепту',            d:'Сгенерировать 5 рецептов.',                    r:'jade'},
@@ -1594,7 +1592,7 @@ const BSPR=[null,null,null];
 function ensureSprites(){if(!BSPR[0])[8,13,18].forEach((s,i)=>BSPR[i]=makeFlakeSprite(s));}
 function burstLoop(){if(!burstCtx)return;requestAnimationFrame(burstLoop);burstCtx.clearRect(0,0,burstW,burstH);for(const f of burstFlakes){f.y+=f.vy;f.x+=f.vx+Math.sin(f.t)*.4;f.t+=.04;f.rot+=f.vrot;const sp=BSPR[f.L];burstCtx.globalAlpha=Math.max(0,f.life);burstCtx.setTransform(1,0,0,1,f.x,f.y);burstCtx.rotate(f.rot);burstCtx.drawImage(sp,-f.r,-f.r,f.r*2,f.r*2);f.life-=.005;}burstCtx.setTransform(1,0,0,1,0,0);burstCtx.globalAlpha=1;burstFlakes=burstFlakes.filter(f=>f.life>0&&f.y<burstH+30);}
 function burstSnowSpawn(n){ensureSprites();if(!burstCtx&&burstC){burstCtx=burstC.getContext("2d");burstResize();addEventListener("resize",burstResize);requestAnimationFrame(burstLoop);}if(!burstW){burstResize();}for(let i=0;i<n;i++){const L=Math.random()<.55?0:Math.random()<.7?1:2;burstFlakes.push({x:Math.random()*burstW,y:-20-Math.random()*100,vx:(Math.random()*1.4-.7),vy:1+Math.random()*2.2,L,r:[4,7,11][L],t:Math.random()*6,rot:Math.random()*6,vrot:(Math.random()*2-1)*.02,life:1});}}
-function shakeGlobe(){const g=document.getElementById('snowGlobe');if(g){g.classList.remove('shake');void g.offsetWidth;g.classList.add('shake');}if(!burstCtx&&burstC){burstCtx=burstC.getContext('2d');burstResize();addEventListener('resize',burstResize);requestAnimationFrame(burstLoop);}burstSnowSpawn(60);dsBeep(520,.07);DS.globeShakes=(DS.globeShakes||0)+1;dsSave();if(DS.globeShakes>=10)dsUnlock('globe10');if(DS.globeShakes>=50)dsUnlock('globe50');}
+function shakeGlobe(){const g=document.getElementById('snowGlobe');if(g){g.classList.remove('shake');void g.offsetWidth;g.classList.add('shake');}if(!burstCtx&&burstC){burstCtx=burstC.getContext('2d');burstResize();addEventListener('resize',burstResize);requestAnimationFrame(burstLoop);}burstSnowSpawn(60);dsBeep(520,.07);DS.globeShakes=(DS.globeShakes||0)+1;dsSave();}
 
 /* Aurora burst (5 sept) */
 function auroraBurst(){document.body.classList.add('aurora-burst');if(!burstCtx&&burstC){burstCtx=burstC.getContext('2d');burstResize();addEventListener('resize',burstResize);requestAnimationFrame(burstLoop);}burstSnowSpawn(30);dsChime('gold');dsUnlock('aurora');setTimeout(()=>document.body.classList.remove('aurora-burst'),20000);}
@@ -1775,7 +1773,7 @@ function showScreen2(id){document.querySelectorAll('.screen').forEach(s=>s.class
   <div class="sp-art">❄</div>
   <div class="sp-mid">
     <div class="sp-title">Silence</div>
-    <div class="sp-sub">Dr. Zayne · нарезка</div>
+    <div class="sp-sub">Dr. Zayne</div>
     <div class="sp-bar"><div class="sp-bar-fill" id="sp-fill"></div></div>
   </div>
   <button id="sp-toggle" onclick="silenceToggle()" title="Играть/Пауза">▶</button>
