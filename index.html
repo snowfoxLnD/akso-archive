@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>Akso Archive</title>
+<link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Raleway:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Chakra+Petch:wght@500;600;700&family=Cinzel:wght@500;600&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
 <style>
 @font-face{font-family:'FHWA';src:url('./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/FHWASeriesEM_Rg.ttf') format('truetype');}
@@ -467,6 +468,143 @@ button.nav-link{background:none;border:none;cursor:pointer;font-weight:700;lette
 .myth-info{position:relative;z-index:2;}
 @keyframes fadePanel{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 .tab-pane.active{animation:fadePanel .55s ease .08s both;}
+
+/* ════════ ДОСЬЕ ════════ */
+.ds-wrap{max-width:920px;margin:0 auto;padding:20px 8px 60px;}
+.ds-head{text-align:center;margin-bottom:28px;}
+.ds-h-title{font-family:'Orbitron',monospace;font-weight:900;font-size:clamp(1.1rem,3vw,1.7rem);letter-spacing:.18em;color:#eaf3f9;text-shadow:0 0 30px rgba(168,216,240,.3);}
+.ds-h-sub{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.34em;text-transform:uppercase;color:var(--mut);margin-top:8px;}
+
+.ds-card{position:relative;background:linear-gradient(180deg,rgba(11,24,44,.85),rgba(8,17,31,.88));border:1px solid var(--bdr);padding:22px 24px 16px;margin-bottom:24px;overflow:hidden;}
+.ds-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:repeating-linear-gradient(180deg,var(--icdim) 0 6px,transparent 6px 14px);opacity:.6;}
+.ds-card-grid{display:flex;gap:22px;align-items:stretch;}
+.ds-photo{width:148px;height:188px;flex-shrink:0;border:1px solid var(--bdr);background:linear-gradient(160deg,#0f2240,#0a1626);display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;transition:.3s;position:relative;}
+.ds-photo:hover{border-color:var(--ice);}
+.ds-photo img{width:100%;height:100%;object-fit:cover;}
+.ds-photo-ph{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(168,216,240,.4);text-align:center;line-height:1.7;}
+.ds-fields{flex:1;display:flex;flex-direction:column;gap:11px;min-width:0;}
+.ds-row label{display:block;font-family:'JetBrains Mono',monospace;font-size:.48rem;letter-spacing:.22em;text-transform:uppercase;color:var(--icdim);margin-bottom:4px;}
+.ds-row input{width:100%;background:rgba(6,12,22,.5);border:1px solid var(--bdr);color:#eaf3f9;font-family:'Orbitron',monospace;font-weight:700;font-size:.95rem;letter-spacing:.06em;padding:8px 11px;outline:none;transition:.3s;}
+.ds-row input:focus{border-color:var(--ice);}
+.ds-val{font-family:'Orbitron',monospace;font-size:.78rem;color:#dbe8f5;letter-spacing:.06em;padding:7px 0 4px;}
+.ds-row.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ds-bar{height:6px;background:rgba(168,216,240,.1);border:1px solid var(--bdr);position:relative;margin-top:4px;}
+.ds-bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--icdim),var(--ice));transition:width .6s;box-shadow:0 0 10px rgba(168,216,240,.4);}
+.ds-bar-t{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.14em;color:var(--mut);margin-top:6px;}
+.ds-barcode{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--mut);opacity:.5;letter-spacing:.04em;text-align:center;margin-top:14px;padding-top:10px;border-top:1px dashed var(--bdr);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+
+/* Zayne talker */
+.ds-zayne{display:flex;gap:18px;align-items:flex-start;background:rgba(9,20,37,.6);border:1px solid var(--bdr);padding:18px;margin-bottom:24px;flex-wrap:wrap;position:relative;}
+.ds-zp{width:84px;height:104px;flex-shrink:0;border:1px solid var(--bdr);background:linear-gradient(160deg,#0f2240,#0a1626);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;transition:.3s;}
+.ds-zp:hover{border-color:var(--ice);box-shadow:0 0 18px rgba(168,216,240,.18);}
+.ds-zp img{width:100%;height:100%;object-fit:cover;}
+.ds-zp-ph{font-family:'Cinzel',serif;font-size:2rem;color:var(--icdim);}
+.ds-zb{flex:1;min-width:200px;background:rgba(247,248,243,.96);color:#28323e;padding:16px 18px;border-radius:3px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.08rem;line-height:1.55;position:relative;}
+.ds-zb::before{content:'';position:absolute;left:-9px;top:22px;border:9px solid transparent;border-right-color:rgba(247,248,243,.96);border-left:0;}
+.ds-zsig{font-family:'Allura',cursive;font-style:normal;font-size:1.4rem;color:#7a2f2f;margin-top:8px;text-align:right;letter-spacing:.04em;}
+.ds-zhint{width:100%;font-family:'JetBrains Mono',monospace;font-size:.48rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);opacity:.55;text-align:center;}
+
+/* Rx card */
+.ds-rx{background:rgba(247,248,243,.96);color:#28323e;padding:18px 22px 22px;margin-bottom:30px;border:1px solid var(--cop);position:relative;font-family:'Cormorant Garamond',serif;}
+.ds-rx::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:repeating-linear-gradient(180deg,#7a2f2f 0 6px,transparent 6px 14px);opacity:.6;}
+.ds-rx-head{display:flex;align-items:center;gap:14px;border-bottom:1px dashed rgba(40,50,62,.3);padding-bottom:10px;margin-bottom:12px;}
+.ds-rx-symbol{font-size:2.4rem;font-style:italic;font-weight:600;color:#7a2f2f;line-height:1;}
+.ds-rx-t{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.22em;text-transform:uppercase;color:#6a7682;}
+.ds-rx-d{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#28323e;margin-top:2px;}
+.ds-rx-roll{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:#7a2f2f;border:1px solid #c49a6c;background:none;padding:7px 12px;cursor:pointer;transition:.3s;}
+.ds-rx-roll:hover{background:rgba(196,154,108,.12);}
+.ds-rx-body{font-size:1.08rem;line-height:1.65;color:#28323e;font-style:italic;}
+.ds-rx-sig{font-family:'Allura',cursive;font-size:1.5rem;color:#7a2f2f;margin-top:14px;text-align:right;letter-spacing:.04em;}
+
+/* Achievements */
+.ds-sect{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;color:var(--icdim);margin:0 0 14px;display:flex;align-items:center;gap:12px;}
+.ds-sect::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--bdr),transparent);}
+.ds-sect-c{font-family:'Orbitron',monospace;color:var(--cop);font-weight:700;letter-spacing:.1em;}
+.ds-ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:14px;margin-bottom:28px;}
+.ds-ach{position:relative;display:flex;gap:13px;align-items:flex-start;background:rgba(9,20,37,.6);border:1px solid var(--bdr);padding:14px 14px 14px 16px;transition:.3s;overflow:hidden;}
+.ds-ach.locked{opacity:.4;filter:grayscale(.85);}
+.ds-ach.unlocked:hover{transform:translateY(-2px);}
+.ds-ach .ds-ic{flex-shrink:0;width:48px;height:48px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(6,12,22,.5);border:1px solid var(--bdr);}
+.ds-ach .ds-ic img{width:100%;height:100%;object-fit:cover;}
+.ds-ach .ds-ic-em{font-size:1.4rem;}
+.ds-ab{min-width:0;flex:1;}
+.ds-an{font-family:'Orbitron',monospace;font-size:.66rem;letter-spacing:.04em;color:#eaf3f9;line-height:1.3;}
+.ds-ad{font-size:.7rem;color:var(--mut);line-height:1.45;margin-top:4px;}
+.ds-ar{font-family:'JetBrains Mono',monospace;font-size:.46rem;letter-spacing:.18em;text-transform:uppercase;margin-top:8px;}
+.ds-ach[data-r="blue"]{border-left:2px solid #7fb4d8;} .ds-ach[data-r="blue"] .ds-ar{color:#7fb4d8;}
+.ds-ach[data-r="jade"]{border-left:2px solid #76d0bd;} .ds-ach[data-r="jade"] .ds-ar{color:#76d0bd;}
+.ds-ach[data-r="gold"]{border-left:2px solid #d8b878;} .ds-ach[data-r="gold"] .ds-ar{color:#d8b878;}
+.ds-ach[data-r="diamond"]{border-left:2px solid #b4e0f5;} .ds-ach[data-r="diamond"] .ds-ar{color:#b4e0f5;}
+.ds-ach.unlocked[data-r="gold"]{box-shadow:0 0 18px rgba(216,184,120,.12);}
+.ds-ach.unlocked[data-r="diamond"]{box-shadow:0 0 22px rgba(180,224,245,.18);}
+.ds-ach.secret.locked .ds-an,.ds-ach.secret.locked .ds-ad{filter:blur(3.5px);}
+.ds-ach .ds-got{position:absolute;top:7px;right:9px;font-family:'JetBrains Mono',monospace;font-size:.46rem;color:var(--green);letter-spacing:.08em;}
+
+/* Tools */
+.ds-tools{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px;}
+.ds-tbtn{font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--txt);border:1px solid var(--bdr);background:rgba(6,12,22,.4);padding:10px 16px;cursor:pointer;transition:.3s;}
+.ds-tbtn:hover{border-color:var(--ice);color:#eaf3f9;}
+.ds-io{display:none;background:rgba(9,20,37,.6);border:1px solid var(--bdr);padding:14px;margin-bottom:14px;}
+.ds-io.show{display:block;}
+.ds-io-t{font-family:'JetBrains Mono',monospace;font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;color:var(--icdim);margin-bottom:8px;}
+.ds-io textarea{width:100%;height:70px;background:rgba(6,12,22,.7);border:1px solid var(--bdr);color:var(--ice);font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:10px;resize:vertical;outline:none;margin-bottom:8px;}
+.ds-io-msg{font-family:'JetBrains Mono',monospace;font-size:.56rem;color:var(--green);min-height:1em;margin-top:6px;}
+
+/* Toasts (Steam-style) */
+#ds-toasts{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:60;display:flex;flex-direction:column;gap:10px;align-items:center;pointer-events:none;}
+.ds-toast{display:flex;gap:14px;align-items:center;background:linear-gradient(100deg,rgba(8,16,28,.97),rgba(12,22,38,.95));border:1px solid var(--bdr);padding:11px 18px 11px 11px;min-width:300px;box-shadow:0 14px 40px rgba(0,0,0,.55);transform:translateY(-30px);opacity:0;animation:dsTIn .5s forwards,dsTOut .5s 3.7s forwards;}
+@keyframes dsTIn{to{transform:translateY(0);opacity:1}}
+@keyframes dsTOut{to{transform:translateY(-20px);opacity:0}}
+.ds-toast .tic{width:46px;height:46px;border-radius:50%;overflow:hidden;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;background:rgba(6,12,22,.5);flex-shrink:0;}
+.ds-toast .tic img{width:100%;height:100%;object-fit:cover;}
+.ds-toast .th{font-family:'JetBrains Mono',monospace;font-size:.46rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cop);}
+.ds-toast .tn{font-family:'Orbitron',monospace;font-size:.72rem;color:#eaf3f9;margin-top:3px;letter-spacing:.04em;}
+.ds-toast[data-r="diamond"]{border-color:rgba(180,224,245,.5);box-shadow:0 0 30px rgba(180,224,245,.25),0 14px 40px rgba(0,0,0,.55);}
+.ds-toast[data-r="gold"]{border-color:rgba(216,184,120,.45);}
+
+/* Pai mascot in header */
+.pai-mascot{position:fixed;left:14px;bottom:14px;width:78px;height:auto;z-index:14;pointer-events:none;filter:drop-shadow(0 4px 14px rgba(168,216,240,.35));animation:paiFloat 4s ease-in-out infinite;display:none;}
+body.has-pai .pai-mascot{display:block;}
+@keyframes paiFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+
+/* Snow globe (replaces the corner button) */
+#snowGlobe{position:fixed;right:18px;bottom:18px;width:84px;height:84px;z-index:30;cursor:pointer;border:none;background:none;padding:0;transition:transform .3s;}
+#snowGlobe img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 14px rgba(168,216,240,.4));}
+#snowGlobe:hover{transform:translateY(-2px) scale(1.04);}
+#snowGlobe.shake{animation:globeShake .6s ease;}
+@keyframes globeShake{0%,100%{transform:rotate(0)}15%{transform:rotate(-12deg)}30%{transform:rotate(10deg)}45%{transform:rotate(-8deg)}60%{transform:rotate(6deg)}80%{transform:rotate(-3deg)}}
+
+/* Burst-snow canvas (only during shake / 5.09 aurora pulse) */
+#burstSnow{position:fixed;inset:0;z-index:13;pointer-events:none;}
+
+/* 5 sentября aurora burst */
+body.aurora-burst::before{filter:hue-rotate(0deg) brightness(2) saturate(2)!important;animation:auroraBurst 10s ease-out forwards!important;}
+@keyframes auroraBurst{0%{filter:hue-rotate(40deg) brightness(2.4) saturate(2.3)}50%{filter:hue-rotate(-20deg) brightness(1.7) saturate(1.7)}100%{filter:hue-rotate(0) brightness(1) saturate(1)}}
+
+/* Frozen mode (Астра) */
+body.frozen{animation:shiver 5s ease-in-out infinite;}
+@keyframes shiver{0%,100%{filter:none}50%{filter:hue-rotate(-14deg) saturate(1.25) brightness(1.05)}}
+#frozenTint{position:fixed;inset:0;z-index:4;pointer-events:none;opacity:0;transition:opacity 1.1s;background:radial-gradient(ellipse at 50% 40%,rgba(120,200,255,.12),rgba(40,120,200,.32) 95%);mix-blend-mode:screen;}
+body.frozen #frozenTint{opacity:1;}
+
+/* Silence easter egg */
+#silenceOverlay{position:fixed;inset:0;z-index:200;background:#000;display:none;align-items:center;justify-content:center;padding:30px;}
+#silenceOverlay.on{display:flex;animation:silShake 0.18s linear infinite;}
+@keyframes silShake{0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-2px)}75%{transform:translate(-2px,-1px)}100%{transform:translate(1px,2px)}}
+.silence-text{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(1.2rem,4vw,2.4rem);color:#eaf3f9;text-align:center;line-height:1.6;letter-spacing:.04em;max-width:780px;text-shadow:0 0 28px rgba(168,216,240,.5);}
+body.silence-pulse::before{animation:silAur 0.5s ease-in-out infinite!important;}
+@keyframes silAur{0%,100%{filter:brightness(.8)}50%{filter:brightness(1.6) saturate(1.4)}}
+
+@media(max-width:640px){
+  .ds-card-grid{flex-direction:column;align-items:center;text-align:center;}
+  .ds-fields{width:100%;}
+  .ds-photo{width:130px;height:166px;}
+  .ds-zayne{flex-direction:column;align-items:center;text-align:center;}
+  .ds-zb::before{display:none;}
+  .pai-mascot{width:56px;left:8px;bottom:8px;}
+  #snowGlobe{width:64px;height:64px;right:10px;bottom:10px;}
+}
+
 </style>
 </head>
 <body>
@@ -536,6 +674,7 @@ button.nav-link{background:none;border:none;cursor:pointer;font-weight:700;lette
       <button class="nav-link" onclick="navGo('cards',this)">Карточки</button>
       <button class="nav-link" onclick="navGo('myths',this)">Мифы</button>
       <button class="nav-link" onclick="navGo('wu',this)">World Underneath</button>
+      <button class="nav-link" onclick="navGo('dossier',this)">Досье</button>
     </div>
     <div class="nav-right">
       <span class="nav-brand">Love &amp; Deepspace</span>
@@ -565,6 +704,7 @@ button.nav-link{background:none;border:none;cursor:pointer;font-weight:700;lette
       <button class="tab-btn" id="tbtn-cards" onclick="switchTab('cards',this)">Карточки</button>
       <button class="tab-btn" id="tbtn-myths" onclick="switchTab('myths',this)" style="display:none"></button>
       <button class="tab-btn" id="tbtn-wu" onclick="switchTab('wu',this)" style="display:none"></button>
+      <button class="tab-btn" id="tbtn-dossier" onclick="switchTab('dossier',this)" style="display:none"></button>
     </div>
 
     <!-- ВСЕ ИСТОРИИ -->
@@ -601,6 +741,88 @@ button.nav-link{background:none;border:none;cursor:pointer;font-weight:700;lette
       </div>
       <div class="wu-rule"></div>
       <div id="wu-wrap"></div>
+    </div>
+
+    <!-- ДОСЬЕ -->
+    <div class="tab-pane" id="tab-dossier">
+      <div class="ds-wrap">
+        <div class="ds-head">
+          <div class="ds-h-title">ЛИЧНОЕ ДЕЛО ПОСЕТИТЕЛЯ</div>
+          <div class="ds-h-sub">AKSO HOSPITAL · ДОСЬЕ № <span id="ds-id">AH-0000</span></div>
+        </div>
+
+        <div class="ds-card">
+          <div class="ds-card-grid">
+            <div class="ds-photo" id="ds-photo" onclick="document.getElementById('ds-photo-in').click()">
+              <span class="ds-photo-ph">нажми<br>чтобы<br>загрузить<br>фото</span>
+              <input type="file" id="ds-photo-in" accept="image/*" hidden>
+            </div>
+            <div class="ds-fields">
+              <div class="ds-row"><label>ФАМИЛИЯ, ИМЯ ПАЦИЕНТА</label><input id="ds-name" type="text" placeholder="введите имя" maxlength="32"></div>
+              <div class="ds-row"><label>ЛЕЧАЩИЙ ВРАЧ</label><div class="ds-val">Dr. Zayne · Хирург-кардиолог</div></div>
+              <div class="ds-row two">
+                <div><label>ВИЗИТОВ</label><div class="ds-val" id="ds-visits">1</div></div>
+                <div><label>ДАТА ВЫДАЧИ</label><div class="ds-val" id="ds-date">—</div></div>
+              </div>
+              <div class="ds-row"><label>ПРОГРЕСС ДОПУСКА</label>
+                <div class="ds-bar"><div class="ds-bar-fill" id="ds-bar"></div></div>
+                <div class="ds-bar-t"><span id="ds-pct">0%</span> · <span id="ds-stats">0 / 0</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="ds-barcode">||||  ||  |||| | ||  |||  || |||| | ||  ||||  |||  AH-0000  |||  ||||  |||| | ||||  ||</div>
+        </div>
+
+        <!-- Zayne talker -->
+        <div class="ds-zayne">
+          <div class="ds-zp" onclick="zayneSpeak()">
+            <img src="./Файлы/zayne_doctor.png" alt="Dr. Zayne" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="ds-zp-ph" style="display:none">Z</div>
+          </div>
+          <div class="ds-zb">
+            <span id="ds-zline">…</span>
+            <div class="ds-zsig">— Dr. Zayne</div>
+          </div>
+          <div class="ds-zhint">кликни по портрету — Зейн ответит</div>
+        </div>
+
+        <!-- Rx generator -->
+        <div class="ds-rx">
+          <div class="ds-rx-head">
+            <span class="ds-rx-symbol">℞</span>
+            <div>
+              <div class="ds-rx-t">AKSO HOSPITAL · Рецепт</div>
+              <div class="ds-rx-d" id="ds-rx-date">—</div>
+            </div>
+            <button class="ds-rx-roll" onclick="rollRx()">↻ обновить</button>
+          </div>
+          <div class="ds-rx-body" id="ds-rx-body">—</div>
+          <div class="ds-rx-sig">— Dr. Zayne</div>
+        </div>
+
+        <!-- Achievements grid -->
+        <div class="ds-sect">Допуски и отметки <span class="ds-sect-c" id="ds-count">0 / 0</span></div>
+        <div class="ds-ach-grid" id="ds-ach"></div>
+
+        <!-- Export/Import -->
+        <div class="ds-tools">
+          <button class="ds-tbtn" onclick="showIO('exp')">⤓ Экспорт досье</button>
+          <button class="ds-tbtn" onclick="showIO('imp')">⤒ Импорт досье</button>
+          <button class="ds-tbtn" onclick="resetDossier()">⟲ Сбросить</button>
+        </div>
+        <div class="ds-io" id="ds-io-exp">
+          <div class="ds-io-t">Код досье — скопируй для переноса на другое устройство</div>
+          <textarea id="ds-exp-code" readonly></textarea>
+          <button class="ds-tbtn" onclick="copyExp()">Копировать</button>
+          <div class="ds-io-msg" id="ds-exp-msg"></div>
+        </div>
+        <div class="ds-io" id="ds-io-imp">
+          <div class="ds-io-t">Вставь код досье и нажми «Загрузить»</div>
+          <textarea id="ds-imp-code" placeholder="вставь код сюда…"></textarea>
+          <button class="ds-tbtn" onclick="doImport()">Загрузить</button>
+          <div class="ds-io-msg" id="ds-imp-msg"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -684,9 +906,9 @@ const CARDS=[
    desc:'В выходной Зейн зовёт меня сопровождать его на встречу выпускников. Оказавшись в незнакомой среде, я узнаю ту его грань, которую видят лишь избранные...',
    link:'https://teletype.in/@snowfox_lnd/extutorial'},
 
-  {type:'5', badge:'bdg-gold', badgeLabel:'Ивент 2024',
+  {type:'5', badge:'bdg-gold', badgeLabel:'День рождения',
    title:'Eternal Attachment',
-   tags:[{l:'★★★★★',c:''},{l:'Ивент 2024',c:'tg-meta'}],
+   tags:[{l:'★★★★★',c:''}],
    img:F+'Happy%20Birthday%202014/%D0%BF%D1%80%D0%B5%D0%B2%D1%8C%D1%8E.png',
    desc:'Приближается день рождения Зейна, но из-за признаков, указывающих на подозрение на теносиновит, он отдыхает дома. Однако этот неожиданный отпуск — "хорошая новость" для меня, планирующей вечеринку в честь его дня рождения.',
    link:'https://teletype.in/@snowfox_lnd/hpbdy2024'},
@@ -1106,7 +1328,7 @@ function navGo(section,navBtn){
   hero.style.display=showHero?'':'none';
   document.getElementById('site').classList.toggle('no-hero',!showHero);
   const tabsNav=document.querySelector('.tabs-nav');
-  tabsNav.style.display=(section==='myths'||section==='wu')?'none':'';
+  tabsNav.style.display=(section==='myths'||section==='wu'||section==='dossier')?'none':'';
   document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
   navBtn.classList.add('active');
   const btn=document.getElementById('tbtn-'+section);
@@ -1159,6 +1381,8 @@ function switchStarTab(star,btn){
 /* ── SNOWFLAKES (background) ── */
 (function(){
   if(window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  // background snow disabled — only burst snow during globe shake
+  return;
   const glyphs=['❄','❅','•','·'];
   for(let i=0;i<22;i++){
     const f=document.createElement('div');
@@ -1171,6 +1395,245 @@ function switchStarTab(star,btn){
     document.body.appendChild(f);
   }
 })();
+
+
+/* ════════════════ DOSSIER + EFFECTS ════════════════ */
+const F_ASSETS='./Файлы/';
+const AWARDS={blue:F_ASSETS+'award_blue.png',jade:F_ASSETS+'award_jade.png',gold:F_ASSETS+'award_gold.png',diamond:F_ASSETS+'award_diamond.png'};
+const R_LABEL={blue:'Стандартный',jade:'Необычный',gold:'Редкий',diamond:'Легендарный'};
+
+const ACH=[
+  {id:'visit',  n:'Первый визит',          d:'Войти в Архив Аксо.',                          r:'blue'},
+  {id:'cards5', n:'Полный осмотр',         d:'Прочитать все 5★ карточки.',                   r:'jade'},
+  {id:'cards4', n:'Боевой паёк',           d:'Прочитать 4★ карточки.',                       r:'blue'},
+  {id:'myths',  n:'Хранитель мифов',       d:'Открыть оба мифа.',                            r:'jade'},
+  {id:'under',  n:'Спуск в подземелье',    d:'Побывать в World Underneath.',                 r:'blue'},
+  {id:'freeze', n:'Криокамера',            d:'Активировать секретное слово в поиске.',       r:'gold'},
+  {id:'aurora', n:'Северное сияние',       d:'Поймать редкий день авроры.',                  r:'gold'},
+  {id:'night',  n:'Ночная смена',          d:'Зайти после полуночи.',                        r:'blue'},
+  {id:'globe10',n:'Снежная буря',          d:'Тряхнуть шар 10 раз.',                         r:'jade'},
+  {id:'globe50',n:'Метель',                d:'Тряхнуть шар 50 раз.',                         r:'gold'},
+  {id:'name',   n:'Опознан',               d:'Ввести имя в досье.',                          r:'blue'},
+  {id:'photo',  n:'Карта пациента',        d:'Загрузить фото в досье.',                      r:'blue'},
+  {id:'rx',     n:'По рецепту',            d:'Сгенерировать 5 рецептов.',                    r:'jade'},
+  {id:'zayne10',n:'Беседа с доктором',     d:'10 ответов от Dr. Zayne.',                     r:'jade'},
+  {id:'channels',n:'Знакомый круг',        d:'Открыть все каналы из подвала.',               r:'blue'},
+  {id:'bday',   n:'С днём рождения',       d:'Зайти 9 ноября.',                              r:'diamond', secret:true},
+  {id:'silence',n:'Тишина',                d:'Прошептать «Silence».',                        r:'diamond', secret:true},
+  {id:'insomnia',n:'Бессонница хирурга',   d:'Зайти между 02:00 и 04:00.',                   r:'gold', secret:true},
+  {id:'fullset',n:'Полный допуск',         d:'Открыть все остальные допуски.',               r:'diamond'},
+];
+
+let DS={u:[],name:'',photo:'',visits:0,id:null,rxRolls:0,zayneCount:0,globeShakes:0,channelsClicked:[]};
+try{const s=JSON.parse(localStorage.getItem('akso_dossier')||'null');if(s)DS=Object.assign(DS,s);}catch(e){}
+DS.visits=(DS.visits||0)+1;
+if(!DS.id)DS.id='AH-'+String(Math.floor(1000+Math.random()*8999));
+function dsSave(){try{localStorage.setItem('akso_dossier',JSON.stringify(DS));}catch(e){}}
+
+function dsUn(id){return DS.u.includes(id);}
+function dsUnlock(id,silent){
+  if(dsUn(id))return;
+  DS.u.push(id);dsSave();dsRender();
+  if(!silent){const a=ACH.find(x=>x.id===id);if(a)dsToast(a);}
+  const rest=ACH.filter(a=>a.id!=='fullset');
+  if(rest.every(a=>dsUn(a.id))&&!dsUn('fullset'))setTimeout(()=>dsUnlock('fullset'),900);
+}
+function dsToast(a){
+  const wrap=document.getElementById('ds-toasts');if(!wrap)return;
+  const el=document.createElement('div');el.className='ds-toast';el.dataset.r=a.r;
+  el.innerHTML=`<div class="tic"><img src="${AWARDS[a.r]}" alt=""></div><div><div class="th">Допуск получен · ${R_LABEL[a.r]}</div><div class="tn">${a.n}</div></div>`;
+  wrap.appendChild(el);dsChime(a.r);setTimeout(()=>el.remove(),4300);
+}
+
+function dsRender(){
+  const grid=document.getElementById('ds-ach');if(!grid)return;
+  grid.innerHTML='';
+  ACH.forEach(a=>{const un=dsUn(a.id),sec=a.secret&&!un;
+    grid.insertAdjacentHTML('beforeend',`<div class="ds-ach ${un?'unlocked':'locked'} ${a.secret?'secret':''}" data-r="${a.r}">
+      <div class="ds-ic">${sec?'<span class="ds-ic-em">❔</span>':`<img src="${AWARDS[a.r]}" alt="">`}</div>
+      <div class="ds-ab"><div class="ds-an">${sec?'Секретный допуск':a.n}</div><div class="ds-ad">${sec?'Условие скрыто.':a.d}</div><div class="ds-ar">${R_LABEL[a.r]}</div></div>
+      ${un?'<span class="ds-got">✓</span>':''}</div>`);
+  });
+  const u=DS.u.length,tot=ACH.length,pct=Math.round(u/tot*100);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('ds-id',DS.id);set('ds-visits',DS.visits);set('ds-pct',pct+'%');set('ds-stats',u+' / '+tot);set('ds-count',u+' / '+tot);
+  const bar=document.getElementById('ds-bar');if(bar)bar.style.width=pct+'%';
+  const date=document.getElementById('ds-date');if(date)date.textContent=new Date().toLocaleDateString('ru-RU');
+  const bc=document.querySelector('.ds-barcode');if(bc)bc.textContent=bc.textContent.replace(/AH-\d{4}/,DS.id);
+  // restore name + photo
+  const nameInp=document.getElementById('ds-name');if(nameInp&&nameInp.value!==DS.name)nameInp.value=DS.name||'';
+  const photo=document.getElementById('ds-photo');
+  if(photo){const ph=photo.querySelector('.ds-photo-ph'),img=photo.querySelector('img');
+    if(DS.photo){if(img)img.src=DS.photo;else{const im=document.createElement('img');im.src=DS.photo;photo.insertBefore(im,ph);}if(ph)ph.style.display='none';}}
+}
+
+/* Name + photo handlers (attach lazily once panel exists) */
+function dsAttach(){
+  const nameInp=document.getElementById('ds-name');
+  if(nameInp&&!nameInp.dataset.bound){nameInp.dataset.bound='1';nameInp.addEventListener('input',e=>{DS.name=e.target.value.trim();dsSave();if(DS.name)dsUnlock('name');});}
+  const fileInp=document.getElementById('ds-photo-in');
+  if(fileInp&&!fileInp.dataset.bound){fileInp.dataset.bound='1';fileInp.addEventListener('change',e=>{
+    const f=e.target.files&&e.target.files[0];if(!f)return;
+    const r=new FileReader();r.onload=()=>{DS.photo=r.result;dsSave();dsRender();dsUnlock('photo');};r.readAsDataURL(f);
+  });}
+}
+
+/* Export / Import */
+function showIO(w){
+  document.getElementById('ds-io-exp').classList.toggle('show',w==='exp');
+  document.getElementById('ds-io-imp').classList.toggle('show',w==='imp');
+  if(w==='exp'){
+    const code=btoa(unescape(encodeURIComponent(JSON.stringify({v:1,DS}))));
+    document.getElementById('ds-exp-code').value=code;
+  }
+}
+function copyExp(){const t=document.getElementById('ds-exp-code');t.select();try{document.execCommand('copy');document.getElementById('ds-exp-msg').textContent='Скопировано ✓';}catch(e){document.getElementById('ds-exp-msg').textContent='Выдели и скопируй вручную';}}
+function doImport(){
+  const v=document.getElementById('ds-imp-code').value.trim();const m=document.getElementById('ds-imp-msg');
+  try{const o=JSON.parse(decodeURIComponent(escape(atob(v))));const incoming=o.DS||o;
+    DS.u=Array.from(new Set([...(DS.u||[]),...(incoming.u||[])]));
+    if(incoming.name)DS.name=incoming.name;
+    if(incoming.photo)DS.photo=incoming.photo;
+    if(incoming.id)DS.id=incoming.id;
+    if(incoming.rxRolls)DS.rxRolls=Math.max(DS.rxRolls,incoming.rxRolls);
+    if(incoming.zayneCount)DS.zayneCount=Math.max(DS.zayneCount,incoming.zayneCount);
+    if(incoming.globeShakes)DS.globeShakes=Math.max(DS.globeShakes,incoming.globeShakes);
+    dsSave();dsRender();
+    m.style.color='var(--green)';m.textContent='Загружено ✓ ('+DS.u.length+' допусков)';
+  }catch(e){m.style.color='#ff5e74';m.textContent='Код не распознан ✕';}
+}
+function resetDossier(){if(!confirm('Сбросить досье полностью?'))return;DS={u:[],name:'',photo:'',visits:1,id:DS.id,rxRolls:0,zayneCount:0,globeShakes:0,channelsClicked:[]};dsSave();dsRender();const ph=document.getElementById('ds-photo');if(ph){const img=ph.querySelector('img');if(img)img.remove();const p=ph.querySelector('.ds-photo-ph');if(p)p.style.display='';}}
+
+/* Zayne talker — English lines */
+const Z_LINES=[
+ "You didn't get enough sleep again. I can read it from your chart.",
+ "Cold? Come closer. I don't bite. Usually.",
+ "The archive won't run away. Your rest, on the other hand, might.",
+ "When it gets heavy — you know where to find me.",
+ "I checked your vitals. You'll live.",
+ "Don't push yourself into my office. Although… I wouldn't mind.",
+ "It's snowing. Perfect time to wrap up and read.",
+ "You're stronger than you think. That's not a diagnosis — that's a fact.",
+ "Breathe in. Hold. Breathe out. Better already.",
+ "I'll write you a prescription. For warmth.",
+ "Patient's pulse: steady. Doctor's pulse: complicated.",
+ "Stay. Just for a while.",
+];
+let z_i=-1;
+function zayneSpeak(){z_i=(z_i+1)%Z_LINES.length;const el=document.getElementById('ds-zline');if(el)el.textContent=Z_LINES[z_i];DS.zayneCount=(DS.zayneCount||0)+1;dsSave();if(DS.zayneCount>=10)dsUnlock('zayne10');dsBeep(440,.05);}
+
+/* Rx generator */
+const RX_OPEN=['Назначаю','Рекомендую','Предписываю','Выписываю'];
+const RX_WHAT=['чашку горячего чая с жасмином','тёплый плед и тишину','прогулку под снегом','час отдыха без телефона','книгу и кружку какао','глубокий вдох и счёт до десяти','объятие — продолжительное','тёплую ванну','короткий, но крепкий сон','смех — желательно вслух'];
+const RX_WHEN=['перед сном','сразу после прочтения этого','когда станет слишком тихо','в момент тревоги','каждые два часа','при первых признаках усталости','до и после визита в архив','в любую погоду'];
+const RX_DOSE=['Дозировка не ограничена.','Повторять по необходимости.','Курс — пока не станет легче.','Минимальная доза — одна. Максимальная — без верхней границы.','Без перерывов.','Принимать неспешно.'];
+function rollRx(){
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  const body=`${pick(RX_OPEN)}: ${pick(RX_WHAT)} — ${pick(RX_WHEN)}. ${pick(RX_DOSE)}`;
+  const el=document.getElementById('ds-rx-body');if(el)el.textContent=body;
+  const d=document.getElementById('ds-rx-date');if(d)d.textContent='от '+new Date().toLocaleDateString('ru-RU');
+  DS.rxRolls=(DS.rxRolls||0)+1;dsSave();if(DS.rxRolls>=5)dsUnlock('rx');
+  dsBeep(620,.05);
+}
+
+/* Sound (synth blip) */
+let dsActx;
+function dsBeep(f,d,v){try{if(!dsActx)dsActx=new(window.AudioContext||window.webkitAudioContext)();const o=dsActx.createOscillator(),g=dsActx.createGain();o.type='sine';o.frequency.value=f;g.gain.value=v||.05;o.connect(g);g.connect(dsActx.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,dsActx.currentTime+(d||.08));o.stop(dsActx.currentTime+(d||.08)+.02);}catch(e){}}
+function dsChime(r){const seq=r==='diamond'?[660,880,990,1180,1320]:r==='gold'?[660,880,990]:r==='jade'?[620,820,920]:[600,750];seq.forEach((f,i)=>setTimeout(()=>dsBeep(f,.18,.06),i*80));}
+
+/* Snow globe + burst snow on shake */
+const burstC=document.getElementById('burstSnow');let burstCtx,burstFlakes=[],burstW,burstH;
+function burstResize(){if(!burstC)return;burstW=burstC.width=innerWidth;burstH=burstC.height=innerHeight;}
+function makeFlakeSprite(size){const c=document.createElement('canvas');c.width=c.height=size*2+4;const g=c.getContext('2d');g.translate(c.width/2,c.height/2);g.strokeStyle='rgba(235,245,255,.95)';g.lineWidth=Math.max(1,size*.12);g.lineCap='round';for(let i=0;i<6;i++){g.rotate(Math.PI/3);g.beginPath();g.moveTo(0,0);g.lineTo(0,-size*.9);g.moveTo(0,-size*.5);g.lineTo(size*.28,-size*.68);g.moveTo(0,-size*.5);g.lineTo(-size*.28,-size*.68);g.stroke();}return c;}
+const BSPR=[null,null,null];
+function ensureSprites(){if(!BSPR[0])[8,13,18].forEach((s,i)=>BSPR[i]=makeFlakeSprite(s));}
+function burstLoop(){if(!burstCtx)return;requestAnimationFrame(burstLoop);burstCtx.clearRect(0,0,burstW,burstH);for(const f of burstFlakes){f.y+=f.vy;f.x+=f.vx+Math.sin(f.t)*.4;f.t+=.04;f.rot+=f.vrot;const sp=BSPR[f.L];burstCtx.globalAlpha=Math.max(0,f.life);burstCtx.setTransform(1,0,0,1,f.x,f.y);burstCtx.rotate(f.rot);burstCtx.drawImage(sp,-f.r,-f.r,f.r*2,f.r*2);f.life-=.005;}burstCtx.setTransform(1,0,0,1,0,0);burstCtx.globalAlpha=1;burstFlakes=burstFlakes.filter(f=>f.life>0&&f.y<burstH+30);}
+function burstSnowSpawn(n){ensureSprites();for(let i=0;i<n;i++){const L=Math.random()<.55?0:Math.random()<.7?1:2;burstFlakes.push({x:Math.random()*burstW,y:-20-Math.random()*100,vx:(Math.random()*1.4-.7),vy:1+Math.random()*2.2,L,r:[4,7,11][L],t:Math.random()*6,rot:Math.random()*6,vrot:(Math.random()*2-1)*.02,life:1});}}
+function shakeGlobe(){const g=document.getElementById('snowGlobe');if(g){g.classList.remove('shake');void g.offsetWidth;g.classList.add('shake');}if(!burstCtx&&burstC){burstCtx=burstC.getContext('2d');burstResize();addEventListener('resize',burstResize);requestAnimationFrame(burstLoop);}burstSnowSpawn(60);dsBeep(520,.07);DS.globeShakes=(DS.globeShakes||0)+1;dsSave();if(DS.globeShakes>=10)dsUnlock('globe10');if(DS.globeShakes>=50)dsUnlock('globe50');}
+
+/* Aurora burst (5 sept) */
+function auroraBurst(){document.body.classList.add('aurora-burst');if(!burstCtx&&burstC){burstCtx=burstC.getContext('2d');burstResize();addEventListener('resize',burstResize);requestAnimationFrame(burstLoop);}burstSnowSpawn(30);dsChime('gold');dsUnlock('aurora');setTimeout(()=>document.body.classList.remove('aurora-burst'),10000);}
+
+/* Freeze toggle (Астра) */
+let frozen=false;
+function toggleFreeze(){frozen=!frozen;document.body.classList.toggle('frozen',frozen);if(frozen){dsChime('gold');dsUnlock('freeze');}}
+
+/* Silence easter egg */
+const SILENCE_TEXT="Тишина — лучшее лекарство.\nИ всё же я хочу слышать тебя.";
+let silenceBusy=false;
+function runSilence(){
+  if(silenceBusy)return;silenceBusy=true;
+  const ov=document.getElementById('silenceOverlay'),tx=document.getElementById('silText'),au=document.getElementById('silenceAudio');
+  if(!ov||!tx)return;
+  tx.textContent='';ov.classList.add('on');
+  let i=0;const total=SILENCE_TEXT.length;
+  const typer=setInterval(()=>{i++;tx.textContent=SILENCE_TEXT.slice(0,i);if(i>=total){clearInterval(typer);startMusic();}},65);
+  function startMusic(){
+    try{au.currentTime=0;au.volume=0.85;au.play().then(()=>{document.body.classList.add('silence-pulse');au.onended=endSilence;}).catch(()=>{setTimeout(endSilence,3500);});}catch(e){setTimeout(endSilence,3500);}
+  }
+  function endSilence(){document.body.classList.remove('silence-pulse');ov.classList.remove('on');silenceBusy=false;dsUnlock('silence');}
+}
+
+/* Hook into search box (the existing #search-input) */
+function hookSearch(){
+  const inp=document.getElementById('search-input');if(!inp||inp.dataset.dsBound)return;inp.dataset.dsBound='1';
+  inp.addEventListener('input',e=>{
+    const v=e.target.value.trim().toLowerCase();
+    if(v==='астра'||v==='astra'){toggleFreeze();e.target.value='';}
+    else if(v==='5 сентября'||v==='5.09'||v==='5/9'||v==='5 september'){auroraBurst();e.target.value='';}
+    else if(v==='silence'||v==='тишина'){e.target.value='';runSilence();}
+  });
+}
+
+/* Track channel clicks for "Знакомый круг" */
+function hookChannels(){
+  document.querySelectorAll('.ch-bar').forEach(a=>{if(a.dataset.dsBound)return;a.dataset.dsBound='1';a.addEventListener('click',()=>{const k=a.getAttribute('href')||'';if(!DS.channelsClicked.includes(k))DS.channelsClicked.push(k);dsSave();if(DS.channelsClicked.length>=4)dsUnlock('channels');});});
+}
+
+/* Show Pai mascot once site enters */
+function showPai(){document.body.classList.add('has-pai');}
+
+/* Track which tabs visited (for myths/under achievements) */
+const _origSwitchTab=window.switchTab;
+window.switchTab=function(tab,btn){
+  if(typeof _origSwitchTab==='function')_origSwitchTab(tab,btn);
+  if(tab==='myths')dsUnlock('myths');
+  if(tab==='wu')dsUnlock('under');
+  if(tab==='dossier'){setTimeout(()=>{dsAttach();dsRender();hookSearch();hookChannels();},30);}
+};
+
+/* On site entered (after title screen / enterSite) */
+const _enterSite=window.enterSite;
+window.enterSite=function(){
+  if(typeof _enterSite==='function')_enterSite();
+  setTimeout(()=>{
+    showPai();
+    hookSearch();
+    hookChannels();
+    dsUnlock('visit',true);
+    const h=new Date().getHours();
+    if(h>=0&&h<6)dsUnlock('night');
+    if(h>=2&&h<4)dsUnlock('insomnia');
+    const d=new Date();if(d.getMonth()===10&&d.getDate()===9)dsUnlock('bday');
+    dsAttach();dsRender();
+  },100);
+};
+
+// If already inside the site (e.g. user reloads in-place), initialize anyway
+if(document.getElementById('site')&&document.getElementById('site').classList.contains('vis')){
+  setTimeout(()=>{showPai();hookSearch();hookChannels();dsUnlock('visit',true);dsAttach();dsRender();},200);
+}
+
+
 </script>
+
+<canvas id="burstSnow"></canvas>
+<div id="frozenTint"></div>
+<button id="snowGlobe" onclick="shakeGlobe()" title="Тряхни!"><img src="./Файлы/snowglobe.png" alt="snow globe"></button>
+<img class="pai-mascot" src="./Файлы/%D0%9F%D0%B0%D0%B9.png" alt="Пай">
+<div id="ds-toasts"></div>
+<div id="silenceOverlay"><div class="silence-text" id="silText"></div></div>
+<audio id="silenceAudio" src="./Файлы/silence.mp3" preload="none"></audio>
+
 </body>
 </html>
