@@ -1588,15 +1588,14 @@ function toggleFreeze(){
 }
 
 /* Silence easter egg */
-const SILENCE_TEXT="Тишина — лучшее лекарство.\nИ всё же я хочу слышать тебя.";
+const SILENCE_TEXT="";
 let silenceBusy=false;
 function runSilence(){
   if(silenceBusy)return;silenceBusy=true;
   const ov=document.getElementById('silenceOverlay'),tx=document.getElementById('silText'),au=document.getElementById('silenceAudio');
   if(!ov||!tx){silenceBusy=false;return;}
   tx.textContent='';ov.classList.add('on');
-  let i=0;const total=SILENCE_TEXT.length;
-  const typer=setInterval(()=>{i++;tx.textContent=SILENCE_TEXT.slice(0,i);if(i>=total){clearInterval(typer);startMusic();}},65);
+  startMusic();
   function startMusic(){
     try{
       au.pause();au.currentTime=0;au.load();au.volume=0.85;
