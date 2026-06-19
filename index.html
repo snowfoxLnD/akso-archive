@@ -555,6 +555,7 @@ button.nav-link{background:none;border:none;cursor:pointer;font-weight:700;lette
 .ds-toast{display:flex;gap:14px;align-items:center;background:linear-gradient(100deg,rgba(8,16,28,.97),rgba(12,22,38,.95));border:1px solid var(--bdr);padding:11px 18px 11px 11px;min-width:300px;box-shadow:0 14px 40px rgba(0,0,0,.55);transform:translateY(-30px);opacity:0;animation:dsTIn .5s forwards,dsTOut .5s 3.7s forwards;}
 @keyframes dsTIn{to{transform:translateY(0);opacity:1}}
 @keyframes dsTOut{to{transform:translateY(-20px);opacity:0}}
+.ds-toast .tic .ds-ic-em{font-size:1.4rem;}
 .ds-toast .tic{width:46px;height:46px;border-radius:50%;overflow:hidden;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;background:rgba(6,12,22,.5);flex-shrink:0;}
 .ds-toast .tic img{width:100%;height:100%;object-fit:cover;}
 .ds-toast .th{font-family:'JetBrains Mono',monospace;font-size:.46rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cop);}
@@ -628,14 +629,6 @@ body.silence-pulse::before{animation:silAur 0.5s ease-in-out infinite!important;
 <div id="ptcl"></div>
 
 <!-- WELCOME -->
-<div id="nameAsk" class="screen" style="background:#040912;display:none;flex-direction:column;align-items:center;justify-content:center;gap:22px;z-index:1001;">
-  <div style="font-family:'FHWA',monospace;font-size:clamp(.6rem,1.2vw,.8rem);letter-spacing:.34em;color:rgba(168,216,240,.55);text-transform:uppercase;">AKSO HOSPITAL · Регистрация</div>
-  <div id="nameAskTitle" style="font-family:'FHWA',monospace;font-size:clamp(1.2rem,3.5vw,2rem);letter-spacing:.1em;color:#c8e8f8;text-align:center;text-shadow:0 0 50px rgba(168,216,240,.3);">Госпожа Охотница,<br>введите своё имя</div>
-  <input id="nameAskInput" type="text" maxlength="32" placeholder="ваше имя" autocomplete="off"
-   style="background:rgba(9,20,37,.6);border:1px solid rgba(168,216,240,.3);color:#eaf3f9;font-family:'Orbitron',monospace;font-size:1rem;letter-spacing:.06em;padding:12px 18px;text-align:center;outline:none;min-width:240px;">
-  <button id="nameAskBtn" onclick="confirmName()" style="font-family:'FHWA',monospace;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:#c8e8f8;border:1px solid rgba(168,216,240,.4);background:none;padding:12px 36px;cursor:pointer;transition:.3s;">[ Подтвердить ]</button>
-  <button onclick="skipName()" style="font-family:'JetBrains Mono',monospace;font-size:.54rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);background:none;border:none;cursor:pointer;opacity:.6;">пропустить</button>
-</div>
 
 <div class="screen grid-bg vis" id="welcome" onclick="startLoading()">
   <div class="welcome-hosp">AKSO HOSPITAL · Digital Archive · v4.0</div>
@@ -1428,25 +1421,25 @@ const AWARDS={blue:F_ASSETS+'award_blue.png',jade:F_ASSETS+'award_jade.png',gold
 const R_LABEL={blue:'Стандартный',jade:'Необычный',gold:'Редкий',diamond:'Легендарный'};
 
 const ACH=[
-  {id:'visit',  n:'🚪 Первый визит',          d:'Войти в Архив Аксо.',                          r:'blue'},
-  {id:'cards5', n:'🩺 Полный осмотр',         d:'Прочитать все 5★ карточки.',                   r:'jade'},
-  {id:'cards4', n:'🎴 Боевой паёк',           d:'Прочитать 4★ карточки.',                       r:'blue'},
-  {id:'myths',  n:'⛩️ Хранитель мифов',       d:'Открыть оба мифа.',                            r:'jade'},
-  {id:'under',  n:'🕳️ Спуск в подземелье',    d:'Побывать в World Underneath.',                 r:'blue'},
-  {id:'freeze', n:'❄️ Криокамера',            d:'Активировать секретное слово в поиске.',       r:'gold'},
-  {id:'aurora', n:'🌌 Северное сияние',       d:'Поймать редкий день авроры.',                  r:'gold'},
-  {id:'night',  n:'🌙 Ночная смена',          d:'Зайти после полуночи.',                        r:'blue'},
-  {id:'globe10',n:'🔮 Снежная буря',          d:'Тряхнуть шар 10 раз.',                         r:'jade'},
-  {id:'globe50',n:'🌨️ Метель',                d:'Тряхнуть шар 50 раз.',                         r:'gold'},
-  {id:'name',   n:'🪪 Опознан',               d:'Ввести имя в досье.',                          r:'blue'},
-  {id:'photo',  n:'📸 Карта пациента',        d:'Загрузить фото в досье.',                      r:'blue'},
-  {id:'rx',     n:'💊 По рецепту',            d:'Сгенерировать 5 рецептов.',                    r:'jade'},
-  {id:'zayne10',n:'💬 Беседа с доктором',     d:'10 ответов от Dr. Zayne.',                     r:'jade'},
-  {id:'channels',n:'📡 Знакомый круг',        d:'Открыть все каналы из подвала.',               r:'blue'},
-  {id:'bday',   n:'🎂 С днём рождения, доктор', d:'Зайти 5 сентября.',                            r:'diamond', secret:true},
-  {id:'silence',n:'🤫 Тишина',                d:'Прошептать «Silence».',                        r:'diamond', secret:true},
-  {id:'insomnia',n:'🕯️ Бессонница хирурга',   d:'Зайти между 02:00 и 04:00.',                   r:'gold', secret:true},
-  {id:'fullset',n:'👑 Полный допуск',         d:'Открыть все остальные допуски.',               r:'diamond'},
+  {id:'visit', e:'🚪', n:'Первый визит',          d:'Войти в Архив Аксо.',                          r:'blue'},
+  {id:'cards5', e:'🩺', n:'Полный осмотр',         d:'Прочитать все 5★ карточки.',                   r:'jade'},
+  {id:'cards4', e:'🎴', n:'Боевой паёк',           d:'Прочитать 4★ карточки.',                       r:'blue'},
+  {id:'myths', e:'⛩️', n:'Хранитель мифов',       d:'Открыть оба мифа.',                            r:'jade'},
+  {id:'under', e:'🕳️', n:'Спуск в подземелье',    d:'Побывать в World Underneath.',                 r:'blue'},
+  {id:'freeze', e:'❄️', n:'Криокамера',            d:'Активировать секретное слово в поиске.',       r:'gold'},
+  {id:'aurora', e:'🌌', n:'Северное сияние',       d:'Поймать редкий день авроры.',                  r:'gold'},
+  {id:'night', e:'🌙', n:'Ночная смена',          d:'Зайти после полуночи.',                        r:'blue'},
+  {id:'globe10', e:'🔮', n:'Снежная буря',          d:'Тряхнуть шар 10 раз.',                         r:'jade'},
+  {id:'globe50', e:'🌨️', n:'Метель',                d:'Тряхнуть шар 50 раз.',                         r:'gold'},
+  {id:'name', e:'🪪', n:'Опознан',               d:'Ввести имя в досье.',                          r:'blue'},
+  {id:'photo', e:'📸', n:'Карта пациента',        d:'Загрузить фото в досье.',                      r:'blue'},
+  {id:'rx', e:'💊', n:'По рецепту',            d:'Сгенерировать 5 рецептов.',                    r:'jade'},
+  {id:'zayne10', e:'💬', n:'Беседа с доктором',     d:'10 ответов от Dr. Zayne.',                     r:'jade'},
+  {id:'channels', e:'📡', n:'Знакомый круг',        d:'Открыть все каналы из подвала.',               r:'blue'},
+  {id:'bday', e:'🎂', n:'С днём рождения, доктор', d:'Зайти 5 сентября.',                            r:'diamond', secret:true},
+  {id:'silence', e:'🤫', n:'Тишина',                d:'Прошептать «Silence».',                        r:'diamond', secret:true},
+  {id:'insomnia', e:'🕯️', n:'Бессонница хирурга',   d:'Зайти между 02:00 и 04:00.',                   r:'gold', secret:true},
+  {id:'fullset', e:'👑', n:'Полный допуск',         d:'Открыть все остальные допуски.',               r:'diamond'},
 ];
 
 let DS={u:[],name:'',photo:'',visits:0,id:null,rxRolls:0,zayneCount:0,globeShakes:0,channelsClicked:[]};
@@ -1466,7 +1459,7 @@ function dsUnlock(id,silent){
 function dsToast(a){
   const wrap=document.getElementById('ds-toasts');if(!wrap)return;
   const el=document.createElement('div');el.className='ds-toast';el.dataset.r=a.r;
-  el.innerHTML=`<div class="tic"><img src="${AWARDS[a.r]}" alt=""></div><div><div class="th">Допуск получен · ${R_LABEL[a.r]}</div><div class="tn">${a.n}</div></div>`;
+  el.innerHTML=`<div class="tic"><span class="ds-ic-em">${a.e||'★'}</span></div><div><div class="th">Допуск получен · ${R_LABEL[a.r]}</div><div class="tn">${a.n}</div></div>`;
   wrap.appendChild(el);dsChime(a.r);setTimeout(()=>el.remove(),4300);
 }
 
@@ -1475,7 +1468,7 @@ function dsRender(){
   grid.innerHTML='';
   ACH.forEach(a=>{const un=dsUn(a.id),sec=a.secret&&!un;
     grid.insertAdjacentHTML('beforeend',`<div class="ds-ach ${un?'unlocked':'locked'} ${a.secret?'secret':''}" data-r="${a.r}">
-      <div class="ds-ic">${sec?'<span class="ds-ic-em">❔</span>':`<img src="${AWARDS[a.r]}" alt="">`}</div>
+      <div class="ds-ic"><span class="ds-ic-em">${sec?'❔':(a.e||'★')}</span></div>
       <div class="ds-ab"><div class="ds-an">${sec?'Секретный допуск':a.n}</div><div class="ds-ad">${sec?'Условие скрыто.':a.d}</div><div class="ds-ar">${R_LABEL[a.r]}</div></div>
       ${un?'<span class="ds-got">✓</span>':''}</div>`);
   });
@@ -1681,23 +1674,7 @@ if(document.getElementById('site')&&document.getElementById('site').classList.co
 
 /* Hunter name capture on entry */
 function showScreen2(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('vis'));const el=document.getElementById(id);if(el){el.classList.add('vis');el.style.display='flex';}}
-let _origStartLoading=window.startLoading;
-window.startLoading=function(){
-  let hasName=false;try{const s=JSON.parse(localStorage.getItem('akso_dossier')||'null');hasName=s&&s.name;}catch(e){}
-  if(hasName){if(typeof _origStartLoading==='function')_origStartLoading();return;}
-  showScreen2('nameAsk');
-  setTimeout(()=>{const i=document.getElementById('nameAskInput');if(i)i.focus();},120);
-};
-function _proceedLoading(){const w=document.getElementById('welcome');document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('vis');if(s.id==='nameAsk')s.style.display='none';});if(typeof _origStartLoading==='function')_origStartLoading();}
-function confirmName(){
-  const i=document.getElementById('nameAskInput');const v=(i&&i.value.trim())||'';
-  if(v){try{let s=JSON.parse(localStorage.getItem('akso_dossier')||'{}');s.name=v;if(!s.u)s.u=[];localStorage.setItem('akso_dossier',JSON.stringify(s));}catch(e){}}
-  const t=document.getElementById('nameAskTitle');if(t){t.innerHTML='✓ Подтверждено!';}
-  const btn=document.getElementById('nameAskBtn');if(btn)btn.style.display='none';
-  setTimeout(_proceedLoading,1100);
-}
-function skipName(){_proceedLoading();}
-document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('nameAsk')&&document.getElementById('nameAsk').classList.contains('vis')){confirmName();}});
+/* name capture removed — name is entered in Досье */
 
 
 /* black-ice shatter on WU card click */
