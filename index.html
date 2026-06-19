@@ -1234,6 +1234,16 @@ function initWuGlitch(){
 /* ── MODAL ── */
 function openCard(i){
   const c=CARDS[i];
+  // track reads for achievements
+  try{
+    if(!DS.read)DS.read=[];
+    if(!DS.read.includes(i)){DS.read.push(i);dsSave();}
+    if(c.type==='4')dsUnlock('cards4');
+    if(c.type==='5'){
+      const all5=CARDS.map((x,idx)=>({x,idx})).filter(o=>o.x.type==='5');
+      if(all5.every(o=>DS.read.includes(o.idx)))dsUnlock('cards5');
+    }
+  }catch(e){}
   const available=!!c.link;
   const imgBlock=c.img
     ? `<img src="${c.img}" alt="${c.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ph" style="display:none">медиа · превью</div><div class="scan"></div>`
@@ -1566,7 +1576,7 @@ const ACH=[
   {id:'fullset', e:'👑', n:'Полный допуск',         d:'Открыть все остальные допуски.',               r:'diamond'},
 ];
 
-let DS={u:[],name:'',photo:'',visits:0,id:null,rxRolls:0,zayneCount:0,globeShakes:0,channelsClicked:[]};
+let DS={u:[],name:'',photo:'',visits:0,id:null,rxRolls:0,zayneCount:0,globeShakes:0,channelsClicked:[],read:[]};
 try{const s=JSON.parse(localStorage.getItem('akso_dossier')||'null');if(s)DS=Object.assign(DS,s);}catch(e){}
 DS.visits=(DS.visits||0)+1;
 if(!DS.id)DS.id='AH-'+String(Math.floor(1000+Math.random()*8999));
@@ -1640,11 +1650,12 @@ function doImport(){
     if(incoming.rxRolls)DS.rxRolls=Math.max(DS.rxRolls,incoming.rxRolls);
     if(incoming.zayneCount)DS.zayneCount=Math.max(DS.zayneCount,incoming.zayneCount);
     if(incoming.globeShakes)DS.globeShakes=Math.max(DS.globeShakes,incoming.globeShakes);
+    if(incoming.read)DS.read=Array.from(new Set([...(DS.read||[]),...incoming.read]));
     dsSave();dsRender();
     m.style.color='var(--green)';m.textContent='Загружено ✓ ('+DS.u.length+' допусков)';
   }catch(e){m.style.color='#ff5e74';m.textContent='Код не распознан ✕';}
 }
-function resetDossier(){if(!confirm('Сбросить досье полностью?'))return;DS={u:[],name:'',photo:'',visits:1,id:DS.id,rxRolls:0,zayneCount:0,globeShakes:0,channelsClicked:[]};dsSave();dsRender();const ph=document.getElementById('ds-photo');if(ph){const img=ph.querySelector('img');if(img)img.remove();const p=ph.querySelector('.ds-photo-ph');if(p)p.style.display='';}}
+function resetDossier(){if(!confirm('Сбросить досье полностью?'))return;DS={u:[],name:'',photo:'',visits:1,id:DS.id,rxRolls:0,zayneCount:0,globeShakes:0,channelsClicked:[],read:[]};dsSave();dsRender();const ph=document.getElementById('ds-photo');if(ph){const img=ph.querySelector('img');if(img)img.remove();const p=ph.querySelector('.ds-photo-ph');if(p)p.style.display='';}}
 
 /* Zayne talker — English lines */
 const Z_LINES=[
