@@ -489,26 +489,6 @@ body.day{--bg:#cfe0ee;--card:rgba(255,255,255,.82);--txt:#1a2a3a;--mut:#4a6882;-
   animation:iceReveal .4s ease;}
 @keyframes iceReveal{from{opacity:0;filter:blur(5px)}to{opacity:1;filter:none}}
 
-/* Rx popup (Досье) */
-#rx-popup{position:fixed;right:18px;top:78px;z-index:50;width:256px;
-  background:rgba(244,245,238,.97);color:#1a2430;border:1px solid rgba(196,154,108,.55);
-  box-shadow:0 14px 40px rgba(0,0,0,.55);transform:translateX(310px);opacity:0;
-  transition:transform .5s cubic-bezier(.2,.8,.3,1),opacity .4s;pointer-events:none;
-  display:block !important;}
-#rx-popup.vis{transform:translateX(0);opacity:1;pointer-events:all;}
-.rx-top{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;
-  border-bottom:1px dashed rgba(26,36,48,.25);}
-.rx-rx{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:#7a2f2f;font-style:italic;}
-.rx-h{font-size:.43rem;letter-spacing:.18em;text-transform:uppercase;color:#6a7682;line-height:1.6;text-align:right;}
-.rx-x{border:none;background:none;color:#6a7682;cursor:pointer;font-size:.9rem;padding:0;}
-.rx-body{padding:13px 14px 15px;}
-.rx-q{font-family:'Cormorant Garamond',serif;font-size:.98rem;line-height:1.55;color:#28323e;font-style:italic;}
-#rx-pill{position:fixed;right:18px;top:78px;z-index:49;width:42px;height:42px;border-radius:50%;
-  background:rgba(244,245,238,.97);border:1px solid rgba(196,154,108,.5);color:#7a2f2f;
-  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:700;font-size:1.2rem;
-  align-items:center;justify-content:center;cursor:pointer;display:none;
-  box-shadow:0 6px 20px rgba(0,0,0,.4);animation:pillPulse 2.5s ease infinite;}
-@keyframes pillPulse{0%,100%{box-shadow:0 6px 20px rgba(0,0,0,.4)}50%{box-shadow:0 6px 20px rgba(0,0,0,.4),0 0 0 5px rgba(196,154,108,.1)}}
 
 @media(max-width:768px){
   #bai-sprite{width:60px;}
@@ -523,15 +503,6 @@ body.day{--bg:#cfe0ee;--card:rgba(255,255,255,.82);--txt:#1a2a3a;--mut:#4a6882;-
 <canvas id="frost-c"></canvas>
 <div id="freeze-tint"></div>
 <img id="bai-sprite" src="./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/bai.png" alt="Бай" onerror="this.style.display='none'">
-<div id="rx-popup">
-  <div class="rx-top">
-    <span class="rx-rx">℞</span>
-    <span class="rx-h">AKSO HOSPITAL<br>Досье · цитата дня</span>
-    <button class="rx-x" onclick="closeRx()">✕</button>
-  </div>
-  <div class="rx-body"><div class="rx-q" id="rx-q">—</div></div>
-</div>
-<button id="rx-pill" onclick="openRx()" title="Открыть досье">℞</button>
 
 <!-- WELCOME -->
 
@@ -1192,7 +1163,6 @@ function enterSite(){
   setupNavHide();
   const frost=document.getElementById('frost-c');if(frost)frost.style.display='block';
   const bai=document.getElementById('bai-sprite');if(bai)bai.style.removeProperty('display');
-  setTimeout(initRx,1400);
 }
 function setupNavHide(){
   let ly=0;
@@ -1354,39 +1324,6 @@ function wuIce(el,e){
   setTimeout(()=>el.classList.remove('iced'),2200);
 }
 
-/* ── RX POPUP (Досье) ── */
-const RX=[
-  '"I want to capture spring, and you."',
-  '"I\'ve been thinking of you for a long time."',
-  '"Your presence alone turns even the most ordinary days into something special."',
-  '"I\'d like to share the quiet moments of all four seasons with you."',
-  '"Here is my heart — it\'s the one I\'ve spent all this time keeping safe."',
-  '"I am still waiting for you to come through the morning mist."',
-  '"I won\'t ask about the things that need to be kept confidential. But let me know if you\'re not feeling well. Otherwise, I\'ll worry."',
-  '"The person who\'s worth breaking the rules for wasn\'t with me back then."',
-  '"It\'s possible that I\'d rather show you my feelings with actions over telling you."',
-  '"We were going to meet anyway. Wouldn\'t it be nice to see each other sooner?"',
-  '"Physically or emotionally?"',
-  '"Don\'t move. If your hair isn\'t dry, you\'ll start sneezing again."',
-  '"I want to write down how it felt when I first fell in love with you."',
-  '"Did I ever say I don\'t enjoy adventuring with you?"',
-];
-let _rxIdx=Math.floor(Math.random()*RX.length);
-function openRx(){
-  _rxIdx=(_rxIdx+1)%RX.length;
-  document.getElementById('rx-q').textContent=RX[_rxIdx];
-  document.getElementById('rx-popup').classList.add('vis');
-  document.getElementById('rx-pill').style.display='none';
-}
-function closeRx(){
-  document.getElementById('rx-popup').classList.remove('vis');
-  setTimeout(()=>{document.getElementById('rx-pill').style.display='flex';},420);
-}
-// show on enter site, hide after 5s
-function initRx(){
-  openRx();
-  setTimeout(closeRx,5000);
-}
 
 /* ── MARQUEE quotes ── */
 (function(){
