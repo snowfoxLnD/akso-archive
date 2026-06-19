@@ -43,7 +43,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;opa
 
 /* screens */
 .screen{display:none;position:fixed;inset:0;z-index:1000;flex-direction:column;align-items:center;justify-content:center;}
-.screen.vis{display:flex;animation:scrnFade .5s ease;}
+.screen.vis{display:flex;}
 @keyframes scrnFade{from{opacity:0}to{opacity:1}}
 .grid-bg::before{content:'';position:absolute;inset:0;pointer-events:none;
   background-image:linear-gradient(rgba(42,108,176,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(42,108,176,.06) 1px,transparent 1px);
@@ -472,46 +472,15 @@ button.nav-link{background:none;border:none;cursor:pointer;font-weight:700;lette
 /* ── EXTRA FEATURES ── */
 /* day mode */
 body.day{--bg:#cfe0ee;--card:rgba(255,255,255,.82);--txt:#1a2a3a;--mut:#4a6882;--ice:#2a6ea0;--icdim:#3a7fb0;--bdr:rgba(40,90,140,.18);}
-body.day #main-nav{background:rgba(215,232,245,.96);}
-body.day::before{filter:brightness(1.55) saturate(.65) hue-rotate(6deg);}
-
-/* freeze effect */
-#freeze-tint{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity 1.1s;
-  background:radial-gradient(ellipse at 50% 40%,rgba(120,200,255,.1),rgba(40,120,200,.28) 90%);mix-blend-mode:screen;}
-body.frozen #freeze-tint{opacity:1;}
-body.frozen{animation:shiver 6s ease-in-out infinite;}
-@keyframes shiver{0%,100%{filter:none}50%{filter:hue-rotate(-12deg) saturate(1.2)}}
-
-/* globe button */
-#globe-btn{position:fixed;right:18px;bottom:18px;z-index:30;cursor:pointer;width:68px;height:68px;border:none;background:none;padding:0;
-  filter:drop-shadow(0 4px 14px rgba(100,180,255,.45));transition:transform .25s;}
-#globe-btn:hover{transform:scale(1.1);}
-#globe-btn img{width:100%;height:100%;object-fit:contain;}
-#globe-btn.shake{animation:gShake .5s ease;}
-@keyframes gShake{0%,100%{transform:rotate(0)}20%{transform:rotate(-10deg)}40%{transform:rotate(9deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(4deg)}}
-
-/* bell */
-#bell-btn{position:fixed;right:96px;bottom:26px;z-index:30;cursor:pointer;border:none;background:none;
-  font-size:1.5rem;line-height:1;filter:drop-shadow(0 2px 8px rgba(196,154,108,.5));transition:transform .2s;}
-#bell-btn:hover{transform:rotate(12deg);}
-#bell-btn.ring{animation:bellRing .35s ease;}
-@keyframes bellRing{0%,100%{transform:rotate(0)}25%{transform:rotate(-22deg)}75%{transform:rotate(22deg)}}
-
-/* mode buttons bottom-left */
-#mode-btns{position:fixed;left:14px;bottom:18px;z-index:30;display:flex;flex-direction:column;gap:7px;}
-.mode-btn{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--mut);border:1px solid var(--bdr);background:rgba(6,14,26,.75);padding:6px 10px;cursor:pointer;
-  transition:all .3s;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);}
-.mode-btn:hover,.mode-btn.on{color:var(--ice);border-color:rgba(168,216,240,.4);}
+/* hide extras until site is active */
+#bai-sprite,#frost-c{display:none;}
 
 /* Bai sprite */
 #bai-sprite{position:fixed;z-index:25;pointer-events:none;width:80px;height:auto;
   filter:drop-shadow(0 4px 10px rgba(80,160,220,.5));transform:translateX(-200px);}
 
-/* paw trail */
-.paw{position:fixed;pointer-events:none;z-index:15;font-size:.75rem;opacity:.55;
-  animation:pawFade .9s ease forwards;transform-origin:center;}
-@keyframes pawFade{0%{opacity:.55;transform:scale(1)}100%{opacity:0;transform:scale(.4)}}
+/* frost canvas */
+#frost-c{position:fixed;inset:0;z-index:2;pointer-events:none;}
 
 /* WU ice click */
 .wcard{cursor:default;}
@@ -524,7 +493,8 @@ body.frozen{animation:shiver 6s ease-in-out infinite;}
 #rx-popup{position:fixed;right:18px;top:78px;z-index:50;width:256px;
   background:rgba(244,245,238,.97);color:#1a2430;border:1px solid rgba(196,154,108,.55);
   box-shadow:0 14px 40px rgba(0,0,0,.55);transform:translateX(310px);opacity:0;
-  transition:transform .5s cubic-bezier(.2,.8,.3,1),opacity .4s;pointer-events:none;}
+  transition:transform .5s cubic-bezier(.2,.8,.3,1),opacity .4s;pointer-events:none;
+  display:block !important;}
 #rx-popup.vis{transform:translateX(0);opacity:1;pointer-events:all;}
 .rx-top{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;
   border-bottom:1px dashed rgba(26,36,48,.25);}
@@ -536,15 +506,11 @@ body.frozen{animation:shiver 6s ease-in-out infinite;}
 #rx-pill{position:fixed;right:18px;top:78px;z-index:49;width:42px;height:42px;border-radius:50%;
   background:rgba(244,245,238,.97);border:1px solid rgba(196,154,108,.5);color:#7a2f2f;
   font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:700;font-size:1.2rem;
-  display:none;align-items:center;justify-content:center;cursor:pointer;
+  align-items:center;justify-content:center;cursor:pointer;display:none;
   box-shadow:0 6px 20px rgba(0,0,0,.4);animation:pillPulse 2.5s ease infinite;}
 @keyframes pillPulse{0%,100%{box-shadow:0 6px 20px rgba(0,0,0,.4)}50%{box-shadow:0 6px 20px rgba(0,0,0,.4),0 0 0 5px rgba(196,154,108,.1)}}
 
 @media(max-width:768px){
-  #globe-btn{right:12px;bottom:12px;width:54px;height:54px;}
-  #bell-btn{right:74px;bottom:18px;font-size:1.2rem;}
-  #mode-btns{left:10px;bottom:12px;gap:5px;}
-  .mode-btn{font-size:.44rem;padding:5px 8px;}
   #bai-sprite{width:60px;}
   #rx-popup{width:220px;right:12px;}
   #rx-pill{right:12px;}
@@ -554,16 +520,9 @@ body.frozen{animation:shiver 6s ease-in-out infinite;}
 <body>
 
 <div id="ptcl"></div>
+<canvas id="frost-c"></canvas>
 <div id="freeze-tint"></div>
 <img id="bai-sprite" src="./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/bai.png" alt="Бай" onerror="this.style.display='none'">
-<button id="globe-btn" onclick="shakeGlobe()" title="Потрясти шар ❄">
-  <img src="./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/snowglobe.png" alt="Снежный шар" onerror="this.outerHTML='<span style=font-size:2.2rem;line-height:1>🔮</span>'">
-</button>
-<button id="bell-btn" onclick="ringBell()" title="Колокольчик">🔔</button>
-<div id="mode-btns">
-  <button class="mode-btn" id="btn-day" onclick="toggleDay()">☀ День</button>
-  <button class="mode-btn" id="btn-snd" onclick="toggleSound()">♪ Звук</button>
-</div>
 <div id="rx-popup">
   <div class="rx-top">
     <span class="rx-rx">℞</span>
@@ -1231,7 +1190,9 @@ function enterSite(){
   document.getElementById('site').classList.add('vis');
   renderAllCards();
   setupNavHide();
-  setTimeout(initRx,1200);
+  const frost=document.getElementById('frost-c');if(frost)frost.style.display='block';
+  const bai=document.getElementById('bai-sprite');if(bai)bai.style.removeProperty('display');
+  setTimeout(initRx,1400);
 }
 function setupNavHide(){
   let ly=0;
@@ -1322,80 +1283,42 @@ function switchStarTab(star,btn){
   }
 })();
 
-/* ── SOUNDS ── */
-let _actx=null,_sndOn=false;
-function _ac(){if(!_actx){_actx=new(window.AudioContext||window.webkitAudioContext)();}if(_actx.state==='suspended')_actx.resume();return _actx;}
-function _beep(freq,dur,type,vol,t0){
-  const ac=_ac(),o=ac.createOscillator(),g=ac.createGain(),t=t0||ac.currentTime;
-  o.type=type||'sine';o.frequency.value=freq;g.gain.setValueAtTime(vol||.08,t);
-  g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+dur+.02);
-}
-function sndBell(){
-  if(!_sndOn)return;const ac=_ac(),t=ac.currentTime;
-  _beep(1047,.6,'sine',.1,t);_beep(1319,.5,'sine',.06,t+.01);_beep(1568,.4,'sine',.04,t+.02);
-}
-function sndBleat(){
-  if(!_sndOn)return;const ac=_ac(),t=ac.currentTime;
-  const o=ac.createOscillator(),g=ac.createGain();
-  o.type='sawtooth';o.frequency.setValueAtTime(320,t);o.frequency.exponentialRampToValueAtTime(180,t+.18);
-  o.frequency.setValueAtTime(340,t+.22);o.frequency.exponentialRampToValueAtTime(200,t+.4);
-  g.gain.setValueAtTime(.07,t);g.gain.setValueAtTime(.07,t+.18);g.gain.exponentialRampToValueAtTime(.0001,t+.42);
-  o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+.45);
-}
-function sndHeartbeat(){
-  if(!_sndOn)return;const ac=_ac(),t=ac.currentTime;
-  _beep(55,.14,'sine',.12,t);_beep(50,.11,'sine',.09,t+.2);
-}
-function toggleSound(){
-  _sndOn=!_sndOn;_ac();
-  document.getElementById('btn-snd').classList.toggle('on',_sndOn);
-  document.getElementById('btn-snd').textContent=_sndOn?'♪ Звук ●':'♪ Звук';
-}
-
-/* ── GLOBE ── */
-function shakeGlobe(){
-  const g=document.getElementById('globe-btn');
-  g.classList.remove('shake');void g.offsetWidth;g.classList.add('shake');
-  sndBell();
-  // snow burst via ptcl particles
-  for(let i=0;i<18;i++){
-    const p=document.createElement('span');
-    const style=document.getElementById('ptcl');
-    const x=70+Math.random()*60,vy=-(3+Math.random()*5),vx=(Math.random()-0.5)*6;
-    p.style.cssText=`position:absolute;left:${x}%;bottom:20px;width:3px;height:3px;border-radius:50%;background:rgba(168,216,240,.8);transition:none;`;
-    document.getElementById('ptcl').appendChild(p);
-    let py=0,px=0,op=1,tick=0;
-    (function anim(){tick++;py+=vy-tick*.12;px+=vx;op-=.025;
-      p.style.transform=`translate(${px}px,${py}px)`;p.style.opacity=op;
-      if(op>0)requestAnimationFrame(anim);else p.remove();
-    })();
+/* ── FROST CANVAS (таяние инея) ── */
+(function(){
+  const fc=document.getElementById('frost-c');if(!fc)return;
+  const fx=fc.getContext('2d');
+  let W,H,melts=[];
+  function resize(){W=fc.width=innerWidth;H=fc.height=innerHeight;buildFrost();}
+  function buildFrost(){
+    fx.clearRect(0,0,W,H);
+    const g=fx.createRadialGradient(W/2,H*.35,Math.min(W,H)*.2,W/2,H*.35,Math.max(W,H)*.85);
+    g.addColorStop(0,'rgba(200,230,255,0)');g.addColorStop(.65,'rgba(190,222,250,.07)');g.addColorStop(1,'rgba(200,232,255,.22)');
+    fx.fillStyle=g;fx.fillRect(0,0,W,H);
+    fx.fillStyle='rgba(220,240,255,.55)';
+    for(let i=0;i<360;i++){
+      const x=Math.random()*W,y=Math.random()*H,d=Math.hypot((x-W/2)/W,(y-H*.35)/H);
+      if(Math.random()>d*1.45)continue;
+      fx.globalAlpha=.22+Math.random()*.48;fx.beginPath();fx.arc(x,y,Math.random()*1.9,0,6.3);fx.fill();
+    }
+    fx.globalAlpha=1;
   }
-}
-
-/* ── BELL ── */
-function ringBell(){
-  const b=document.getElementById('bell-btn');
-  b.classList.remove('ring');void b.offsetWidth;b.classList.add('ring');
-  sndBell();
-  // show Rx quote on bell ring
-  openRx();
-}
-
-/* ── DAY / NIGHT ── */
-function toggleDay(){
-  const on=document.body.classList.toggle('day');
-  document.getElementById('btn-day').classList.toggle('on',on);
-  document.getElementById('btn-day').textContent=on?'🌙 Ночь':'☀ День';
-}
-
-/* ── PAW TRAIL ── */
-let _pawT=0;
-document.addEventListener('mousemove',e=>{
-  const now=Date.now();if(now-_pawT<220)return;_pawT=now;
-  const p=document.createElement('div');p.className='paw';p.textContent='🐾';
-  p.style.cssText=`left:${e.clientX-6}px;top:${e.clientY-6}px;transform:rotate(${Math.random()*40-20}deg);`;
-  document.body.appendChild(p);setTimeout(()=>p.remove(),920);
-});
+  function loop(){
+    requestAnimationFrame(loop);if(!melts.length)return;
+    fx.globalCompositeOperation='source-over';fx.globalAlpha=.007;
+    const g=fx.createRadialGradient(W/2,H*.35,0,W/2,H*.35,Math.max(W,H)*.85);
+    g.addColorStop(.65,'rgba(190,222,250,.07)');g.addColorStop(1,'rgba(200,232,255,.22)');
+    fx.fillStyle=g;fx.fillRect(0,0,W,H);fx.globalAlpha=1;
+    fx.globalCompositeOperation='destination-out';
+    for(const m of melts){m.r+=5;const r=fx.createRadialGradient(m.x,m.y,0,m.x,m.y,58);
+      r.addColorStop(0,'rgba(0,0,0,.55)');r.addColorStop(1,'rgba(0,0,0,0)');
+      fx.fillStyle=r;fx.beginPath();fx.arc(m.x,m.y,58,0,6.3);fx.fill();}
+    melts=melts.filter(m=>m.r<64);fx.globalCompositeOperation='source-over';
+  }
+  addEventListener('pointermove',e=>{if(document.getElementById('site').classList.contains('vis'))melts.push({x:e.clientX,y:e.clientY,r:0});});
+  addEventListener('touchmove',e=>{if(document.getElementById('site').classList.contains('vis'))for(const t of e.touches)melts.push({x:t.clientX,y:t.clientY,r:0});},{passive:true});
+  addEventListener('resize',resize);
+  resize();requestAnimationFrame(loop);
+})();
 
 /* ── BAI SPRITE ── */
 (function(){
@@ -1415,10 +1338,9 @@ document.addEventListener('mousemove',e=>{
       const hop=Math.abs(Math.sin(t*7))*14,sway=Math.sin(t*7)*3;
       el.style.transform=`translate(${x}px,${-hop}px) rotate(${sway*dir}deg) scaleX(${dir})`;
       if((dir>0&&x<end)||(dir<0&&x>end))requestAnimationFrame(step);
-      else{busy=false;if(_sndOn)setTimeout(sndBleat,100);setTimeout(run,10000+Math.random()*18000);}
+      else{busy=false;setTimeout(run,10000+Math.random()*18000);}
     }
     requestAnimationFrame(step);
-    if(_sndOn)sndBleat();
   }
   setTimeout(run,3000);
 })();
@@ -1429,7 +1351,6 @@ function wuIce(el,e){
   el.style.setProperty('--ix',((e.clientX-rx.left)/rx.width*100)+'%');
   el.style.setProperty('--iy',((e.clientY-rx.top)/rx.height*100)+'%');
   el.classList.remove('iced');void el.offsetWidth;el.classList.add('iced');
-  sndHeartbeat();
   setTimeout(()=>el.classList.remove('iced'),2200);
 }
 
