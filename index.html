@@ -4,6 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>Akso Archive</title>
+<meta name="description" content="Akso Archive — фанатский архив по Зейну из Love and Deepspace. Карточки, мифы, World Underneath, переводы и лор.">
+<meta name="theme-color" content="#060e1a">
+<link rel="icon" type="image/png" href="./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/%D0%90%D0%BA%D1%81%D0%BE%20%D0%BB%D0%BE%D0%B3%D0%BE%20(%D0%BD%D1%83%D0%B6%D0%BD%D0%BE%D0%B5).png">
+<link rel="apple-touch-icon" href="./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/%D0%90%D0%BA%D1%81%D0%BE%20%D0%BB%D0%BE%D0%B3%D0%BE%20(%D0%BD%D1%83%D0%B6%D0%BD%D0%BE%D0%B5).png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Akso Archive">
+<meta property="og:title" content="Akso Archive · архив Зейна">
+<meta property="og:description" content="Фанатский архив по Зейну из Love and Deepspace: карточки, мифы, World Underneath, лор и переводы.">
+<meta property="og:image" content="https://snowfoxlnd.github.io/akso-archive/./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/%D0%90%D0%BA%D1%81%D0%BE%20%D0%BB%D0%BE%D0%B3%D0%BE%20(%D0%BD%D1%83%D0%B6%D0%BD%D0%BE%D0%B5).png">
+<meta property="og:url" content="https://snowfoxlnd.github.io/akso-archive/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Akso Archive · архив Зейна">
+<meta name="twitter:description" content="Карточки, мифы, World Underneath, лор и переводы по Зейну.">
+<meta name="twitter:image" content="https://snowfoxlnd.github.io/akso-archive/./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/%D0%90%D0%BA%D1%81%D0%BE%20%D0%BB%D0%BE%D0%B3%D0%BE%20(%D0%BD%D1%83%D0%B6%D0%BD%D0%BE%D0%B5).png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Raleway:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Chakra+Petch:wght@500;600;700&family=Cinzel:wght@500;600&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -743,7 +759,7 @@ body.day{--bg:#cfe0ee;--card:rgba(255,255,255,.82);--txt:#1a2a3a;--mut:#4a6882;-
   <div class="site-hero" id="about">
     <div class="hero-inner">
       <div class="hero-pai-wrap">
-        <img class="hero-pai-img"
+        <img loading="lazy" decoding="async" class="hero-pai-img"
           src="./%D0%A4%D0%B0%D0%B9%D0%BB%D1%8B/%D0%9F%D0%B0%D0%B9.png"
           alt="Пай" onerror="this.style.display='none'">
       </div>
@@ -1103,7 +1119,7 @@ function cardHTML(c,i){
     ? `<div class="stamp ok">Доступно</div>`
     : `<div class="stamp wait">Обработка</div>`;
   const imgBlock=c.img
-    ? `<img src="${c.img}" alt="${c.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ph" style="display:none">медиа · превью</div>`
+    ? `<img loading="lazy" decoding="async" src="${c.img}" alt="${c.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ph" style="display:none">медиа · превью</div>`
     : `<div class="ph">медиа · превью</div>`;
   const rarity=c.tags.map(t=>{
     if(t.l.includes('★')){const s4=t.l==='★★★★';return `<span class="stars${s4?' stars-4':''}">${t.l}</span>`;}
@@ -1138,7 +1154,7 @@ function cardHTML(c,i){
 function wuCardHTML(c,n){
   const nn=String(n).padStart(2,'0');
   const imgBlock=c.img
-    ? `<img src="${c.img}" alt="${c.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="ph" style="display:none">добавишь с ПК</span>`
+    ? `<img loading="lazy" decoding="async" src="${c.img}" alt="${c.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="ph" style="display:none">добавишь с ПК</span>`
     : `<span class="ph">добавишь с ПК</span>`;
   return`<div class="wcard" onclick="wuIce(this,event)">
     <div class="wpic">${imgBlock}<span class="code">A-${128+n} · ${n}.0J/7</span></div>
@@ -1252,7 +1268,7 @@ function openCard(i){
   }catch(e){}
   const available=!!c.link;
   const imgBlock=c.img
-    ? `<img src="${c.img}" alt="${c.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ph" style="display:none">медиа · превью</div><div class="scan"></div>`
+    ? `<img loading="lazy" decoding="async" src="${c.img}" alt="${c.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ph" style="display:none">медиа · превью</div><div class="scan"></div>`
     : `<div class="ph">медиа · превью</div><div class="scan"></div>`;
   const rarity=c.tags.map(t=>{
     if(t.l.includes('★')){const s4=t.l==='★★★★';return `<span class="stars${s4?' stars-4':''}">${t.l}</span>`;}
@@ -1789,7 +1805,6 @@ const BSPR=[null,null,null];
 function ensureSprites(){if(!BSPR[0])[8,13,18].forEach((s,i)=>BSPR[i]=makeFlakeSprite(s));}
 function burstLoop(){if(!burstCtx)return;requestAnimationFrame(burstLoop);burstCtx.clearRect(0,0,burstW,burstH);for(const f of burstFlakes){f.y+=f.vy;f.x+=f.vx+Math.sin(f.t)*.4;f.t+=.04;f.rot+=f.vrot;const sp=BSPR[f.L];burstCtx.globalAlpha=Math.max(0,f.life);burstCtx.setTransform(1,0,0,1,f.x,f.y);burstCtx.rotate(f.rot);burstCtx.drawImage(sp,-f.r,-f.r,f.r*2,f.r*2);f.life-=.005;}burstCtx.setTransform(1,0,0,1,0,0);burstCtx.globalAlpha=1;burstFlakes=burstFlakes.filter(f=>f.life>0&&f.y<burstH+30);}
 function burstSnowSpawn(n){ensureSprites();if(!burstCtx&&burstC){burstCtx=burstC.getContext("2d");burstResize();addEventListener("resize",burstResize);requestAnimationFrame(burstLoop);}if(!burstW){burstResize();}for(let i=0;i<n;i++){const L=Math.random()<.55?0:Math.random()<.7?1:2;burstFlakes.push({x:Math.random()*burstW,y:-20-Math.random()*100,vx:(Math.random()*1.4-.7),vy:1+Math.random()*2.2,L,r:[4,7,11][L],t:Math.random()*6,rot:Math.random()*6,vrot:(Math.random()*2-1)*.02,life:1});}}
-function shakeGlobe(){const g=document.getElementById('snowGlobe');if(g){g.classList.remove('shake');void g.offsetWidth;g.classList.add('shake');}if(!burstCtx&&burstC){burstCtx=burstC.getContext('2d');burstResize();addEventListener('resize',burstResize);requestAnimationFrame(burstLoop);}burstSnowSpawn(60);dsBeep(520,.07);DS.globeShakes=(DS.globeShakes||0)+1;dsSave();}
 
 /* Aurora burst (5 sept) */
 function auroraBurst(){document.body.classList.add('aurora-burst');if(!burstCtx&&burstC){burstCtx=burstC.getContext('2d');burstResize();addEventListener('resize',burstResize);requestAnimationFrame(burstLoop);}burstSnowSpawn(30);dsChime('gold');dsUnlock('aurora');setTimeout(()=>document.body.classList.remove('aurora-burst'),20000);}
@@ -1803,7 +1818,6 @@ function toggleFreeze(){
 }
 
 /* Silence easter egg */
-const SILENCE_TEXT="";
 let silenceBusy=false;
 function runSilence(){
   const pl=document.getElementById('silencePlayer');const au=document.getElementById('silenceAudio');
@@ -1849,7 +1863,6 @@ function hookChannels(){
 }
 
 /* Show Pai mascot once site enters */
-function showPai(){}
 
 /* Track which tabs visited (for myths/under achievements) */
 const _origSwitchTab=window.switchTab;
@@ -1865,7 +1878,6 @@ const _enterSite=window.enterSite;
 window.enterSite=function(){
   if(typeof _enterSite==='function')_enterSite();
   setTimeout(()=>{
-    showPai();
     hookSearch();
     hookChannels();
     dsUnlock('visit',true);
@@ -1879,7 +1891,7 @@ window.enterSite=function(){
 
 // If already inside the site (e.g. user reloads in-place), initialize anyway
 if(document.getElementById('site')&&document.getElementById('site').classList.contains('vis')){
-  setTimeout(()=>{showPai();hookSearch();hookChannels();dsUnlock('visit',true);dsAttach();dsRender();},200);
+  setTimeout(()=>{hookSearch();hookChannels();dsUnlock('visit',true);dsAttach();dsRender();},200);
 }
 
 
@@ -1887,7 +1899,6 @@ if(document.getElementById('site')&&document.getElementById('site').classList.co
 
 
 /* Hunter name capture on entry */
-function showScreen2(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('vis'));const el=document.getElementById(id);if(el){el.classList.add('vis');el.style.display='flex';}}
 /* name capture removed — name is entered in Досье */
 
 
