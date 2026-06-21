@@ -258,6 +258,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;opa
   background:repeating-linear-gradient(0deg,rgba(168,216,240,.05) 0 1px,transparent 1px 3px);
   mix-blend-mode:overlay;}
 .m-body{padding:20px 24px 26px;}
+.m-readdate{font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.1em;color:var(--cop);margin-bottom:10px;opacity:.85;}
 .m-rarity{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;}
 .m-rarity .stars{color:#e8c84a;font-size:.78rem;letter-spacing:.12em;}
 .m-rarity .tag{font-family:var(--mono);font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--icdim);border:1px solid rgba(74,138,176,.3);padding:3px 9px;}
@@ -539,7 +540,7 @@ button.nav-link{background:none;border:none;cursor:pointer;font-weight:700;lette
 .ds-sect{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--icdim);margin:24px 0 14px;display:flex;align-items:center;gap:10px;}
 .ds-sect::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--bdr),transparent);}
 .ds-sect-c{color:var(--mut);font-size:.52rem;}
-.ds-ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:24px;}
+.ds-ach-grid{margin-bottom:24px;}
 .ds-ach{display:flex;gap:12px;align-items:flex-start;background:var(--card-bg);border:1px solid var(--bdr);padding:13px 14px;transition:.3s;overflow:hidden;position:relative;}
 .ds-ach.locked{opacity:.45;filter:grayscale(.6);}
 .ds-ach.unlocked:hover{transform:translateY(-2px);}
@@ -676,6 +677,18 @@ body.day{--bg:#cfe0ee;--card:rgba(255,255,255,.82);--txt:#1a2a3a;--mut:#4a6882;-
   #rx-popup{width:220px;right:12px;}
   #rx-pill{right:12px;}
 }
+
+.ds-rank{color:#bfe6ff!important;text-shadow:0 0 18px rgba(168,216,240,.35);}
+.ds-rank-next{font-family:'JetBrains Mono',monospace;font-size:.46rem;letter-spacing:.1em;color:var(--mut);margin-top:3px;}
+/* collapsible achievement categories */
+.ds-accat{border:1px solid var(--bdr);background:rgba(6,12,22,.3);margin-bottom:10px;}
+.ds-accat-h{display:flex;align-items:center;gap:10px;padding:12px 15px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--icdim);user-select:none;}
+.ds-accat-h .ds-chev{transition:transform .3s;font-size:.7rem;}
+.ds-accat.closed .ds-chev{transform:rotate(-90deg);}
+.ds-accat-h .ds-ccount{margin-left:auto;font-family:'Orbitron',monospace;font-size:.6rem;color:var(--cop);letter-spacing:.06em;}
+.ds-accat-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;padding:0 14px 14px;max-height:1600px;transition:max-height .45s ease,opacity .3s,padding .3s;overflow:hidden;opacity:1;}
+.ds-accat.closed .ds-accat-body{max-height:0;opacity:0;padding-top:0;padding-bottom:0;}
+
 </style>
 </head>
 <body>
@@ -835,6 +848,7 @@ body.day{--bg:#cfe0ee;--card:rgba(255,255,255,.82);--txt:#1a2a3a;--mut:#4a6882;-
             <div class="ds-fields">
               <div class="ds-row"><label>ФАМИЛИЯ, ИМЯ ПАЦИЕНТА</label><input id="ds-name" type="text" placeholder="введите имя" maxlength="32"></div>
               <div class="ds-row"><label>ЛЕЧАЩИЙ ВРАЧ</label><div class="ds-val">Dr. Zayne · Кардиохирург</div></div>
+              <div class="ds-row"><label>УРОВЕНЬ ДОПУСКА</label><div class="ds-val ds-rank" id="ds-rank">—</div><div class="ds-rank-next" id="ds-rank-next"></div></div>
               <div class="ds-row two">
                 <div><label>ВИЗИТОВ</label><div class="ds-val" id="ds-visits">1</div></div>
                 <div><label>ДАТА ВЫДАЧИ</label><div class="ds-val" id="ds-date">—</div></div>
@@ -1260,7 +1274,10 @@ function openCard(i){
   // track reads for achievements
   try{
     if(!DS.read)DS.read=[];
-    if(!DS.read.includes(i)){DS.read.push(i);dsSave();}
+    if(!DS.readDates)DS.readDates={};
+    if(!DS.read.includes(i)){DS.read.push(i);}
+    if(!DS.readDates[c.title]){DS.readDates[c.title]=new Date().toISOString();}
+    dsSave();
     if(c.type==='4')dsUnlock('cards4');
     if(c.type==='5'){
       const all5=CARDS.map((x,idx)=>({x,idx})).filter(o=>o.x.type==='5');
@@ -1294,6 +1311,7 @@ function openCard(i){
     <div class="m-body">
       <div class="m-rarity">${rarity}${metaTag}<span class="tag">${c.badgeLabel}</span></div>
       <div class="m-title">${c.title}</div>
+      ${(DS.readDates&&DS.readDates[c.title])?`<div class="m-readdate">Впервые прочитано: ${new Date(DS.readDates[c.title]).toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'})}</div>`:''}
       <div class="m-diag"><span class="k">${diagLabel}</span>${diagText}</div>
       <div class="m-vitals"><svg viewBox="0 0 560 30" preserveAspectRatio="none"><path d="${available?'M0,15 H120 l8,-10 6,20 6,-18 8,8 H260 l8,-10 6,20 6,-18 8,8 H420 l8,-10 6,20 6,-18 8,8 H560':'M0,15 H560'}"/></svg></div>
       <div class="m-foot">${footAction}</div>
@@ -1579,6 +1597,27 @@ const F_ASSETS='./Файлы/';
 const AWARDS={blue:F_ASSETS+'award_blue.png',jade:F_ASSETS+'award_jade.png',gold:F_ASSETS+'award_gold.png',diamond:F_ASSETS+'award_diamond.png'};
 const R_LABEL={blue:'Стандартный',jade:'Необычный',gold:'Редкий',diamond:'Легендарный'};
 
+/* Уровни допуска по карьере Зейна (по числу открытых ачивок) */
+const ACCESS_RANKS=[
+  {n:'Посетитель',       min:0},
+  {n:'Интерн',           min:3},
+  {n:'Ординатор',        min:6},
+  {n:'Кардиохирург',     min:9},
+  {n:'Главный кардиохирург', min:13},
+  {n:'Шеф AEC',          min:16},
+];
+function accessRank(u){let r=ACCESS_RANKS[0],nx=null;for(let i=0;i<ACCESS_RANKS.length;i++){if(u>=ACCESS_RANKS[i].min){r=ACCESS_RANKS[i];nx=ACCESS_RANKS[i+1]||null;}}return{r,nx};}
+
+/* Категории ачивок */
+const ACH_CATS=[
+  {cat:'Исследование', ids:['visit','myths','under','channels']},
+  {cat:'Коллекция',    ids:['cards5','cards4','rx']},
+  {cat:'Секреты',      ids:['freeze','silence','insomnia','fullset']},
+  {cat:'Лор',          ids:['zayne10','name','photo']},
+  {cat:'Сезонные',     ids:['bday','aurora','night']},
+];
+
+
 const ACH=[
   {id:'visit', e:'🚪', n:'Первый визит',          d:'Войти в Архив Аксо.',                          r:'blue'},
   {id:'cards5', e:'🩺', n:'Полный осмотр',         d:'Прочитать все 5★ карточки.',                   r:'jade'},
@@ -1622,16 +1661,27 @@ function dsToast(a){
 
 function dsRender(){
   const grid=document.getElementById('ds-ach');if(!grid)return;
-  grid.innerHTML='';
-  ACH.forEach(a=>{const un=dsUn(a.id),sec=a.secret&&!un;
-    grid.insertAdjacentHTML('beforeend',`<div class="ds-ach ${un?'unlocked':'locked'} ${a.secret?'secret':''}" data-r="${a.r}">
+  const byId={};ACH.forEach(a=>byId[a.id]=a);
+  const achCard=a=>{const un=dsUn(a.id),sec=a.secret&&!un;
+    return `<div class="ds-ach ${un?'unlocked':'locked'} ${a.secret?'secret':''}" data-r="${a.r}">
       <div class="ds-ic"><span class="ds-ic-em">${sec?'❔':(a.e||'★')}</span></div>
       <div class="ds-ab"><div class="ds-an">${sec?'Секретный допуск':a.n}</div><div class="ds-ad">${sec?'Условие скрыто.':a.d}</div><div class="ds-ar">${R_LABEL[a.r]}</div></div>
-      ${un?'<span class="ds-got">✓</span>':''}</div>`);
+      ${un?'<span class="ds-got">✓</span>':''}</div>`;};
+  grid.innerHTML='';
+  ACH_CATS.forEach((cat,ci)=>{
+    const items=cat.ids.map(id=>byId[id]).filter(Boolean);
+    const got=items.filter(a=>dsUn(a.id)).length;
+    const open=ci<2?'':'closed';
+    grid.insertAdjacentHTML('beforeend',`<div class="ds-accat ${open}">
+      <div class="ds-accat-h" onclick="this.parentElement.classList.toggle('closed')"><span class="ds-chev">▾</span>${cat.cat}<span class="ds-ccount">${got} / ${items.length}</span></div>
+      <div class="ds-accat-body">${items.map(achCard).join('')}</div></div>`);
   });
   const u=DS.u.length,tot=ACH.length,pct=Math.round(u/tot*100);
   const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
   set('ds-id',DS.id);set('ds-visits',DS.visits);set('ds-pct',pct+'%');set('ds-stats',u+' / '+tot);set('ds-count',u+' / '+tot);
+  const {r,nx}=accessRank(u);
+  set('ds-rank',r.n);
+  const rn=document.getElementById('ds-rank-next');if(rn)rn.textContent=nx?`до «${nx.n}» — ещё ${nx.min-u} ${(nx.min-u)===1?'допуск':'допуск(ов)'}`:'высший ранг достигнут ✓';
   const bar=document.getElementById('ds-bar');if(bar)bar.style.width=pct+'%';
   const date=document.getElementById('ds-date');if(date)date.textContent=new Date().toLocaleDateString('ru-RU');
   const bc=document.querySelector('.ds-barcode');if(bc)bc.textContent=bc.textContent.replace(/AH-\d{4}/,DS.id);
